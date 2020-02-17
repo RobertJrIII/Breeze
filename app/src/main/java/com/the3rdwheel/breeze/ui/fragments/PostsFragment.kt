@@ -8,6 +8,13 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.the3rdwheel.breeze.R
+import com.the3rdwheel.breeze.api.Auth
+import kotlinx.android.synthetic.main.posts_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * A simple [Fragment] subclass.
@@ -22,5 +29,15 @@ class PostsFragment : Fragment() {
         return inflater.inflate(R.layout.posts_fragment, container, false)
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
+
+        CoroutineScope(IO).launch {
+            val token = Auth().getAppOnlyOathToken(Auth.CREDENTIALS)
+            withContext(Main) {
+                postTextView.text = token.access_token
+            }
+        }
+    }
 }

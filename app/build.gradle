@@ -4,6 +4,12 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+
+
+def secretPropertiesFile = rootProject.file("secrets.properties");
+def secretProperties = new Properties()
+secretProperties.load(new FileInputStream(secretPropertiesFile))
+
 android {
 
     dataBinding { enabled = true }
@@ -20,8 +26,15 @@ android {
     buildTypes {
         release {
             minifyEnabled false
+            buildConfigField("String","CLIENT_ID",secretProperties['clientID'])
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            minifyEnabled false
+            buildConfigField("String","CLIENT_ID",secretProperties['clientID'])
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
     }
 
     compileOptions {
