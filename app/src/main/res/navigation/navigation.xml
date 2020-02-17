@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools" android:id="@+id/navigation"
+            app:startDestination="@id/postsFragment">
+
+    <fragment android:id="@+id/postsFragment" android:name="com.the3rdwheel.breeze.ui.fragments.PostsFragment"
+              android:label="posts_fragment" tools:layout="@layout/posts_fragment"/>
+    <fragment android:id="@+id/accountFragment" android:name="com.the3rdwheel.breeze.ui.fragments.AccountFragment"
+              android:label="account_fragment" tools:layout="@layout/account_fragment"/>
+    <fragment android:id="@+id/settingsFragment"
+              android:name="com.the3rdwheel.breeze.ui.fragments.SettingsFragment"
+              android:label="SettingsFragment"/>
+</navigation>
