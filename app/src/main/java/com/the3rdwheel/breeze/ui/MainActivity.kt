@@ -9,6 +9,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.toolbar.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -24,5 +25,6 @@ class MainActivity : AppCompatActivity() {
         navBar.setOnNavigationItemReselectedListener {
             Toast.makeText(this, "That Tickles!", Toast.LENGTH_SHORT).show()
         }
+        setSupportActionBar(toolbar)
     }
 }
