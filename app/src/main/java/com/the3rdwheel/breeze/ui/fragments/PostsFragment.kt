@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.isupatches.wisefy.WiseFy
 
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.api.Auth
@@ -31,12 +33,14 @@ class PostsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val wisefy = WiseFy.Brains(this.context!!).getSmarts()
 
-
+        postTextView.text = wisefy.isDeviceConnectedToMobileOrWifiNetwork().toString()
         CoroutineScope(IO).launch {
             val token = Auth().getAppOnlyOathToken(Auth.CREDENTIALS)
             withContext(Main) {
-                postTextView.text = token.access_token
+                // postTextView.text = token.access_token
+                Toast.makeText(this@PostsFragment.context, token.access_token, Toast.LENGTH_LONG).show()
             }
         }
     }
