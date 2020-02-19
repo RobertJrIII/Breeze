@@ -1,4 +1,4 @@
-package com.the3rdwheel.breeze.model
+package com.the3rdwheel.breeze.authentication
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

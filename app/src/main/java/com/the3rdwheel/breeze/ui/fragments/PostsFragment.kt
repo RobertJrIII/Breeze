@@ -10,7 +10,7 @@ import android.widget.Toast
 import com.isupatches.wisefy.WiseFy
 
 import com.the3rdwheel.breeze.R
-import com.the3rdwheel.breeze.api.Auth
+import com.the3rdwheel.breeze.authentication.api.Auth
 import kotlinx.android.synthetic.main.posts_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO

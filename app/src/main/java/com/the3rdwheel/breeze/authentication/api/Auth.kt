@@ -1,7 +1,7 @@
-package com.the3rdwheel.breeze.api
+package com.the3rdwheel.breeze.authentication.api
 
 import com.the3rdwheel.breeze.BuildConfig
-import com.the3rdwheel.breeze.model.AppOnlyResponse
+import com.the3rdwheel.breeze.authentication.AppOnlyResponse
 import okhttp3.Credentials
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory

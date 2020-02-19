@@ -26,12 +26,12 @@ android {
     buildTypes {
         release {
             minifyEnabled false
-            buildConfigField("String","CLIENT_ID",secretProperties['clientID'])
+            buildConfigField("String", "CLIENT_ID", secretProperties['clientID'])
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
             minifyEnabled false
-            buildConfigField("String","CLIENT_ID",secretProperties['clientID'])
+            buildConfigField("String", "CLIENT_ID", secretProperties['clientID'])
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
@@ -97,11 +97,15 @@ dependencies {
 
     //Room
     implementation "androidx.room:room-runtime:2.2.3"
-    kapt "androidx.room:room-compiler:2.2.3" 
+    kapt "androidx.room:room-compiler:2.2.3"
     implementation "androidx.room:room-ktx:2.2.3"
 
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
 
+    //Koin
+    implementation "org.koin:koin-android:2.0.1"
+    implementation "org.koin:koin-androidx-viewmodel:2.0.1"
+    implementation "org.koin:koin-androidx-scope:2.0.1"
 
 }

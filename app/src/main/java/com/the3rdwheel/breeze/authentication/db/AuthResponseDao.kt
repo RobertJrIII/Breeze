@@ -1,12 +1,12 @@
-package com.the3rdwheel.breeze.db
+package com.the3rdwheel.breeze.authentication.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.the3rdwheel.breeze.model.AppOnlyResponse
-import com.the3rdwheel.breeze.model.AppOnlyResponse_ID
+import com.the3rdwheel.breeze.authentication.AppOnlyResponse
+import com.the3rdwheel.breeze.authentication.AppOnlyResponse_ID
 
 @Dao
-interface AppOnlyResponseDao {
+interface AuthResponseDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(apponlyresponse: AppOnlyResponse)
