@@ -7,21 +7,12 @@ import com.the3rdwheel.breeze.authentication.response.AuthResponse
 import okio.IOException
 import timber.log.Timber
 
-
-interface AuthDataSource {
-    val downloadedAuthResponse: LiveData<AuthResponse>
-
-
-    suspend fun fetchAuthResponse(credentials: String)
-}
-
-
-class AuthDataSourceImp(private val auth: Auth) : AuthDataSource {
+class AuthDataSource(private val auth: Auth) {
     private val _downloadedAuthResponse = MutableLiveData<AuthResponse>()
-    override val downloadedAuthResponse: LiveData<AuthResponse>
+    val downloadedAuthResponse: LiveData<AuthResponse>
         get() = _downloadedAuthResponse
 
-    override suspend fun fetchAuthResponse(credentials: String) {
+    suspend fun fetchAuthResponse(credentials: String) {
         try {
             val response = auth.getAuthResponse(credentials)
 
