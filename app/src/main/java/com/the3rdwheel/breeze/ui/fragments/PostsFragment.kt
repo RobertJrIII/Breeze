@@ -7,11 +7,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
 import com.isupatches.wisefy.WiseFy
 import com.the3rdwheel.breeze.BuildConfig
 
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.authentication.api.Auth
+import com.the3rdwheel.breeze.network.AuthDataSource
+import com.the3rdwheel.breeze.network.AuthDataSourceImp
+import com.the3rdwheel.breeze.network.ConnectivityInterceptor
 import kotlinx.android.synthetic.main.posts_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -38,13 +42,15 @@ class PostsFragment : Fragment() {
         val wisefy = WiseFy.Brains(this.context!!).getSmarts()
 
         postTextView.text = wisefy.isDeviceConnectedToMobileOrWifiNetwork().toString()
-        CoroutineScope(IO).launch {
-            val token = Auth().getAppOnlyOathToken(Credentials.basic(BuildConfig.CLIENT_ID, ""))
 
-            withContext(Main) {
-                // postTextView.text = token.access_token
-                Toast.makeText(this@PostsFragment.context, token.access_token, Toast.LENGTH_LONG).show()
-            }
+        val apiService = Auth(ConnectivityInterceptor(this@PostsFragment.context!!))
+        val authDataSource = AuthDataSourceImp(apiService)
+        authDataSource.downloadedAuthResponse.observe(viewLifecycleOwner, Observer {
+            Toast.makeText(this@PostsFragment.context, it.access_token, Toast.LENGTH_LONG).show()
+        })
+        CoroutineScope(IO).launch {
+            authDataSource.fetchAuthResponse(Credentials.basic(BuildConfig.CLIENT_ID, ""))
+
         }
     }
 }
