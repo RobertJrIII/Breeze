@@ -1,7 +1,7 @@
 package com.the3rdwheel.breeze.api
 
 import com.the3rdwheel.breeze.BuildConfig
-import com.the3rdwheel.breeze.model.OAuthResponse
+import com.the3rdwheel.breeze.model.AppOnlyResponse
 import okhttp3.Credentials
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -19,7 +19,7 @@ interface Auth {
         @Field("grant_type") grant_Type: String = "https://oauth.reddit.com/grants/installed_client",
         @Field("device_id") device_Id: String = "DO_NOT_TRACK_THIS_DEVICE"
 
-    ): OAuthResponse
+    ): AppOnlyResponse
 
 
     companion object {

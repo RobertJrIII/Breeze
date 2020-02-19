@@ -38,6 +38,7 @@ class PostsFragment : Fragment() {
         postTextView.text = wisefy.isDeviceConnectedToMobileOrWifiNetwork().toString()
         CoroutineScope(IO).launch {
             val token = Auth().getAppOnlyOathToken(Auth.CREDENTIALS)
+
             withContext(Main) {
                 // postTextView.text = token.access_token
                 Toast.makeText(this@PostsFragment.context, token.access_token, Toast.LENGTH_LONG).show()

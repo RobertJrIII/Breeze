@@ -19,16 +19,14 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         val controller: NavController = findNavController(R.id.nav_host_fragment)
-        val navBar = binding.navBar
-        navBar.setupWithNavController(controller)
+        val navBar = binding.navBar.apply {
+            setupWithNavController(controller)
+        }
 
         navBar.setOnNavigationItemReselectedListener {
             Toast.makeText(this, "That Tickles!", Toast.LENGTH_SHORT).show()
         }
         setSupportActionBar(toolbar)
-
-
-
 
 
     }
