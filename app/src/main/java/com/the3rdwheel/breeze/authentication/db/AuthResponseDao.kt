@@ -2,21 +2,20 @@ package com.the3rdwheel.breeze.authentication.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.the3rdwheel.breeze.authentication.AppOnlyResponse
-import com.the3rdwheel.breeze.authentication.AppOnlyResponse_ID
+import com.the3rdwheel.breeze.authentication.AuthResponse
 
 @Dao
 interface AuthResponseDao {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(apponlyresponse: AppOnlyResponse)
+    @Insert()
+    fun insert(apponlyresponse: AuthResponse)
 
     @Update
-    fun update(apponlyresponse: AppOnlyResponse)
+    fun update(apponlyresponse: AuthResponse)
 
     @Delete
-    fun delete(apponlyresponse: AppOnlyResponse)
+    fun delete(apponlyresponse: AuthResponse)
 
-    @Query("select * from app_only_response_table where id = $AppOnlyResponse_ID")
-    fun getOAuthResponse(): LiveData<AppOnlyResponse>
+    @Query("select * from auth_response_table where id = id")
+    fun getOAuthResponse(id: String): LiveData<AuthResponse>
 }

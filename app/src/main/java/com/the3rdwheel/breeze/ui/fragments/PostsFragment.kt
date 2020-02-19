@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.isupatches.wisefy.WiseFy
+import com.the3rdwheel.breeze.BuildConfig
 
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.authentication.api.Auth
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.Credentials
 
 /**
  * A simple [Fragment] subclass.
@@ -37,7 +39,7 @@ class PostsFragment : Fragment() {
 
         postTextView.text = wisefy.isDeviceConnectedToMobileOrWifiNetwork().toString()
         CoroutineScope(IO).launch {
-            val token = Auth().getAppOnlyOathToken(Auth.CREDENTIALS)
+            val token = Auth().getAppOnlyOathToken(Credentials.basic(BuildConfig.CLIENT_ID, ""))
 
             withContext(Main) {
                 // postTextView.text = token.access_token
