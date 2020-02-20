@@ -23,9 +23,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Credentials
 
-/**
- * A simple [Fragment] subclass.
- */
 class PostsFragment : Fragment() {
 
     override fun onCreateView(

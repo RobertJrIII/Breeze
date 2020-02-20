@@ -12,15 +12,14 @@ class AuthDataSource(private val auth: Auth) {
     val downloadedAuthResponse: LiveData<AuthResponse>
         get() = _downloadedAuthResponse
 
-    suspend fun fetchAuthResponse(credentials: String) {
-        try {
-            val response = auth.getAuthResponse(credentials)
+    suspend fun fetchAuthResponse(credentials: String) = try {
+        val response = auth.getAuthResponse(credentials)
 
-            _downloadedAuthResponse.postValue(response)
-        } catch (e: IOException) {
-            Timber.e("No network")
-        }
+        this._downloadedAuthResponse.postValue(response)
+    } catch (e: IOException) {
+        Timber.e("No network")
     }
+
 
 }
 
