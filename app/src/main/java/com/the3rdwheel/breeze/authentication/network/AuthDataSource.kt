@@ -3,7 +3,7 @@ package com.the3rdwheel.breeze.authentication.network
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.the3rdwheel.breeze.authentication.api.Auth
-import com.the3rdwheel.breeze.authentication.response.AuthResponse
+import com.the3rdwheel.breeze.authentication.network.response.AuthResponse
 import okio.IOException
 import timber.log.Timber
 

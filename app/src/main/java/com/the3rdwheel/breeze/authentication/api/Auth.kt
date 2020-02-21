@@ -1,6 +1,6 @@
 package com.the3rdwheel.breeze.authentication.api
 
-import com.the3rdwheel.breeze.authentication.response.AuthResponse
+import com.the3rdwheel.breeze.authentication.network.response.AuthResponse
 import com.the3rdwheel.breeze.authentication.network.ConnectivityInterceptor
 import com.the3rdwheel.breeze.reddit.REDDIT_AUTH_URL
 import okhttp3.OkHttpClient
@@ -9,7 +9,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface Auth {
-    /**
+    /** Used for application only OAuth
      * @param credentials The client id and password encoded with Base64
      * @param grant_Type default https://oauth.reddit.com/grants/installed_client
      * @param device_Id a random UUID String or leave blank for DO_NOT_TRACK_THIS_DEVICE

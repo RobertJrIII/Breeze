@@ -1,7 +1,4 @@
-package com.the3rdwheel.breeze.authentication.response
-
-
-
+package com.the3rdwheel.breeze.authentication.network.response
 
 
 data class AuthResponse(
