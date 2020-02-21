@@ -1,16 +1,14 @@
 package com.the3rdwheel.breeze.authentication.db
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.lifecycle.LiveData
+import androidx.room.*
 import com.the3rdwheel.breeze.authentication.response.AuthResponse
 
 
 @Dao
 interface AuthResponseDao {
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(authResponse: AuthResponse)
 
     @Update
@@ -18,6 +16,11 @@ interface AuthResponseDao {
 
 
     @Query("Select* From auth_table Where user =:user")
-    fun getUser(user: String):AuthResponse
+    fun getUserResponse(user: String): LiveData<AuthResponse>
 
+    @Query("Select* From auth_table Where user =:user")
+    fun getUserResponseLiveData(user: String): LiveData<AuthResponse>
+
+    @Query("Delete From auth_table")
+    fun removeAllResponses()
 }

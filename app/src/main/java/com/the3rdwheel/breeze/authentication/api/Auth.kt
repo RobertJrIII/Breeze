@@ -1,7 +1,7 @@
 package com.the3rdwheel.breeze.authentication.api
 
 import com.the3rdwheel.breeze.authentication.response.AuthResponse
-import com.the3rdwheel.breeze.network.ConnectivityInterceptor
+import com.the3rdwheel.breeze.authentication.network.ConnectivityInterceptor
 import com.the3rdwheel.breeze.reddit.REDDIT_AUTH_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

@@ -1,4 +1,4 @@
-package com.the3rdwheel.breeze.network
+package com.the3rdwheel.breeze.authentication.network
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
