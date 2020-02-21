@@ -2,6 +2,7 @@ package com.the3rdwheel.breeze.authentication.response
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.squareup.moshi.Json
 
 
 @Entity(tableName = "auth_table")

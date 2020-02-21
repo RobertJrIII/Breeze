@@ -22,6 +22,7 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.Credentials
+import timber.log.Timber
 
 class PostsFragment : Fragment() {
 
@@ -43,6 +44,7 @@ class PostsFragment : Fragment() {
         val authDataSource = AuthDataSource(apiService)
         authDataSource.downloadedAuthResponse.observe(viewLifecycleOwner, Observer {
             Toast.makeText(this@PostsFragment.context, it.access_token, Toast.LENGTH_LONG).show()
+            Timber.d("Response ${it.user} ${it.token_type} ${it.access_token}")
         })
         CoroutineScope(IO).launch {
             authDataSource.fetchAuthResponse(Credentials.basic(BuildConfig.CLIENT_ID, ""))
