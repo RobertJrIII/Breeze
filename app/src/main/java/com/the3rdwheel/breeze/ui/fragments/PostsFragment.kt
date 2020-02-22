@@ -1,12 +1,10 @@
 package com.the3rdwheel.breeze.ui.fragments
 
-
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.isupatches.wisefy.WiseFy
 import com.the3rdwheel.breeze.BuildConfig
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.authentication.api.Auth
@@ -34,13 +32,10 @@ class PostsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val wisefy = WiseFy.Brains(this.context!!).getSmarts()
-
-        postTextView.text = wisefy.isDeviceConnectedToMobileOrWifiNetwork().toString()
 
         val apiService = get<Auth>()
         CoroutineScope(IO).launch {
-            database = get<AccountDatabase>()
+            database = get()
             try {
 
                 val response = apiService.getAuthResponse(Credentials.basic(BuildConfig.CLIENT_ID, ""))
@@ -59,7 +54,6 @@ class PostsFragment : Fragment() {
             }
         }
     }
-
 
 
 }

@@ -3,8 +3,10 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
+
 apply plugin: 'kotlin-kapt'
 
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 def secretPropertiesFile = rootProject.file("secrets.properties")
 def secretProperties = new Properties()

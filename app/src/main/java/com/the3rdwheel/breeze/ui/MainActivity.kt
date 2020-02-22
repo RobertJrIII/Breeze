@@ -20,9 +20,8 @@ class MainActivity : AppCompatActivity() {
         navBar.apply {
             setupWithNavController(controller)
         }
-
         navBar.setOnNavigationItemReselectedListener {
-            Toast.makeText(this, "That Tickles!", Toast.LENGTH_SHORT).show()
+
         }
         setSupportActionBar(toolbar)
 
