@@ -14,7 +14,7 @@ interface AccountDao {
     fun changeAccessToke(userName: String, accessToken: String)
 
     @Query("Select * From accounts Where userName =:userName")
-    fun getUser(userName: String)
+    fun getUser(userName: String):Account
 
     @Query("Delete From accounts Where userName =:userName")
     fun deleteUser(userName: String)

@@ -6,8 +6,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.lifecycle.Observer
 import com.isupatches.wisefy.WiseFy
 import com.the3rdwheel.breeze.BuildConfig
 
@@ -15,14 +13,15 @@ import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.authentication.api.Auth
 import com.the3rdwheel.breeze.authentication.db.AccountDatabase
 import com.the3rdwheel.breeze.authentication.db.entity.Account
-import com.the3rdwheel.breeze.authentication.network.AuthDataSource
 import com.the3rdwheel.breeze.authentication.network.ConnectivityInterceptor
 import kotlinx.android.synthetic.main.posts_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.Credentials
-import timber.log.Timber
+import okio.IOException
 
 class PostsFragment : Fragment() {
 
@@ -30,7 +29,6 @@ class PostsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.posts_fragment, container, false)
     }
 
@@ -41,17 +39,34 @@ class PostsFragment : Fragment() {
         postTextView.text = wisefy.isDeviceConnectedToMobileOrWifiNetwork().toString()
 
         val apiService = Auth(ConnectivityInterceptor(this@PostsFragment.context!!))
-        val authDataSource = AuthDataSource(apiService)
-        authDataSource.downloadedAuthResponse.observe(viewLifecycleOwner, Observer {
-            AccountDatabase.invoke(context!!).accountDao().insert(Account("Anonymous", 0, it, 1))
-            Toast.makeText(this@PostsFragment.context, it.access_token, Toast.LENGTH_LONG).show()
-            //Timber.d("Response  ${it.token_type} ${it.access_token}")
-        })
+//        val authDataSource = AuthDataSource(apiService)
+//        authDataSource.downloadedAuthResponse.observe(viewLifecycleOwner, Observer {
+//
+//            Toast.makeText(this@PostsFragment.context, it.access_token, Toast.LENGTH_LONG).show()
+//            //Timber.d("Response  ${it.token_type} ${it.access_token}")
+//        })
 
 
         CoroutineScope(IO).launch {
-            authDataSource.fetchAuthResponse(Credentials.basic(BuildConfig.CLIENT_ID, ""))
+            val database = AccountDatabase.invoke(context!!)
+            try {
 
+                val response = apiService.getAuthResponse(Credentials.basic(BuildConfig.CLIENT_ID, ""))
+
+
+
+                database.accountDao().insert(Account("Anonymous", 0, response, 1))
+                // val text = database.accountDao().getUser("Anonymous").authResponse.access_token
+
+
+            } catch (e: IOException) {
+                val text = database.accountDao().getUser("Anonymous").authResponse.access_token
+                withContext(Main) {
+                    postTextView.text = text
+
+                }
+
+            }
         }
     }
 }
