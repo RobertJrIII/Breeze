@@ -15,7 +15,7 @@ class AuthDataSource(private val auth: Auth) {
     suspend fun fetchAuthResponse(credentials: String) = try {
         val response = auth.getAuthResponse(credentials)
 
-        this._downloadedAuthResponse.postValue(response)
+        _downloadedAuthResponse.postValue(response)
     } catch (e: IOException) {
         Timber.e("No network")
     }

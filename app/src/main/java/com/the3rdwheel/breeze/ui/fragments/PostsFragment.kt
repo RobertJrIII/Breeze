@@ -13,6 +13,8 @@ import com.the3rdwheel.breeze.BuildConfig
 
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.authentication.api.Auth
+import com.the3rdwheel.breeze.authentication.db.AccountDatabase
+import com.the3rdwheel.breeze.authentication.db.entity.Account
 import com.the3rdwheel.breeze.authentication.network.AuthDataSource
 import com.the3rdwheel.breeze.authentication.network.ConnectivityInterceptor
 import kotlinx.android.synthetic.main.posts_fragment.*
@@ -41,8 +43,9 @@ class PostsFragment : Fragment() {
         val apiService = Auth(ConnectivityInterceptor(this@PostsFragment.context!!))
         val authDataSource = AuthDataSource(apiService)
         authDataSource.downloadedAuthResponse.observe(viewLifecycleOwner, Observer {
+            AccountDatabase.invoke(context!!).accountDao().insert(Account("Anonymous", 0, it, 1))
             Toast.makeText(this@PostsFragment.context, it.access_token, Toast.LENGTH_LONG).show()
-            Timber.d("Response  ${it.token_type} ${it.access_token}")
+            //Timber.d("Response  ${it.token_type} ${it.access_token}")
         })
 
 

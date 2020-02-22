@@ -9,6 +9,6 @@ import com.the3rdwheel.breeze.authentication.network.response.AuthResponse
 data class Account(
     @PrimaryKey(autoGenerate = false) val userName: String,
     val karma: Int,
-    @Embedded val authResponse: AuthResponse,
-    val isCurrentUser: Boolean
+    @Embedded (prefix = "auth_") val authResponse: AuthResponse,
+    val currentUser: Int
 )
