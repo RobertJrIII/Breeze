@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 import timber.log.Timber
 
 class BreezeApp : Application() {
@@ -22,6 +24,13 @@ class BreezeApp : Application() {
 
         val config = FontRequestEmojiCompatConfig(this, fontRequest)
         EmojiCompat.init(config)
+
+
+        startKoin {
+            androidContext(this@BreezeApp)
+            modules(com.the3rdwheel.breeze.koin.modules)
+        }
+
 
     }
 

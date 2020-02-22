@@ -11,8 +11,6 @@ def secretProperties = new Properties()
 secretProperties.load(new FileInputStream(secretPropertiesFile))
 
 android {
-
-    //dataBinding { enabled = true }
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
@@ -31,8 +29,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            shrinkResources true
-            minifyEnabled true
+            shrinkResources false
+            minifyEnabled false
             buildConfigField("String", "CLIENT_ID", secretProperties['clientID'])
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
@@ -98,9 +96,9 @@ dependencies {
     implementation 'androidx.emoji:emoji:1.0.0'
 
     //Room
-    implementation "androidx.room:room-runtime:2.2.3"
-    kapt "androidx.room:room-compiler:2.2.3"
-    implementation "androidx.room:room-ktx:2.2.3"
+    implementation "androidx.room:room-runtime:2.2.4"
+    kapt "androidx.room:room-compiler:2.2.4"
+    implementation "androidx.room:room-ktx:2.2.4"
 
     //Lifecycle
     implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
