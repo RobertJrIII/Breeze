@@ -3,6 +3,9 @@ package com.the3rdwheel.breeze.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.activity.viewModels
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
@@ -23,6 +26,8 @@ class MainActivity : AppCompatActivity() {
         navBar.setOnNavigationItemReselectedListener {
 
         }
+
+
         setSupportActionBar(toolbar)
 
     }
