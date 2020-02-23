@@ -5,37 +5,34 @@ import androidx.lifecycle.ViewModel
 import com.the3rdwheel.breeze.authentication.api.Auth
 import com.the3rdwheel.breeze.authentication.db.AccountDatabase
 import com.the3rdwheel.breeze.authentication.db.entity.Account
-import com.the3rdwheel.breeze.reddit.ANONYMOUS_KARMA
-import com.the3rdwheel.breeze.reddit.ANONYMOUS_USER
-import com.the3rdwheel.breeze.reddit.CREDENTIALS
-import com.the3rdwheel.breeze.reddit.CURRENT_USER
+import com.the3rdwheel.breeze.reddit.RedditUtils
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okio.IOException
 import timber.log.Timber
 
-class ViewModel(auth: Auth, database: AccountDatabase) : ViewModel() {
-    private val auth = auth
-    private val database = database
+class ViewModel(private val auth: Auth, private val database: AccountDatabase) : ViewModel() {
+
 
     fun setUser() {
         CoroutineScope(IO).launch {
+
+
+
             if (database.accountDao().getAnyUser() == null) {
 
 
                 try {
                     val response =
-                        auth.getAuthResponse(CREDENTIALS)
+                        auth.getAuthResponse(RedditUtils.CREDENTIALS)
                     database.accountDao()
                         .insert(
                             Account(
-                                ANONYMOUS_USER,
-                                ANONYMOUS_KARMA,
+                                RedditUtils.ANONYMOUS_USER,
+                                RedditUtils.ANONYMOUS_KARMA,
                                 response,
-                                CURRENT_USER
+                                RedditUtils.CURRENT_USER
                             )
                         )
                 } catch (e: IOException) {
@@ -52,7 +49,7 @@ class ViewModel(auth: Auth, database: AccountDatabase) : ViewModel() {
         var data: LiveData<Account>? = null
         CoroutineScope(IO).launch {
 
-            data = database.accountDao().getUser(ANONYMOUS_USER)
+            data = database.accountDao().getUserLiveData(RedditUtils.ANONYMOUS_USER)
         }
 
         return data

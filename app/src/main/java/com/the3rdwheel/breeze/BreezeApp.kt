@@ -13,7 +13,12 @@ class BreezeApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Timber.plant(Timber.DebugTree())
+
+        if (BuildConfig.DEBUG) {
+
+            Timber.plant(Timber.DebugTree())
+        }
+
         val fontRequest = FontRequest(
             "com.google.android.gms.fonts",
             "com.google.android.gms",
@@ -28,7 +33,7 @@ class BreezeApp : Application() {
 
         startKoin {
             androidContext(this@BreezeApp)
-            modules(com.the3rdwheel.breeze.koin.modules)
+            modules(com.the3rdwheel.breeze.koin.authModules)
         }
 
 

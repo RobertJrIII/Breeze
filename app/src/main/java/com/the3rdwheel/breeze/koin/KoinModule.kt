@@ -9,12 +9,12 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 
 import org.koin.dsl.module
 
-val modules = module {
+val authModules = module {
 
     single { ConnectivityInterceptor(androidContext()) }
 
     single { Auth.invoke(get()) }
-    single { AccountDatabase.invoke(androidContext()) }
+    single { AccountDatabase(androidContext()) }
 
 
     viewModel { ViewModel(get(), get()) }

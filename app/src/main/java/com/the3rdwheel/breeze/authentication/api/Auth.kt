@@ -2,7 +2,7 @@ package com.the3rdwheel.breeze.authentication.api
 
 import com.the3rdwheel.breeze.authentication.network.response.AuthResponse
 import com.the3rdwheel.breeze.authentication.network.ConnectivityInterceptor
-import com.the3rdwheel.breeze.reddit.REDDIT_AUTH_URL
+import com.the3rdwheel.breeze.reddit.RedditUtils
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -34,7 +34,7 @@ interface Auth {
                 .addInterceptor(connectivityInterceptor).build()
             val retrofitBuilder = Retrofit.Builder()
                 .client(okHttpClient)
-                .baseUrl(REDDIT_AUTH_URL)
+                .baseUrl(RedditUtils.REDDIT_AUTH_URL)
                 .addConverterFactory(MoshiConverterFactory.create())
 
 

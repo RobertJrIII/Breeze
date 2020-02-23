@@ -16,7 +16,11 @@ interface AccountDao {
     fun changeAccessToke(userName: String, accessToken: String)
 
     @Query("Select * From accounts Where userName =:userName")
-    fun getUser(userName: String): LiveData<Account>
+    fun getUserLiveData(userName: String): LiveData<Account>
+
+
+    @Query("Select * From accounts Where userName =:userName")
+    fun getUser(userName: String): Account
 
     @Query("Delete From accounts Where userName =:userName")
     fun deleteUser(userName: String)
@@ -28,5 +32,5 @@ interface AccountDao {
     fun updateAccountKarma(userName: String, karma: Int)
 
     @Query("Select * From accounts LIMIT 1")
-    fun getAnyUser(): Account
+    fun getAnyUser(): Account?
 }
