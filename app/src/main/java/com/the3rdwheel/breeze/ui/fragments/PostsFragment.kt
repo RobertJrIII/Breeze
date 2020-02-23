@@ -6,12 +6,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.ViewModel
 import kotlinx.android.synthetic.main.posts_fragment.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class PostsFragment : Fragment() {
+
+    private val viewModel: ViewModel by inject()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -21,17 +33,17 @@ class PostsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val viewModel: ViewModel by viewModel()
-        viewModel.setUser()
 
 
-        viewModel.getAccessToken().let {
-            it?.observe(viewLifecycleOwner, Observer {
 
-                postTextView.text = it.authResponse.access_token
-            })
+
+        CoroutineScope(IO).launch {
+            val token = viewModel.getAccessToken().authResponse.access_token
+
+            withContext(Main) {
+                postTextView.text = token
+            }
         }
-
 
     }
 }

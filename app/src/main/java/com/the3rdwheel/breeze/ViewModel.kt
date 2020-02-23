@@ -2,6 +2,7 @@ package com.the3rdwheel.breeze
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.room.RoomDatabase
 import com.the3rdwheel.breeze.authentication.api.Auth
 import com.the3rdwheel.breeze.authentication.db.AccountDatabase
 import com.the3rdwheel.breeze.authentication.db.entity.Account
@@ -13,13 +14,14 @@ import okio.IOException
 import timber.log.Timber
 
 class ViewModel(private val auth: Auth, private val database: AccountDatabase) : ViewModel() {
+    init {
+        setUser()
+    }
 
-
-    fun setUser() {
+    private fun setUser() {
         CoroutineScope(IO).launch {
 
-
-
+            if (database.isOpen) return@launch
             if (database.accountDao().getAnyUser() == null) {
 
 
@@ -35,6 +37,7 @@ class ViewModel(private val auth: Auth, private val database: AccountDatabase) :
                                 RedditUtils.CURRENT_USER
                             )
                         )
+
                 } catch (e: IOException) {
                     Timber.e(e)
                 }
@@ -45,15 +48,16 @@ class ViewModel(private val auth: Auth, private val database: AccountDatabase) :
         }
     }
 
-    fun getAccessToken(): LiveData<Account>? {
-        var data: LiveData<Account>? = null
-        CoroutineScope(IO).launch {
+    fun getAccessToken(): Account {
+        return database.accountDao().getUser(RedditUtils.ANONYMOUS_USER)
 
-            data = database.accountDao().getUserLiveData(RedditUtils.ANONYMOUS_USER)
-        }
-
-        return data
     }
 
+    override fun onCleared() {
+        super.onCleared()
 
+        if (database.isOpen) {
+            database.close()
+        }
+    }
 }

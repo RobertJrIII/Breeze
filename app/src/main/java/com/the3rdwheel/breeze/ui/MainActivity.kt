@@ -22,8 +22,6 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private val auth: Auth = get()
-    private val database: AccountDatabase = get()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,51 +36,40 @@ class MainActivity : AppCompatActivity() {
 
         }
         setSupportActionBar(toolbar)
-        setUser()
+
 
     }
+//
+//    private fun setUser() {
+//        CoroutineScope(IO).launch {
+//
+//
+//            if (database.accountDao().getAnyUser() == null) {
+//
+//
+//                try {
+//                    val response =
+//                        auth.getAuthResponse(RedditUtils.CREDENTIALS)
+//                    database.accountDao()
+//                        .insert(
+//                            Account(
+//                                RedditUtils.ANONYMOUS_USER,
+//                                RedditUtils.ANONYMOUS_KARMA,
+//                                response,
+//                                RedditUtils.CURRENT_USER
+//                            )
+//                        )
+//
+//                    database.close()
+//                } catch (e: IOException) {
+//                    Timber.e(e)
+//                }
+//
+//
+//            }
+//
+//        }
+//    }
 
-    private fun setUser() {
-        CoroutineScope(IO).launch {
-
-
-            if (database.accountDao().getAnyUser() == null) {
-
-
-                try {
-                    val response =
-                        auth.getAuthResponse(RedditUtils.CREDENTIALS)
-                    database.accountDao()
-                        .insert(
-                            Account(
-                                RedditUtils.ANONYMOUS_USER,
-                                RedditUtils.ANONYMOUS_KARMA,
-                                response,
-                                RedditUtils.CURRENT_USER
-                            )
-                        )
-
-                    database.close()
-                } catch (e: IOException) {
-                    Timber.e(e)
-                }
-
-
-            }
-
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        if (database.isOpen) {
-            database.close()
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        setUser()
-    }
 
 }

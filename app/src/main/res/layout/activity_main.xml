@@ -26,11 +26,8 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navBar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
-
-
-        android:background="?android:attr/windowBackground"
 
 
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
@@ -38,6 +35,7 @@
 
 
         />
+    <!--        android:background="?android:attr/windowBackground"-->
     <!--                app:itemIconTint="@drawable/bottom_navigation_selector"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

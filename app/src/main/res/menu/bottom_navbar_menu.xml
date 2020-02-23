@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-            android:title="@string/posts"
-            android:icon="@drawable/ic_post_black_24dp"
-            android:id="@id/postsFragment"
-    />
+        android:id="@id/postsFragment"
+        android:icon="@drawable/ic_post_24dp"
+        android:title="@string/posts" />
 
     <item
-            android:id="@id/accountFragment"
-            android:title="@string/account"
-            android:icon="@drawable/ic_account_circle_black_24dp"
+        android:id="@id/accountFragment"
+        android:icon="@drawable/ic_account_circle_24dp"
+        android:title="@string/account"
 
-    />
+        />
     <item
-            android:id="@id/settingsFragment"
-            android:title="@string/settings"
-            android:icon="@drawable/ic_settings_black_24dp"
+        android:id="@id/messagesFragment"
+        android:icon="@drawable/inbox_24dp"
+        android:title="@string/messages"
 
-    />
+        />
+
+    <item
+        android:id="@id/settingsFragment"
+        android:icon="@drawable/ic_settings_24dp"
+        android:title="@string/settings"
+
+        />
 
 </menu>
