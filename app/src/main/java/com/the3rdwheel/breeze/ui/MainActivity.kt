@@ -15,9 +15,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okio.IOException
 import org.koin.android.ext.android.get
 import timber.log.Timber
@@ -63,6 +61,8 @@ class MainActivity : AppCompatActivity() {
                                 RedditUtils.CURRENT_USER
                             )
                         )
+
+                    database.close()
                 } catch (e: IOException) {
                     Timber.e(e)
                 }
@@ -75,7 +75,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        database.close()
+        if (database.isOpen) {
+            database.close()
+        }
     }
 
     override fun onResume() {
