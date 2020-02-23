@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.authentication.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -15,7 +16,7 @@ interface AccountDao {
     fun changeAccessToke(userName: String, accessToken: String)
 
     @Query("Select * From accounts Where userName =:userName")
-    fun getUser(userName: String): Account
+    fun getUser(userName: String): LiveData<Account>
 
     @Query("Delete From accounts Where userName =:userName")
     fun deleteUser(userName: String)

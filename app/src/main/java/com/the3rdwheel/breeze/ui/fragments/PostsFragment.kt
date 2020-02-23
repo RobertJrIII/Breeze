@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.the3rdwheel.breeze.BuildConfig
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.ViewModel
@@ -41,7 +42,12 @@ class PostsFragment : Fragment() {
         viewModel.setUser()
 
 
-        postTextView.text = viewModel.getAccessToken()
+        viewModel.getAccessToken().let {
+            it?.observe(viewLifecycleOwner, Observer {
+
+                postTextView.text = it.authResponse.access_token
+            })
+        }
 
 
     }

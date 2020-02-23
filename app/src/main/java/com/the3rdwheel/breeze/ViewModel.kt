@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.the3rdwheel.breeze.authentication.api.Auth
 import com.the3rdwheel.breeze.authentication.db.AccountDatabase
@@ -19,6 +20,7 @@ import timber.log.Timber
 class ViewModel(auth: Auth, database: AccountDatabase) : ViewModel() {
     private val auth = auth
     private val database = database
+
     fun setUser() {
         CoroutineScope(IO).launch {
             if (database.accountDao().getAnyUser() == null) {
@@ -46,16 +48,15 @@ class ViewModel(auth: Auth, database: AccountDatabase) : ViewModel() {
         }
     }
 
-    fun getAccessToken(): String? {
-        var token: String? = null
+    fun getAccessToken(): LiveData<Account>? {
+        var data: LiveData<Account>? = null
         CoroutineScope(IO).launch {
-            val response = database.accountDao().getUser(ANONYMOUS_USER).authResponse.access_token
-            withContext(Dispatchers.Main) {
-               return@withContext response
-            }
+
+            data = database.accountDao().getUser(ANONYMOUS_USER)
         }
 
-        return token
+        return data
     }
+
 
 }
