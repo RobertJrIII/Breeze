@@ -7,9 +7,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.the3rdwheel.breeze.BuildConfig
 import com.the3rdwheel.breeze.R
+import com.the3rdwheel.breeze.ViewModel
 import com.the3rdwheel.breeze.authentication.api.Auth
 import com.the3rdwheel.breeze.authentication.db.AccountDatabase
 import com.the3rdwheel.breeze.authentication.db.entity.Account
+import com.the3rdwheel.breeze.reddit.ANONYMOUS_USER
+import com.the3rdwheel.breeze.reddit.CREDENTIALS
 import kotlinx.android.synthetic.main.posts_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -19,10 +22,12 @@ import kotlinx.coroutines.withContext
 import okhttp3.Credentials
 import okio.IOException
 import org.koin.android.ext.android.get
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
 
 class PostsFragment : Fragment() {
-    lateinit var database: AccountDatabase
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -32,28 +37,14 @@ class PostsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        val viewModel: ViewModel by viewModel()
+        viewModel.setUser()
 
-        val apiService = get<Auth>()
-        CoroutineScope(IO).launch {
-            database = get()
-            try {
 
-                val response = apiService.getAuthResponse(Credentials.basic(BuildConfig.CLIENT_ID, ""))
-                database.accountDao().insert(Account("Anonymous", 0, response, 1))
-            } catch (e: IOException) {
-                Timber.e(e)
-                try {
-                    val text = database.accountDao().getUser("Anonymous").authResponse.access_token
-                    withContext(Main) {
-                        postTextView.text = text
-                    }
-                } catch (e: Exception) {
-                    Timber.e(e)
-                }
+        postTextView.text = viewModel.getAccessToken()
 
-            }
-        }
+
     }
-
-
 }
+
+

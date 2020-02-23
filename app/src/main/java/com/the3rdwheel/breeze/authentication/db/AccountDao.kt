@@ -1,4 +1,5 @@
 package com.the3rdwheel.breeze.authentication.db
+
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -14,7 +15,7 @@ interface AccountDao {
     fun changeAccessToke(userName: String, accessToken: String)
 
     @Query("Select * From accounts Where userName =:userName")
-    fun getUser(userName: String):Account
+    fun getUser(userName: String): Account
 
     @Query("Delete From accounts Where userName =:userName")
     fun deleteUser(userName: String)
@@ -24,4 +25,7 @@ interface AccountDao {
 
     @Query("Update accounts Set karma =:karma Where userName =:userName")
     fun updateAccountKarma(userName: String, karma: Int)
+
+    @Query("Select * From accounts LIMIT 1")
+    fun getAnyUser(): Account
 }
