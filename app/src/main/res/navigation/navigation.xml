@@ -19,7 +19,7 @@
         android:id="@+id/settingsFragment"
         android:name="com.the3rdwheel.breeze.ui.fragments.SettingsFragment"
         android:label="SettingsFragment"
-        tools:layout="@layout/settings_fragment" />
+         />
     <fragment
         android:id="@+id/messagesFragment"
         android:name="com.the3rdwheel.breeze.ui.fragments.MessagesFragment"
