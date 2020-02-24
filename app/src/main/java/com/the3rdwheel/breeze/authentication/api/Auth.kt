@@ -17,7 +17,8 @@ interface Auth {
      */
     @FormUrlEncoded
     @Headers(
-        "Content-Type: application/x-www-form-urlencoded")
+        "Content-Type: application/x-www-form-urlencoded"
+    )
     @POST("access_token")
     suspend fun getAuthResponse(
         @Header("Authorization") credentials: String,
@@ -26,6 +27,9 @@ interface Auth {
 
     ): AuthResponse
 
+
+    @POST("access_token")
+    fun refreshToken(@Header("Authorization") credentials: String)
 
     companion object {
 
