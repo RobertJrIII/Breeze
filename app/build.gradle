@@ -61,6 +61,8 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     kotlinOptions { jvmTarget = "1.8" }
+
+
 }
 
 dependencies {
@@ -103,6 +105,7 @@ dependencies {
     implementation("io.coil-kt:coil:0.9.5")
 
     //fragment
+
     implementation "androidx.fragment:fragment:1.2.2"
 
     //wisefy

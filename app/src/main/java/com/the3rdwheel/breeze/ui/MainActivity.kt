@@ -6,8 +6,9 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.the3rdwheel.breeze.R
-import com.the3rdwheel.breeze.databinding.ActivityMainBinding.*
+import com.the3rdwheel.breeze.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.toolbar.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,8 +16,8 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val binding = ActivityMainBinding.inflate(layoutInflater)
 
-        val binding = inflate(layoutInflater)
         setContentView(binding.root)
         val controller: NavController = findNavController(R.id.nav_host_fragment)
         val navBar = binding.navBar
@@ -26,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         navBar.setOnNavigationItemReselectedListener {
 
         }
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.mainToolbar.toolbar)
 
 
     }
