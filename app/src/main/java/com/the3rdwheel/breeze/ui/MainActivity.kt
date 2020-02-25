@@ -2,12 +2,12 @@ package com.the3rdwheel.breeze.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.databinding.ActivityMainBinding.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -17,15 +17,17 @@ class MainActivity : AppCompatActivity() {
 
 
         val binding = inflate(layoutInflater)
+        setContentView(binding.root)
         val controller: NavController = findNavController(R.id.nav_host_fragment)
-        binding.navBar.apply {
+        val navBar = binding.navBar
+        navBar.apply {
             setupWithNavController(controller)
         }
-        binding.navBar.setOnNavigationItemReselectedListener {
+        navBar.setOnNavigationItemReselectedListener {
 
         }
-        setSupportActionBar(binding.toolbar.root as Toolbar)
-        setContentView(binding.root)
+        setSupportActionBar(toolbar)
+
 
     }
 
