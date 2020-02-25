@@ -2,12 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <PreferenceCategory
 
-    <Preference
-        app:key="version"
-        app:summary="@string/version"
-        app:title="Build Version"
+        android:title="Test">
+        <Preference
+            app:key="version"
+            app:summary="@string/version"
+            app:title="Build Version"
 
 
-        />
+            />
+    </PreferenceCategory>
+
 </PreferenceScreen>

@@ -5,7 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.the3rdwheel.breeze.R
+import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 
 
 class PostsFragment : Fragment() {
@@ -15,15 +15,12 @@ class PostsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.posts_fragment, container, false)
+        val binding = PostsFragmentBinding.inflate(inflater, container, false)
+        binding.postTextView.text = "Hi"
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
-
-
-    }
 }
 
 

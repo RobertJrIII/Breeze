@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.the3rdwheel.breeze.databinding.AccountFragmentBinding
 
-import com.the3rdwheel.breeze.R
 
 /**
  * A simple [Fragment] subclass.
@@ -18,8 +18,8 @@ class AccountFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.account_fragment, container, false)
+        val binding = AccountFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
 

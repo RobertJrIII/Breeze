@@ -127,7 +127,9 @@ dependencies {
     implementation "org.koin:koin-androidx-scope:2.0.1"
 
     //Preferences
-    implementation "androidx.preference:preference:1.1.0"
+    implementation "androidx.preference:preference-ktx:1.1.0"
 
+    //leak canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
 }
