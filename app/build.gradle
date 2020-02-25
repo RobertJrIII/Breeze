@@ -13,6 +13,8 @@ def secretProperties = new Properties()
 secretProperties.load(new FileInputStream(secretPropertiesFile))
 
 android {
+
+
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
@@ -23,6 +25,19 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
+
+    defaultConfig {
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = [
+                        "room.schemaLocation"  : "$projectDir/schemas".toString(),
+                        "room.incremental"     : "true",
+                        "room.expandProjection": "true"]
+            }
+        }
+    }
+
     buildTypes {
         release {
             shrinkResources true
@@ -38,7 +53,9 @@ android {
         }
 
     }
-
+    viewBinding {
+        enabled = true
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -85,9 +102,8 @@ dependencies {
     //Coil
     implementation("io.coil-kt:coil:0.9.5")
 
-    //Groupie
-    implementation "com.xwray:groupie:2.7.0"
-    implementation "com.xwray:groupie-kotlin-android-extensions:2.7.0"
+    //fragment
+    implementation "androidx.fragment:fragment:1.2.2"
 
     //wisefy
     implementation 'com.isupatches:wisefy:4.0.0'
