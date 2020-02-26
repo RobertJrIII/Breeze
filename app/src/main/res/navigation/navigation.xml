@@ -8,21 +8,20 @@
     <fragment
         android:id="@+id/postsFragment"
         android:name="com.the3rdwheel.breeze.ui.fragments.PostsFragment"
-        android:label="posts_fragment"
+        android:label="Posts"
         tools:layout="@layout/posts_fragment" />
     <fragment
         android:id="@+id/accountFragment"
         android:name="com.the3rdwheel.breeze.ui.fragments.AccountFragment"
-        android:label="account_fragment"
+        android:label="Account"
         tools:layout="@layout/account_fragment" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.the3rdwheel.breeze.ui.fragments.SettingsFragment"
-        android:label="SettingsFragment"
-         />
+        android:label="Settings" />
     <fragment
-        android:id="@+id/messagesFragment"
-        android:name="com.the3rdwheel.breeze.ui.fragments.MessagesFragment"
-        android:label="messages_fragment"
-        tools:layout="@layout/messages_fragment" />
+        android:id="@+id/inboxFragment"
+        android:name="com.the3rdwheel.breeze.ui.fragments.InboxFragment"
+        android:label="Inbox"
+        tools:layout="@layout/inbox_fragment" />
 </navigation>
