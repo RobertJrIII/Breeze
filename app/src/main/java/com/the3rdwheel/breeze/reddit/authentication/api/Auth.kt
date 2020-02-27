@@ -1,7 +1,8 @@
-package com.the3rdwheel.breeze.rawk.authentication.api
+package com.the3rdwheel.breeze.reddit.authentication.api
 
-import com.the3rdwheel.breeze.rawk.authentication.network.response.AuthResponse
-import com.the3rdwheel.breeze.rawk.RedditUtils
+import com.the3rdwheel.breeze.reddit.authentication.network.response.AuthResponse
+import com.the3rdwheel.breeze.reddit.RedditUtils
+import com.the3rdwheel.breeze.reddit.authentication.network.ConnectivityInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -32,8 +33,10 @@ interface Auth {
 
     companion object {
 
-        operator fun invoke(): Auth {
-            val okHttpClient = OkHttpClient.Builder().build()
+
+        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): Auth {
+            val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(connectivityInterceptor).build()
             val retrofitBuilder = Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(RedditUtils.REDDIT_AUTH_URL)
@@ -42,17 +45,6 @@ interface Auth {
 
             return retrofitBuilder.build().create(Auth::class.java)
         }
-//        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): Auth {
-//            val okHttpClient = OkHttpClient.Builder()
-//                .addInterceptor(connectivityInterceptor).build()
-//            val retrofitBuilder = Retrofit.Builder()
-//                .client(okHttpClient)
-//                .baseUrl(RedditUtils.REDDIT_AUTH_URL)
-//                .addConverterFactory(MoshiConverterFactory.create())
-//
-//
-//            return retrofitBuilder.build().create(Auth::class.java)
-//        }
 
     }
 }

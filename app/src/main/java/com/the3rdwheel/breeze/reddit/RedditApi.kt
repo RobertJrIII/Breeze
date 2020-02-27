@@ -1,4 +1,4 @@
-package com.the3rdwheel.breeze.rawk
+package com.the3rdwheel.breeze.reddit
 
 import retrofit2.http.GET
 import retrofit2.http.Query

@@ -1,4 +1,4 @@
-package com.the3rdwheel.breeze.rawk.authentication.network.response
+package com.the3rdwheel.breeze.reddit.authentication.network.response
 
 
 data class AuthResponse(

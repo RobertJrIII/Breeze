@@ -1,4 +1,4 @@
-package com.the3rdwheel.breeze.rawk
+package com.the3rdwheel.breeze.reddit
 
 import com.the3rdwheel.breeze.BuildConfig
 import okhttp3.Credentials
