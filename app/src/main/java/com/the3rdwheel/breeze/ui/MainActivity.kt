@@ -23,9 +23,8 @@ class MainActivity : AppCompatActivity() {
         val controller: NavController = findNavController(R.id.nav_host_fragment)
         val navBar = binding.navBar
 
-        navBar.apply {
-            setupWithNavController(controller)
-        }
+        navBar.setupWithNavController(controller)
+
         navBar.setOnNavigationItemReselectedListener {
 
         }

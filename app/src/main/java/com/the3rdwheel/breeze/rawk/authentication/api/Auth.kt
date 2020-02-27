@@ -1,8 +1,7 @@
-package com.the3rdwheel.breeze.authentication.api
+package com.the3rdwheel.breeze.rawk.authentication.api
 
-import com.the3rdwheel.breeze.authentication.network.response.AuthResponse
-import com.the3rdwheel.breeze.authentication.network.ConnectivityInterceptor
-import com.the3rdwheel.breeze.reddit.RedditUtils
+import com.the3rdwheel.breeze.rawk.authentication.network.response.AuthResponse
+import com.the3rdwheel.breeze.rawk.RedditUtils
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -28,14 +27,13 @@ interface Auth {
     ): AuthResponse
 
 
-    @POST("access_token")
-    fun refreshToken(@Header("Authorization") credentials: String)
+//    @POST("access_token")
+//    fun refreshToken(@Header("Authorization") credentials: String)
 
     companion object {
 
-        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): Auth {
-            val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(connectivityInterceptor).build()
+        operator fun invoke(): Auth {
+            val okHttpClient = OkHttpClient.Builder().build()
             val retrofitBuilder = Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(RedditUtils.REDDIT_AUTH_URL)
@@ -44,6 +42,17 @@ interface Auth {
 
             return retrofitBuilder.build().create(Auth::class.java)
         }
+//        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): Auth {
+//            val okHttpClient = OkHttpClient.Builder()
+//                .addInterceptor(connectivityInterceptor).build()
+//            val retrofitBuilder = Retrofit.Builder()
+//                .client(okHttpClient)
+//                .baseUrl(RedditUtils.REDDIT_AUTH_URL)
+//                .addConverterFactory(MoshiConverterFactory.create())
+//
+//
+//            return retrofitBuilder.build().create(Auth::class.java)
+//        }
 
     }
 }

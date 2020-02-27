@@ -5,10 +5,10 @@ import android.widget.Toast
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
-import com.the3rdwheel.breeze.authentication.api.Auth
-import com.the3rdwheel.breeze.authentication.db.AccountDatabase
-import com.the3rdwheel.breeze.authentication.db.entity.Account
-import com.the3rdwheel.breeze.reddit.RedditUtils
+import com.the3rdwheel.breeze.rawk.authentication.api.Auth
+import com.the3rdwheel.breeze.rawk.authentication.db.AccountDatabase
+import com.the3rdwheel.breeze.rawk.authentication.db.entity.Account
+import com.the3rdwheel.breeze.rawk.RedditUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main

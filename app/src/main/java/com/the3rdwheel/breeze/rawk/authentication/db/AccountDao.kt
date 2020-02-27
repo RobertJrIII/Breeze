@@ -1,11 +1,11 @@
-package com.the3rdwheel.breeze.authentication.db
+package com.the3rdwheel.breeze.rawk.authentication.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.the3rdwheel.breeze.authentication.db.entity.Account
+import com.the3rdwheel.breeze.rawk.authentication.db.entity.Account
 
 @Dao
 interface AccountDao {

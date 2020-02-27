@@ -10,16 +10,21 @@ import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 
 class PostsFragment : Fragment() {
 
-
+    private var _binding: PostsFragmentBinding? = null
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding = PostsFragmentBinding.inflate(inflater, container, false)
+
+        _binding = PostsFragmentBinding.inflate(inflater, container, false)
         binding.postTextView.text = "Hi"
         return binding.root
     }
-
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
 }
 

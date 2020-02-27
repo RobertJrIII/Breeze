@@ -114,5 +114,5 @@
     public <methods>;
 }
 
--keep class com.the3rdwheel.breeze.authentication.network.response.** {*;}
+-keep class com.the3rdwheel.breeze.reddit.authentication.network.response.** {*;}
 

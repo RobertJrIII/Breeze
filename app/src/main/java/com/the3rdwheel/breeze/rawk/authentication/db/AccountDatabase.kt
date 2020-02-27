@@ -1,10 +1,10 @@
-package com.the3rdwheel.breeze.authentication.db
+package com.the3rdwheel.breeze.rawk.authentication.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.the3rdwheel.breeze.authentication.db.entity.Account
+import com.the3rdwheel.breeze.rawk.authentication.db.entity.Account
 
 @Database(entities = [Account::class], version = 1)
 abstract class AccountDatabase : RoomDatabase() {
