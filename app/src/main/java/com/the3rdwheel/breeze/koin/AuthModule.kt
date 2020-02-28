@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.koin
 
+import com.the3rdwheel.breeze.network.AccessTokenAuthenticator
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.authentication.db.AccountDatabase
 import com.the3rdwheel.breeze.network.ConnectivityInterceptor
@@ -18,7 +19,7 @@ val authModules = module {
     single { Auth.invoke(get()) }
     single { AccountDatabase(androidContext()) }
 
-
+    single { AccessTokenAuthenticator(get(), get()) }
 
 }
 

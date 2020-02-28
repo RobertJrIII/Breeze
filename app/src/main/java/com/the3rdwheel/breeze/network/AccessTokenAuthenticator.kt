@@ -11,6 +11,8 @@ import okhttp3.Authenticator
 import okhttp3.Request
 import okhttp3.Response
 import okhttp3.Route
+import okio.IOException
+import timber.log.Timber
 
 class AccessTokenAuthenticator(private val auth: Auth, private val database: AccountDatabase) :
     Authenticator {
@@ -22,14 +24,19 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
                 currentUser = database.accountDao().getCurrentUser()
 
                 if (currentUser?.userName.equals(RedditUtils.ANONYMOUS_USER)) {
+                    try {
 
-                    val newAccessToken = auth.getAuthResponse(RedditUtils.CREDENTIALS).access_token
-                    currentUser?.userName?.let {
-                        database.accountDao()
-                            .changeAccessToken(
-                                it,
-                                newAccessToken
-                            )
+                        val newAccessToken =
+                            auth.getAuthResponse(RedditUtils.CREDENTIALS).access_token
+                        currentUser?.userName?.let {
+                            database.accountDao()
+                                .changeAccessToken(
+                                    it,
+                                    newAccessToken
+                                )
+                        }
+                    } catch (e: IOException) {
+                        Timber.e(e)
                     }
                 }
                 //TODO If user logged in do something else
