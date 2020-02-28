@@ -1,4 +1,4 @@
-package com.the3rdwheel.breeze.reddit.authentication.network
+package com.the3rdwheel.breeze.network
 
 import android.content.Context
 import com.isupatches.wisefy.WiseFy

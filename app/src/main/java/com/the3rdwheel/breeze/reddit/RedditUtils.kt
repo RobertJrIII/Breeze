@@ -13,4 +13,6 @@ object RedditUtils {
     const val CURRENT_USER = 1
     const val BREEZE_REDIRECT_URL = "breeze://com.the3rdwheel.breeze/callback"
     const val TOKEN_TYPE = "Bearer"
+    const val AUTHORIZATION_KEY = "Authorization"
+    const val AUTHORIZATION_BASE = "bearer "
 }

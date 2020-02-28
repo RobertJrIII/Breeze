@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
 
 
         val appBarConfiguration = AppBarConfiguration(
+
             topLevelDestinationIds = setOf(
                 R.id.postsFragment,
                 R.id.accountFragment, R.id.inboxFragment,

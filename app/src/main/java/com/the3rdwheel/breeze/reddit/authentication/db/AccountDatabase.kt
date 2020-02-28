@@ -16,9 +16,9 @@ abstract class AccountDatabase : RoomDatabase() {
     companion object {
         @Volatile
         private var instance: AccountDatabase? = null
-        private val LOCK = Any()
 
-        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+
+        operator fun invoke(context: Context) = instance ?: synchronized(this) {
             instance ?: buildDatabase(context).also { instance = it }
         }
 

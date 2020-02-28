@@ -1,8 +1,8 @@
 package com.the3rdwheel.breeze.reddit.authentication.api
 
-import com.the3rdwheel.breeze.reddit.authentication.network.response.AuthResponse
+import com.the3rdwheel.breeze.reddit.authentication.response.AuthResponse
 import com.the3rdwheel.breeze.reddit.RedditUtils
-import com.the3rdwheel.breeze.reddit.authentication.network.ConnectivityInterceptor
+import com.the3rdwheel.breeze.network.ConnectivityInterceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
