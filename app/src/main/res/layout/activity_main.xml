@@ -12,7 +12,8 @@
         android:id="@+id/mainToolbar"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize" />
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp" />
 
     <fragment
 
@@ -20,19 +21,19 @@
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:defaultNavHost="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
 
         app:navGraph="@navigation/navigation"
         tools:layout="@layout/posts_fragment" />
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-
         android:id="@+id/navBar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
+
 
 
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
