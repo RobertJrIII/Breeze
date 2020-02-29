@@ -3,6 +3,7 @@ package com.the3rdwheel.breeze.reddit.retrofit
 import com.the3rdwheel.breeze.network.AccessTokenAuthenticator
 import com.the3rdwheel.breeze.network.ConnectivityInterceptor
 import com.the3rdwheel.breeze.reddit.RedditUtils
+import com.the3rdwheel.breeze.reddit.models.Submission
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -13,7 +14,7 @@ interface RedditApi {
 
 
     @GET("search")
-    suspend fun getSearchResults(@Query("q") query: String)
+    suspend fun getSearchResults(@Query("q") query: String): Submission
 
 
     @GET("/api/trending_subreddits")

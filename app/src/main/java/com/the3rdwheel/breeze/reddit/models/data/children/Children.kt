@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.reddit.models.data.children
 
-data class Children(val posts: ArrayList<String>)
+import com.the3rdwheel.breeze.reddit.models.data.children.posts.Post
 
-//TODO Finish this class
+data class Children(val posts: ArrayList<Post>)
+
