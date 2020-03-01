@@ -28,10 +28,24 @@ class PostsFragment : Fragment() {
 
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
 
+
+
+
         return binding.root
     }
 
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        val api: RedditApi = get()
 
+        CoroutineScope(IO).launch {
+
+            val title = api.getPosts().data.children.posts[0].postData.title
+            withContext(Main) {
+                _binding?.postTextView?.text = title
+            }
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

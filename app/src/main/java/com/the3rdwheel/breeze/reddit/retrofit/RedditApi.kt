@@ -22,8 +22,8 @@ interface RedditApi {
     //    @GET("/api/trending_subreddits")
 //    suspend fun getTrendingSubs()
     @Headers("Content-Type: application/json")
-    @GET("")
-    suspend fun getPosts(@Header("Authorization") token: String): Submission
+    @GET("/")
+    suspend fun getPosts(): Submission
 
 
     companion object {
