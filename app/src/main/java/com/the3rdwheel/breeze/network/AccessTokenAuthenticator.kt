@@ -75,6 +75,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
 
 
         } catch (e: IOException) {
+
             Timber.e(e)
         }
 

@@ -39,8 +39,9 @@ class PostsFragment : Fragment() {
         val api: RedditApi = get()
 
         CoroutineScope(IO).launch {
-
-            val title = api.getPosts().data.children[0].postData.title
+            //RedditUtils.AUTHORIZATION_BASE + get<AccountDatabase>().accountDao().getCurrentUser().authResponse.access_token
+            val title =
+                api.getPosts().data.children[0].postData.author
             withContext(Main) {
                 _binding?.postTextView?.text = title
             }
