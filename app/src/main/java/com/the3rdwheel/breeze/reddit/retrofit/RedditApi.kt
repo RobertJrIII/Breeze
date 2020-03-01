@@ -20,7 +20,7 @@ interface RedditApi {
 
 
     //    @GET("/api/trending_subreddits")
-//    suspend fun getTrendingSubs()
+//    suspend fun getTrendingSubs() @Header("Authorization") token: String
     @Headers("Content-Type: application/json")
     @GET("/")
     suspend fun getPosts(): Submission

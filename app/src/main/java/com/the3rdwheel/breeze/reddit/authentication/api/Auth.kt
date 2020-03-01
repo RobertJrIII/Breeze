@@ -38,7 +38,7 @@ interface Auth {
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(connectivityInterceptor).build()
             val retrofitBuilder = Retrofit.Builder()
-//                .client(okHttpClient)
+                .client(okHttpClient)
                 .baseUrl(RedditUtils.REDDIT_AUTH_URL)
                 .addConverterFactory(MoshiConverterFactory.create())
 
