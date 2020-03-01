@@ -33,9 +33,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:layout_gravity="bottom"
+        android:background="?android:attr/windowBackground"
 
-
-
+        app:labelVisibilityMode="labeled"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:menu="@menu/bottom_navbar_menu"
 
