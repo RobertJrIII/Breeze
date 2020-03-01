@@ -13,8 +13,6 @@ def secretProperties = new Properties()
 secretProperties.load(new FileInputStream(secretPropertiesFile))
 
 android {
-
-
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
     defaultConfig {
@@ -25,7 +23,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
+    viewBinding {
+        enabled = true
+    }
 
     defaultConfig {
         javaCompileOptions {
@@ -53,9 +53,7 @@ android {
         }
 
     }
-    viewBinding {
-        enabled = true
-    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -90,8 +88,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.2.1'
     implementation 'com.squareup.retrofit2:converter-moshi:2.6.2'
 
-
-    implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'com.google.android.material:material:1.1.0'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
@@ -131,7 +127,6 @@ dependencies {
 
     //leak canary
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
-
 
 
 }

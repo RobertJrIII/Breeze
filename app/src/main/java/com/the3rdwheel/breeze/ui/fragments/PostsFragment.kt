@@ -6,6 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
+import com.the3rdwheel.breeze.reddit.RedditUtils
+import com.the3rdwheel.breeze.reddit.authentication.db.AccountDatabase
+import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.koin.android.ext.android.get
 
 
 class PostsFragment : Fragment() {
@@ -18,9 +27,12 @@ class PostsFragment : Fragment() {
     ): View? {
 
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
-        binding.postTextView.text = "Hi"
+
         return binding.root
     }
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
