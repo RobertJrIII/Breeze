@@ -40,7 +40,7 @@ class PostsFragment : Fragment() {
 
         CoroutineScope(IO).launch {
 
-            val title = api.getPosts().data.children.posts[0].postData.title
+            val title = api.getPosts().data.children[0].postData.title
             withContext(Main) {
                 _binding?.postTextView?.text = title
             }

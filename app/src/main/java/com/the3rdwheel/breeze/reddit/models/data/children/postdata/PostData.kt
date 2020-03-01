@@ -1,7 +1,7 @@
-package com.the3rdwheel.breeze.reddit.models.data.children.posts.data
+package com.the3rdwheel.breeze.reddit.models.data.children.postdata
 
 import com.squareup.moshi.Json
-import com.the3rdwheel.breeze.reddit.models.data.children.posts.data.awards.Award
+import com.the3rdwheel.breeze.reddit.models.data.children.postdata.awards.Award
 
 data class PostData(
     val subreddit: String,

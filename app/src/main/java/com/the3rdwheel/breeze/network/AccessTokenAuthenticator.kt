@@ -17,6 +17,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
     override fun authenticate(route: Route?, response: Response): Request? {
 
         if (response.code == 401) {
+            Timber.d("response is 401 for some reason")
             val accessToken = response.request.header(RedditUtils.AUTHORIZATION_KEY)
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
@@ -33,7 +34,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
                         response.request.newBuilder().headers(
                             Headers.headersOf(
                                 RedditUtils.AUTHORIZATION_KEY,
-                                "${RedditUtils.AUTHORIZATION_BASE} $newAccessToken"
+                                RedditUtils.AUTHORIZATION_BASE + newAccessToken
                             )
                         )
                             .build()
@@ -45,7 +46,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
                     return response.request.newBuilder().headers(
                         Headers.headersOf(
                             RedditUtils.AUTHORIZATION_KEY,
-                            "${RedditUtils.AUTHORIZATION_BASE} $accessTokenFromDB"
+                            RedditUtils.AUTHORIZATION_BASE + accessTokenFromDB
                         )
                     ).build()
                 }
@@ -59,6 +60,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
 
     private fun refreshToken(account: Account): String? {
         var newAccessToken: String? = ""
+
         try {
             CoroutineScope(IO).launch {
 
@@ -70,6 +72,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
 
 
             }
+
 
         } catch (e: IOException) {
             Timber.e(e)

@@ -1,6 +1,10 @@
 package com.the3rdwheel.breeze.reddit.models.data.children
 
-import com.the3rdwheel.breeze.reddit.models.data.children.posts.Post
+import com.squareup.moshi.Json
+import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 
-data class Children(val posts: ArrayList<Post>)
+data class Children(
+    val kind: String,
+    @Json(name = "data") val postData: PostData
+)
 
