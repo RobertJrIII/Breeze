@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
-import com.the3rdwheel.breeze.reddit.RedditUtils
-import com.the3rdwheel.breeze.reddit.authentication.db.AccountDatabase
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -29,21 +27,19 @@ class PostsFragment : Fragment() {
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
 
 
-
-
         return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val api: RedditApi = get()
 
+        val redditApi = get<RedditApi>()
         CoroutineScope(IO).launch {
-            //RedditUtils.AUTHORIZATION_BASE + get<AccountDatabase>().accountDao().getCurrentUser().authResponse.access_token
-            val title =
-                api.getPosts().data.children[0].postData.author
+
+            val t = redditApi.getPosts().data.children[0].postData.author
+
             withContext(Main) {
-                _binding?.postTextView?.text = title
+                binding.postTextView.text = t
             }
         }
     }

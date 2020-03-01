@@ -1,6 +1,7 @@
 package com.the3rdwheel.breeze.koin
 
 import com.the3rdwheel.breeze.network.AccessTokenAuthenticator
+import com.the3rdwheel.breeze.network.AuthTokenInterceptor
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.authentication.db.AccountDatabase
 import com.the3rdwheel.breeze.network.ConnectivityInterceptor
@@ -22,6 +23,7 @@ val authModules = module {
 
 
     single { AccessTokenAuthenticator(get(), get()) }
-    single { RedditApi.invoke(get(), get()) }
+    single { AuthTokenInterceptor(get()) }
+    single { RedditApi.invoke(get(), get(), get()) }
 }
 

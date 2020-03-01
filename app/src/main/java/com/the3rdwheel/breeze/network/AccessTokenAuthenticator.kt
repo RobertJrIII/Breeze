@@ -17,7 +17,6 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
     override fun authenticate(route: Route?, response: Response): Request? {
 
         if (response.code == 401) {
-            Timber.d("response is 401 for some reason")
             val accessToken = response.request.header(RedditUtils.AUTHORIZATION_KEY)
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
@@ -27,27 +26,24 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
 
                 val accessTokenFromDB = account.authResponse.access_token
 
-                if (accessToken.equals(accessTokenFromDB)) {
+                if (accessTokenFromDB == accessToken) {
                     val newAccessToken = refreshToken(account)
                     return if (newAccessToken != "") {
 
-                        response.request.newBuilder().headers(
-                            Headers.headersOf(
-                                RedditUtils.AUTHORIZATION_KEY,
-                                RedditUtils.AUTHORIZATION_BASE + newAccessToken
-                            )
-                        )
-                            .build()
+                        response.request.newBuilder().header(
+                            RedditUtils.AUTHORIZATION_KEY,
+                            RedditUtils.AUTHORIZATION_BASE + newAccessToken
+
+                        ).build()
 
                     } else {
                         null
                     }
                 } else {
-                    return response.request.newBuilder().headers(
-                        Headers.headersOf(
-                            RedditUtils.AUTHORIZATION_KEY,
-                            RedditUtils.AUTHORIZATION_BASE + accessTokenFromDB
-                        )
+                    return response.request.newBuilder().header(
+                        RedditUtils.AUTHORIZATION_KEY,
+                        RedditUtils.AUTHORIZATION_BASE + accessTokenFromDB
+
                     ).build()
                 }
             }
@@ -86,28 +82,4 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
 
 }
 
-
-//
-//CoroutineScope(IO).launch {
-//    currentUser = database.accountDao().getCurrentUser()
-//
-//    if (currentUser?.userName.equals(RedditUtils.ANONYMOUS_USER)) {
-//        try {
-//
-//            val newAccessToken =
-//                auth.getAuthResponse(RedditUtils.CREDENTIALS).access_token
-//            currentUser?.userName?.let {
-//                database.accountDao()
-//                    .changeAccessToken(
-//                        it,
-//                        newAccessToken
-//                    )
-//            }
-//        } catch (e: IOException) {
-//            Timber.e(e)
-//        }
-//    }
-//    //TODO If user logged in do something else
-//
-//
-//}
+//TODO If user logged in do something else
