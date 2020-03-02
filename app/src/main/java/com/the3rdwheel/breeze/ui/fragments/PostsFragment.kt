@@ -36,7 +36,7 @@ class PostsFragment : Fragment() {
         val redditApi = get<RedditApi>()
         CoroutineScope(IO).launch {
 
-            val t = redditApi.getPosts().data.children[0].postData.author
+            val t = redditApi.getPosts().data.children[0].data.score.toString()
 
             withContext(Main) {
                 binding.postTextView.text = t

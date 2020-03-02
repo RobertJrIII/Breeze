@@ -10,6 +10,7 @@ import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.IOException
 import timber.log.Timber
+import java.lang.Exception
 
 
 class AccessTokenAuthenticator(private val auth: Auth, private val database: AccountDatabase) :
@@ -26,7 +27,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
 
                 val accessTokenFromDB = account.authResponse.access_token
 
-                if (accessTokenFromDB == accessToken) {
+                if (accessToken.equals(accessTokenFromDB)) {
                     val newAccessToken = refreshToken(account)
                     return if (newAccessToken != "") {
 
@@ -55,27 +56,39 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
     }
 
     private fun refreshToken(account: Account): String? {
-        var newAccessToken: String? = ""
+        var token: String = ""
+        CoroutineScope(IO).launch {
 
-        try {
-            CoroutineScope(IO).launch {
+            val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+            try {
+                val accessToken = response.access_token
+                database.accountDao().changeAccessToken(account.userName, accessToken)
+                token = accessToken
 
-                newAccessToken =
-                    auth.getAuthResponse(RedditUtils.CREDENTIALS).access_token
-                if (!newAccessToken.isNullOrEmpty()) {
-                    database.accountDao().changeAccessToken(account.userName, newAccessToken!!)
-                }
-
-
+            } catch (e: IOException) {
+                Timber.e(e)
             }
-
-
-        } catch (e: IOException) {
-
-            Timber.e(e)
         }
 
-        return newAccessToken
+//        try {
+//            CoroutineScope(IO).launch {
+//
+//                val newAccessToken =
+//                    auth.getAuthResponse(RedditUtils.CREDENTIALS).access_token
+//                if (newAccessToken.isNotEmpty()) {
+//                    database.accountDao().changeAccessToken(account.userName, newAccessToken)
+//                }
+//
+//
+//            }
+//
+//
+//        } catch (e: IOException) {
+//
+//            Timber.e(e)
+//        }
+
+        return token
 
     }
 
