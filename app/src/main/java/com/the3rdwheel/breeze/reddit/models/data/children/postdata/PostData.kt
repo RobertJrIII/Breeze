@@ -18,7 +18,6 @@ data class PostData(
     @Json(name = "total_awards_received") val rewardsReceived: Int,
     val score: Long,
     val thumbnail: String,
-    val edited: Boolean,
     val created: Long,
     @Json(name = "archived") val isArchived: Boolean,
     @Json(name = "pinned") val isPinned: Boolean,

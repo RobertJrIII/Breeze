@@ -19,7 +19,7 @@ interface AccountDao {
     @Query("Select * From accounts Where userName =:userName")
     fun getUserLiveData(userName: String): LiveData<Account>
 
-    @Query("Select * From accounts Where currentUser = ${RedditUtils.CURRENT_USER}")
+    @Query("Select * From accounts Where currentUser = 1")
     fun getCurrentUser(): Account
 
     @Query("Select * From accounts Where userName =:userName")

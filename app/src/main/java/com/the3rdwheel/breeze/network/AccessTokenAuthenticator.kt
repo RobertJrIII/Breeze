@@ -70,23 +70,6 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
             }
         }
 
-//        try {
-//            CoroutineScope(IO).launch {
-//
-//                val newAccessToken =
-//                    auth.getAuthResponse(RedditUtils.CREDENTIALS).access_token
-//                if (newAccessToken.isNotEmpty()) {
-//                    database.accountDao().changeAccessToken(account.userName, newAccessToken)
-//                }
-//
-//
-//            }
-//
-//
-//        } catch (e: IOException) {
-//
-//            Timber.e(e)
-//        }
 
         return token
 
