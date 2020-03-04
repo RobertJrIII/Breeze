@@ -4,6 +4,7 @@ import com.the3rdwheel.breeze.reddit.authentication.response.AuthResponse
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.network.ConnectivityInterceptor
 import okhttp3.OkHttpClient
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
@@ -25,15 +26,16 @@ interface Auth {
         @Field("grant_type") grant_Type: String = "https://oauth.reddit.com/grants/installed_client",
         @Field("device_id") device_Id: String = "DO_NOT_TRACK_THIS_DEVICE"
 
-    ): AuthResponse
+    ): Response<AuthResponse>
 
 
     companion object {
 
 
-        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor): Auth {
+        operator fun invoke(): Auth {
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(connectivityInterceptor).build()
+              //  .addInterceptor(connectivityInterceptor)
+                .build()
             val retrofitBuilder = Retrofit.Builder()
                 .client(okHttpClient)
                 .baseUrl(RedditUtils.REDDIT_AUTH_URL)

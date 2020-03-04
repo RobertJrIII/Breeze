@@ -7,10 +7,9 @@ import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.*
-import okio.IOException
-import timber.log.Timber
 
 
 class AccessTokenAuthenticator(private val auth: Auth, private val context: Context) :
@@ -30,30 +29,28 @@ class AccessTokenAuthenticator(private val auth: Auth, private val context: Cont
                 ).encryptionFingerprint(context).build()
 
 
-                val storedAccessToken = securePrefs.getString("Secret", "")
+                val storedAccessToken = securePrefs.getString(RedditUtils.AUTH_KEY, "")
 
                 if (storedAccessToken.isNullOrEmpty()) return null
 
                 if (storedAccessToken == accessToken) {
                     val newAccessToken = refreshToken(securePrefs)
-                    if (newAccessToken != "") {
+                    return if (newAccessToken != "") {
 
-                        return response.request.newBuilder().header(
+                        response.request.newBuilder().header(
                             RedditUtils.AUTHORIZATION_KEY,
                             RedditUtils.AUTHORIZATION_BASE + newAccessToken
 
                         ).build()
 
                     } else {
-                        return null
+                        null
                     }
-                } else {
-                    return response.request.newBuilder().header(
-                        RedditUtils.AUTHORIZATION_KEY,
-                        RedditUtils.AUTHORIZATION_BASE + storedAccessToken
+                } else return response.request.newBuilder().header(
+                    RedditUtils.AUTHORIZATION_KEY,
+                    RedditUtils.AUTHORIZATION_BASE + storedAccessToken
 
-                    ).build()
-                }
+                ).build()
             }
 
         }
@@ -63,19 +60,23 @@ class AccessTokenAuthenticator(private val auth: Auth, private val context: Cont
     }
 
     private fun refreshToken(securePrefs: ArmadilloSharedPreferences): String? {
-        var token: String = ""
+        var token: String? = ""
         CoroutineScope(IO).launch {
 
 
-            try {
-                val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
-                val accessToken = response.access_token
-                securePrefs.edit().putString("Secret", accessToken).apply()
-                token = accessToken
+//            try {
+                val response = async { auth.getAuthResponse(RedditUtils.CREDENTIALS) }
+                val tokenResponse = response.await()
+                if (tokenResponse.isSuccessful) {
+                    val accessToken = tokenResponse.body()?.access_token
+                    securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
+                    token = accessToken
+                }
 
-            } catch (e: IOException) {
-                Timber.e(e)
-            }
+
+//            } catch (e: IOException) {
+//                Timber.e(e)
+//            }
         }
 
 

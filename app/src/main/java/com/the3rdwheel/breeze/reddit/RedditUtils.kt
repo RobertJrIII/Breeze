@@ -15,4 +15,6 @@ object RedditUtils {
     const val TOKEN_TYPE = "Bearer"
     const val AUTHORIZATION_KEY = "Authorization"
     const val AUTHORIZATION_BASE = "bearer "
+    const val AUTH_KEY = "Secret"
+
 }

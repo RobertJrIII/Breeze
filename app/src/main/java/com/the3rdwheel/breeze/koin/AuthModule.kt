@@ -17,7 +17,7 @@ val authModules = module {
         )
     }
 
-    single { Auth.invoke(get()) }
+    single { Auth.invoke() }
 
 
     single { AccessTokenAuthenticator(get(), androidContext()) }
