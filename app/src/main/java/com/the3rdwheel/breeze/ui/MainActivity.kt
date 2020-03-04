@@ -7,8 +7,6 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.security.crypto.EncryptedSharedPreferences
-import androidx.security.crypto.MasterKeys
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.databinding.ActivityMainBinding
 
@@ -45,15 +43,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(controller, appBarConfiguration)
 
 
-//        val masterKeyAlias = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-//
-//        val sharedPreferences = EncryptedSharedPreferences.create(
-//            "secret_shared_prefs",
-//            masterKeyAlias,
-//            this,
-//            EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
-//            EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
-//        )
 
     }
 
