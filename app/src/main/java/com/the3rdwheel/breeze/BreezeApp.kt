@@ -49,9 +49,9 @@ class BreezeApp : Application() {
         }
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
-        val isSetUp = prefs.getBoolean("firstSetUp", true)
+        val isFirstSetUp = prefs.getBoolean("firstSetUp", true)
 
-        if (isSetUp) {
+        if (isFirstSetUp) {
             setUp()
         }
 
