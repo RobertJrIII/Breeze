@@ -1,19 +1,19 @@
 package com.the3rdwheel.breeze.network
 
+import android.content.Context
+import at.favre.lib.armadillo.Armadillo
+import at.favre.lib.armadillo.ArmadilloSharedPreferences
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
-import com.the3rdwheel.breeze.reddit.authentication.db.AccountDatabase
-import com.the3rdwheel.breeze.reddit.authentication.db.entity.Account
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 import okhttp3.*
 import okio.IOException
 import timber.log.Timber
-import java.lang.Exception
 
 
-class AccessTokenAuthenticator(private val auth: Auth, private val database: AccountDatabase) :
+class AccessTokenAuthenticator(private val auth: Auth, private val context: Context) :
     Authenticator {
     override fun authenticate(route: Route?, response: Response): Request? {
 
@@ -22,28 +22,35 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
             synchronized(this) {
-                val account = database.accountDao().getCurrentUser()
+                val securePrefs = Armadillo.create(
+                    context.getSharedPreferences(
+                        "secret_shared_prefs",
+                        Context.MODE_PRIVATE
+                    )
+                ).encryptionFingerprint(context).build()
 
 
-                val accessTokenFromDB = account.authResponse.access_token
+                val storedAccessToken = securePrefs.getString("Secret", "")
 
-                if (accessToken.equals(accessTokenFromDB)) {
-                    val newAccessToken = refreshToken(account)
-                    return if (newAccessToken != "") {
+                if (storedAccessToken.isNullOrEmpty()) return null
 
-                        response.request.newBuilder().header(
+                if (storedAccessToken == accessToken) {
+                    val newAccessToken = refreshToken(securePrefs)
+                    if (newAccessToken != "") {
+
+                        return response.request.newBuilder().header(
                             RedditUtils.AUTHORIZATION_KEY,
                             RedditUtils.AUTHORIZATION_BASE + newAccessToken
 
                         ).build()
 
                     } else {
-                        null
+                        return null
                     }
                 } else {
                     return response.request.newBuilder().header(
                         RedditUtils.AUTHORIZATION_KEY,
-                        RedditUtils.AUTHORIZATION_BASE + accessTokenFromDB
+                        RedditUtils.AUTHORIZATION_BASE + storedAccessToken
 
                     ).build()
                 }
@@ -55,14 +62,15 @@ class AccessTokenAuthenticator(private val auth: Auth, private val database: Acc
         return null
     }
 
-    private fun refreshToken(account: Account): String? {
+    private fun refreshToken(securePrefs: ArmadilloSharedPreferences): String? {
         var token: String = ""
         CoroutineScope(IO).launch {
 
-            val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+
             try {
+                val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
                 val accessToken = response.access_token
-                database.accountDao().changeAccessToken(account.userName, accessToken)
+                securePrefs.edit().putString("Secret", accessToken).apply()
                 token = accessToken
 
             } catch (e: IOException) {

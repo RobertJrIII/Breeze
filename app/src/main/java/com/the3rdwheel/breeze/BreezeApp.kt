@@ -1,13 +1,13 @@
 package com.the3rdwheel.breeze
 
 import android.app.Application
+import android.content.Context
 import android.widget.Toast
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
+import at.favre.lib.armadillo.Armadillo
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
-import com.the3rdwheel.breeze.reddit.authentication.db.AccountDatabase
-import com.the3rdwheel.breeze.reddit.authentication.db.entity.Account
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -59,21 +59,22 @@ class BreezeApp : Application() {
 
     private fun setUp() {
         val auth: Auth = get()
-        val database: AccountDatabase = get()
+
 
         CoroutineScope(IO).launch {
+
             try {
                 val response =
                     auth.getAuthResponse(RedditUtils.CREDENTIALS)
-                database.accountDao()
-                    .insert(
-                        Account(
-                            RedditUtils.ANONYMOUS_USER,
-                            RedditUtils.ANONYMOUS_KARMA,
-                            response,
-                            RedditUtils.CURRENT_USER
-                        )
+
+                val securePrefs = Armadillo.create(
+                    getSharedPreferences(
+                        "secret_shared_prefs",
+                        Context.MODE_PRIVATE
                     )
+                ).encryptionFingerprint(this@BreezeApp).build()
+                securePrefs.edit().putString("Secret", response.access_token).apply()
+
 
                 val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
                 val editor = prefs.edit()

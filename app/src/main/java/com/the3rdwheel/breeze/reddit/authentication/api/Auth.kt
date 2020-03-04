@@ -28,9 +28,6 @@ interface Auth {
     ): AuthResponse
 
 
-//    @POST("access_token")
-//    fun refreshToken(@Header("Authorization") credentials: String)
-
     companion object {
 
 
