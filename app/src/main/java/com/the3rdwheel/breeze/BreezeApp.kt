@@ -66,7 +66,7 @@ class BreezeApp : Application() {
 
             // try {
             val response = async {
-                auth.getAuthResponse(RedditUtils.CREDENTIALS)
+                auth.getAuthResponse()
             }
 
             val tokenResponse = response.await()
@@ -76,7 +76,7 @@ class BreezeApp : Application() {
 
                 val securePrefs = Armadillo.create(
                     getSharedPreferences(
-                        "secret_shared_prefs",
+                        RedditUtils.SECURE_PREFS,
                         Context.MODE_PRIVATE
                     )
                 ).encryptionFingerprint(this@BreezeApp).build()

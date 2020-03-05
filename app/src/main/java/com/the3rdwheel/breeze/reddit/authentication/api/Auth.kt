@@ -3,6 +3,7 @@ package com.the3rdwheel.breeze.reddit.authentication.api
 import com.the3rdwheel.breeze.reddit.authentication.response.AuthResponse
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.network.ConnectivityInterceptor
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
@@ -10,19 +11,13 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
 
 interface Auth {
-    /** Used for application only OAuth
-     * @param credentials The client id and password encoded with Base64
-     * @param grant_Type default https://oauth.reddit.com/grants/installed_client
-     * @param device_Id a random UUID String or leave blank for DO_NOT_TRACK_THIS_DEVICE
-     * @return returns the response containing access token and token type as well what the reddit api returns
-     */
+
     @FormUrlEncoded
     @Headers(
         "Content-Type: application/x-www-form-urlencoded"
     )
     @POST("access_token")
     suspend fun getAuthResponse(
-        @Header("Authorization") credentials: String,
         @Field("grant_type") grant_Type: String = "https://oauth.reddit.com/grants/installed_client",
         @Field("device_id") device_Id: String = "DO_NOT_TRACK_THIS_DEVICE"
 
@@ -33,8 +28,19 @@ interface Auth {
 
 
         operator fun invoke(): Auth {
-            val okHttpClient = OkHttpClient.Builder()
-              //  .addInterceptor(connectivityInterceptor)
+            val okHttpClient = OkHttpClient.Builder().addInterceptor(object : Interceptor {
+                    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
+                        val request = chain.request()
+                        request.newBuilder().addHeader(
+                            RedditUtils.AUTHORIZATION_KEY,
+                            RedditUtils.CREDENTIALS
+                        ).build()
+
+
+                        return chain.proceed(request)
+                    }
+
+                })
                 .build()
             val retrofitBuilder = Retrofit.Builder()
                 .client(okHttpClient)

@@ -1,8 +1,7 @@
 package com.the3rdwheel.breeze.reddit.retrofit
 
-import com.the3rdwheel.breeze.network.AccessTokenAuthenticator
-import com.the3rdwheel.breeze.network.AuthTokenInterceptor
 import com.the3rdwheel.breeze.network.ConnectivityInterceptor
+import com.the3rdwheel.breeze.network.SupportInterceptor
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.models.Submission
 import okhttp3.OkHttpClient
@@ -27,14 +26,13 @@ interface RedditApi {
     companion object {
         operator fun invoke(
             connectivityInterceptor: ConnectivityInterceptor,
-            accessTokenAuthenticator: AccessTokenAuthenticator,
-            authTokenInterceptor: AuthTokenInterceptor
+            supportInterceptor: SupportInterceptor
         ): RedditApi {
 
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(authTokenInterceptor)
+                .addInterceptor(supportInterceptor)
                 .addInterceptor(connectivityInterceptor)
-                .authenticator(accessTokenAuthenticator)
+                .authenticator(supportInterceptor)
                 .build()
 
             val retrofitBuilder = Retrofit.Builder()

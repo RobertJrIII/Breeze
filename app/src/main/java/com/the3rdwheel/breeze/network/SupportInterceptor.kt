@@ -11,9 +11,35 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import okhttp3.*
 
+class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator,
+    Interceptor {
 
-class AccessTokenAuthenticator(private val auth: Auth, private val context: Context) :
-    Authenticator {
+
+    private val securePrefs = Armadillo.create(
+        context.getSharedPreferences(
+            RedditUtils.SECURE_PREFS,
+            Context.MODE_PRIVATE
+        )
+    ).encryptionFingerprint(context).build()
+
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var request = chain.request()
+
+
+        val token = securePrefs.getString("Secret", "")
+
+        if (!token.isNullOrEmpty()) {
+            request = request.newBuilder().addHeader(
+                RedditUtils.AUTHORIZATION_KEY,
+                token
+            ).build()
+
+        }
+        return chain.proceed(request)
+    }
+
+
     override fun authenticate(route: Route?, response: Response): Request? {
 
         if (response.code == 401) {
@@ -23,7 +49,7 @@ class AccessTokenAuthenticator(private val auth: Auth, private val context: Cont
             synchronized(this) {
                 val securePrefs = Armadillo.create(
                     context.getSharedPreferences(
-                        "secret_shared_prefs",
+                        RedditUtils.SECURE_PREFS,
                         Context.MODE_PRIVATE
                     )
                 ).encryptionFingerprint(context).build()
@@ -65,13 +91,13 @@ class AccessTokenAuthenticator(private val auth: Auth, private val context: Cont
 
 
 //            try {
-                val response = async { auth.getAuthResponse(RedditUtils.CREDENTIALS) }
-                val tokenResponse = response.await()
-                if (tokenResponse.isSuccessful) {
-                    val accessToken = tokenResponse.body()?.access_token
-                    securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
-                    token = accessToken
-                }
+            val response = async { auth.getAuthResponse() }
+            val tokenResponse = response.await()
+            if (tokenResponse.isSuccessful) {
+                val accessToken = tokenResponse.body()?.access_token
+                securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
+                token = accessToken
+            }
 
 
 //            } catch (e: IOException) {
@@ -86,5 +112,3 @@ class AccessTokenAuthenticator(private val auth: Auth, private val context: Cont
 
 
 }
-
-//TODO If user logged in do something else
