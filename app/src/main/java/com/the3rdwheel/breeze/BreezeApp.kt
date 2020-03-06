@@ -12,10 +12,8 @@ import com.the3rdwheel.breeze.reddit.RedditUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okio.IOException
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -64,16 +62,12 @@ class BreezeApp : Application() {
 
         CoroutineScope(IO).launch {
 
-            // try {
-            val response = async {
-                auth.getAuthResponse()
-            }
-
-            val tokenResponse = response.await()
-
-            if (tokenResponse.isSuccessful) {
+            val tokenResponse = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
 
+            val accessToken = tokenResponse.access_token
+
+            withContext(Main) {
                 val securePrefs = Armadillo.create(
                     getSharedPreferences(
                         RedditUtils.SECURE_PREFS,
@@ -81,7 +75,7 @@ class BreezeApp : Application() {
                     )
                 ).encryptionFingerprint(this@BreezeApp).build()
 
-                securePrefs.edit().putString("Secret", tokenResponse.body()?.access_token).apply()
+                securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
 
 
                 val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
@@ -90,17 +84,10 @@ class BreezeApp : Application() {
                 editor.apply()
 
 
-                withContext(Main) {
-
-                    Toast.makeText(this@BreezeApp, "Saved", Toast.LENGTH_LONG).show()
-                }
-
+                Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
             }
 
 
-//            } catch (e: IOException) {
-//                Timber.e(e)
-//            }
         }
     }
 

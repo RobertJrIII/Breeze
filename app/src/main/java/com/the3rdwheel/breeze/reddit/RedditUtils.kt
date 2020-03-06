@@ -18,4 +18,10 @@ object RedditUtils {
     const val AUTH_KEY = "Secret"
     const val SECURE_PREFS = "secret_shared_prefs"
 
+
+    fun getOAuthHeader(accessToken: String): HashMap<String, String> {
+        val params = HashMap<String, String>()
+        params.put(AUTHORIZATION_KEY, AUTHORIZATION_BASE + accessToken)
+        return params
+    }
 }

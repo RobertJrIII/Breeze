@@ -7,52 +7,30 @@ import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.async
+import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.*
 
-class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator,
-    Interceptor {
-
-
-    private val securePrefs = Armadillo.create(
-        context.getSharedPreferences(
-            RedditUtils.SECURE_PREFS,
-            Context.MODE_PRIVATE
-        )
-    ).encryptionFingerprint(context).build()
-
-
-    override fun intercept(chain: Interceptor.Chain): Response {
-        var request = chain.request()
-
-
-        val token = securePrefs.getString("Secret", "")
-
-        if (!token.isNullOrEmpty()) {
-            request = request.newBuilder().addHeader(
-                RedditUtils.AUTHORIZATION_KEY,
-                token
-            ).build()
-
-        }
-        return chain.proceed(request)
-    }
+class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator {
 
 
     override fun authenticate(route: Route?, response: Response): Request? {
 
         if (response.code == 401) {
+
+            val securePrefs = Armadillo.create(
+                context.getSharedPreferences(
+                    RedditUtils.SECURE_PREFS,
+                    Context.MODE_PRIVATE
+                )
+            ).encryptionFingerprint(context.applicationContext).build()
+
+
             val accessToken = response.request.header(RedditUtils.AUTHORIZATION_KEY)
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
             synchronized(this) {
-                val securePrefs = Armadillo.create(
-                    context.getSharedPreferences(
-                        RedditUtils.SECURE_PREFS,
-                        Context.MODE_PRIVATE
-                    )
-                ).encryptionFingerprint(context).build()
 
 
                 val storedAccessToken = securePrefs.getString(RedditUtils.AUTH_KEY, "")
@@ -90,19 +68,17 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
         CoroutineScope(IO).launch {
 
 
-//            try {
-            val response = async { auth.getAuthResponse() }
-            val tokenResponse = response.await()
-            if (tokenResponse.isSuccessful) {
-                val accessToken = tokenResponse.body()?.access_token
+            val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+
+            val accessToken = response.access_token
+
+            withContext(Main) {
                 securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
-                token = accessToken
+
             }
+            token = accessToken
 
 
-//            } catch (e: IOException) {
-//                Timber.e(e)
-//            }
         }
 
 

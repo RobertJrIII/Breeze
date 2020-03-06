@@ -1,13 +1,17 @@
 package com.the3rdwheel.breeze.ui.fragments
 
 import android.app.Application
+import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import at.favre.lib.armadillo.Armadillo
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
+import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -34,22 +38,24 @@ class PostsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val prefs = requireContext().getSharedPreferences("prefs", Application.MODE_PRIVATE)
-        val ran = prefs.getBoolean("firstSetUp", true)
+        val token = Armadillo.create(
+            context?.getSharedPreferences(
+                RedditUtils.SECURE_PREFS,
+                MODE_PRIVATE
+            )
+        ).encryptionFingerprint(context).build().getString(RedditUtils.AUTH_KEY, "")
 
-        if(!ran){
-            val redditApi = get<RedditApi>()
-            CoroutineScope(IO).launch {
+        val redditApi = get<RedditApi>()
+        CoroutineScope(IO).launch {
 
-                val t = redditApi.getPosts().data.children[0].data.toString()
+            val t =
+                redditApi.getPosts(RedditUtils.getOAuthHeader(token!!)).data.children[0].data.toString()
 
-                withContext(Main) {
-                    binding.postTextView.text = t
-                }
+            withContext(Main) {
+                binding.postTextView.text = t
             }
-        }else{
-            Toast.makeText(context,"Token not set", Toast.LENGTH_LONG).show()
         }
+
     }
 
     override fun onDestroyView() {
