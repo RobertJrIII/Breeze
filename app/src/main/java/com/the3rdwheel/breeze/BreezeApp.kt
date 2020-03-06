@@ -12,6 +12,7 @@ import com.the3rdwheel.breeze.reddit.RedditUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
@@ -61,8 +62,9 @@ class BreezeApp : Application() {
 
 
         CoroutineScope(IO).launch {
+            val response = async { auth.getAuthResponse(RedditUtils.CREDENTIALS) }
 
-            val tokenResponse = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+            val tokenResponse = response.await()
 
 
             val accessToken = tokenResponse.access_token

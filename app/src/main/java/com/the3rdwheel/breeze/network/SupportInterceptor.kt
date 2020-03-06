@@ -9,6 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.*
 
@@ -86,12 +87,9 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
         return null
     }
 
-    private fun refreshToken(securePrefs: ArmadilloSharedPreferences): String? {
-        var token: String? = ""
-        CoroutineScope(IO).launch {
 
-
-            val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+    private fun refreshToken(securePrefs: ArmadilloSharedPreferences) = runBlocking {
+        val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
             val accessToken = response.access_token
 
@@ -99,15 +97,33 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
 
             }
-            token = accessToken
 
 
-        }
-
-
-        return token
-
+        return@runBlocking accessToken
     }
+
+//    private fun refreshToken(securePrefs: ArmadilloSharedPreferences): String? {
+//        var token: String? = ""
+//        CoroutineScope(IO).launch {
+//
+//
+//            val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+//
+//            val accessToken = response.access_token
+//
+//            withContext(Main) {
+//                securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
+//
+//            }
+//            token = accessToken
+//
+//
+//        }
+//
+//
+//        return token
+//
+//    }
 
 
 }
