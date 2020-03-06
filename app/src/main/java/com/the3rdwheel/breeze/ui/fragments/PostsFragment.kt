@@ -38,18 +38,13 @@ class PostsFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        val token = Armadillo.create(
-            context?.getSharedPreferences(
-                RedditUtils.SECURE_PREFS,
-                MODE_PRIVATE
-            )
-        ).encryptionFingerprint(context).build().getString(RedditUtils.AUTH_KEY, "")
+
 
         val redditApi = get<RedditApi>()
         CoroutineScope(IO).launch {
 
             val t =
-                redditApi.getPosts(RedditUtils.getOAuthHeader(token!!)).data.children[0].data.toString()
+                redditApi.getPosts().data.children[0].data.toString()
 
             withContext(Main) {
                 binding.postTextView.text = t

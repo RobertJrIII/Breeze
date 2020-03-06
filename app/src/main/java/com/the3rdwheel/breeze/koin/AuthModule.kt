@@ -20,6 +20,6 @@ val authModules = module {
 
 
     single { SupportInterceptor(get(), androidContext()) }
-    single { RedditApi.invoke(get()) }
+    single { RedditApi.invoke(get(),get()) }
 }
 

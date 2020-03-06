@@ -12,7 +12,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okhttp3.*
 
-class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator {
+class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator,
+    Interceptor {
+
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+        var request = chain.request()
+        val securePrefs = Armadillo.create(
+            context.getSharedPreferences(
+                RedditUtils.SECURE_PREFS,
+                Context.MODE_PRIVATE
+            )
+        ).encryptionFingerprint(context.applicationContext).build()
+
+        val token = securePrefs.getString(RedditUtils.AUTH_KEY, "")
+
+        if (!token.isNullOrEmpty()) {
+            request = request.newBuilder()
+                .addHeader(RedditUtils.AUTHORIZATION_KEY, RedditUtils.AUTHORIZATION_BASE + token)
+                .build()
+        }
+
+
+        return chain.proceed(request)
+    }
 
 
     override fun authenticate(route: Route?, response: Response): Request? {

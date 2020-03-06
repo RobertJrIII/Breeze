@@ -20,17 +20,19 @@ interface RedditApi {
 
 
     @GET(".json")
-    suspend fun getPosts(@HeaderMap header: HashMap<String,String>): Submission
+    suspend fun getPosts(): Submission
 
 
     companion object {
         operator fun invoke(
-            connectivityInterceptor: ConnectivityInterceptor
+            connectivityInterceptor: ConnectivityInterceptor,
+            supportInterceptor: SupportInterceptor
         ): RedditApi {
 
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(connectivityInterceptor)
-
+                .authenticator(supportInterceptor)
+                .addInterceptor(supportInterceptor)
                 .build()
 
             val retrofitBuilder = Retrofit.Builder()
