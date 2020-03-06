@@ -70,12 +70,15 @@ class BreezeApp : Application() {
             val accessToken = tokenResponse.access_token
 
             withContext(Main) {
-                val securePrefs = Armadillo.create(
+
+                val securePrefs = RedditUtils.getSecureSharedPrefs(
                     getSharedPreferences(
                         RedditUtils.SECURE_PREFS,
                         Context.MODE_PRIVATE
-                    )
-                ).encryptionFingerprint(this@BreezeApp).build()
+                    ), this@BreezeApp
+                )
+
+
 
                 securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
 
