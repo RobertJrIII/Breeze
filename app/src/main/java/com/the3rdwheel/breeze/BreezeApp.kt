@@ -71,12 +71,12 @@ class BreezeApp : Application() {
 
             withContext(Main) {
 
-                val securePrefs = RedditUtils.getSecureSharedPrefs(
+                val securePrefs = Armadillo.create(
                     getSharedPreferences(
                         RedditUtils.SECURE_PREFS,
                         Context.MODE_PRIVATE
-                    ), this@BreezeApp
-                )
+                    )
+                ).encryptionFingerprint(this@BreezeApp).build()
 
 
 

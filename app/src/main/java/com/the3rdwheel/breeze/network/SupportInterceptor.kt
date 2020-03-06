@@ -43,12 +43,12 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
 
         if (response.code == 401) {
 
-            val securePrefs = RedditUtils.getSecureSharedPrefs(
+            val securePrefs = Armadillo.create(
                 context.getSharedPreferences(
                     RedditUtils.SECURE_PREFS,
                     Context.MODE_PRIVATE
-                ), context
-            )
+                )
+            ).encryptionFingerprint(context).build()
 
             val accessToken = response.request.header(RedditUtils.AUTHORIZATION_KEY)
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)

@@ -1,9 +1,5 @@
 package com.the3rdwheel.breeze.reddit
 
-import android.content.Context
-import android.content.SharedPreferences
-import at.favre.lib.armadillo.Armadillo
-import at.favre.lib.armadillo.ArmadilloSharedPreferences
 import com.the3rdwheel.breeze.BuildConfig
 import okhttp3.Credentials
 
@@ -22,10 +18,4 @@ object RedditUtils {
     const val AUTH_KEY = "Secret"
     const val SECURE_PREFS = "secret_shared_prefs"
 
-    fun getSecureSharedPrefs(
-        sharedPreferences: SharedPreferences,
-        context: Context
-    ): ArmadilloSharedPreferences {
-        return Armadillo.create(sharedPreferences).encryptionFingerprint(context).build()
-    }
 }
