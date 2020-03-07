@@ -1,7 +1,6 @@
 package com.the3rdwheel.breeze
 
 import android.app.Application
-import android.content.Context
 import android.widget.Toast
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
@@ -14,7 +13,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import okio.IOException
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -61,26 +60,28 @@ class BreezeApp : Application() {
         val auth: Auth = get()
 
 
-        CoroutineScope(IO).launch {
-            val response = async { auth.getAuthResponse(RedditUtils.CREDENTIALS) }
+        CoroutineScope(Main).launch {
 
-            val tokenResponse = response.await()
+            try {
+
+                val response = async(IO) { auth.getAuthResponse(RedditUtils.CREDENTIALS) }
+
+                val tokenResponse = response.await()
 
 
-            val accessToken = tokenResponse.access_token
+                val accessToken = tokenResponse.access_token
 
-            withContext(Main) {
 
                 val securePrefs = Armadillo.create(
                     getSharedPreferences(
                         RedditUtils.SECURE_PREFS,
-                        Context.MODE_PRIVATE
+                        MODE_PRIVATE
                     )
                 ).encryptionFingerprint(this@BreezeApp).build()
 
 
 
-                securePrefs.edit().putString(RedditUtils.AUTH_KEY, accessToken).apply()
+                securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
 
 
                 val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
@@ -90,6 +91,10 @@ class BreezeApp : Application() {
 
 
                 Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
+
+
+            } catch (io: IOException) {
+                Timber.e(io)
             }
 
 

@@ -16,10 +16,10 @@ val authModules = module {
         )
     }
 
-    single { Auth.invoke() }
+    single { Auth.invoke(get()) }
 
 
     single { SupportInterceptor(get(), androidContext()) }
-    single { RedditApi.invoke(get(),get()) }
+    single { RedditApi.invoke(get(), get()) }
 }
 

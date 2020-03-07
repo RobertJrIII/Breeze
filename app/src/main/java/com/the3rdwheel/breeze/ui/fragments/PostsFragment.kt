@@ -1,24 +1,20 @@
 package com.the3rdwheel.breeze.ui.fragments
 
-import android.app.Application
-import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import at.favre.lib.armadillo.Armadillo
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
-import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okio.IOException
 import org.koin.android.ext.android.get
+import timber.log.Timber
 
 
 class PostsFragment : Fragment() {
@@ -43,11 +39,15 @@ class PostsFragment : Fragment() {
         val redditApi = get<RedditApi>()
         CoroutineScope(IO).launch {
 
-            val t =
-                redditApi.getPosts().data.children[0].data.toString()
+            try {
+                val response =
+                    redditApi.getPosts().data.children.toString()
 
-            withContext(Main) {
-                binding.postTextView.text = t
+                withContext(Main) {
+                    binding.postTextView.text = response
+                }
+            } catch (io: IOException) {
+                Timber.e(io)
             }
         }
 
