@@ -1,6 +1,7 @@
 package com.the3rdwheel.breeze
 
 import android.app.Application
+import android.widget.Toast
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
@@ -85,6 +86,9 @@ class BreezeApp : Application() {
                     val editor = prefs.edit()
                     editor.putBoolean("firstSetUp", false)
                     editor.apply()
+
+                    Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
+
                 }
 
 
