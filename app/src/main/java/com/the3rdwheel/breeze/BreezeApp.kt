@@ -1,17 +1,16 @@
 package com.the3rdwheel.breeze
 
 import android.app.Application
-import android.widget.Toast
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import at.favre.lib.armadillo.Armadillo
+import com.the3rdwheel.breeze.koin.authModules
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import okio.IOException
@@ -45,7 +44,7 @@ class BreezeApp : Application() {
 
         startKoin {
             androidContext(this@BreezeApp)
-            modules(com.the3rdwheel.breeze.koin.authModules)
+            modules(authModules)
         }
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
@@ -67,9 +66,7 @@ class BreezeApp : Application() {
 
                 val tokenResponse = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
-
                 val accessToken = tokenResponse.access_token
-
 
                 withContext(Main) {
                     val securePrefs = Armadillo.create(
@@ -88,9 +85,6 @@ class BreezeApp : Application() {
                     val editor = prefs.edit()
                     editor.putBoolean("firstSetUp", false)
                     editor.apply()
-
-
-                    Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
                 }
 
 

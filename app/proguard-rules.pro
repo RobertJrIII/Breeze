@@ -115,4 +115,5 @@
 }
 
 -keep class com.the3rdwheel.breeze.reddit.authentication.network.response.** {*;}
+-keep class com.the3rdwheel.breeze.reddit.models.** {*;}
 

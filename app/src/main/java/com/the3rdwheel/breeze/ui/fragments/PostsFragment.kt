@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -37,18 +38,24 @@ class PostsFragment : Fragment() {
 
 
         val redditApi = get<RedditApi>()
-        CoroutineScope(IO).launch {
+        if (!requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+                .getBoolean("firstSetUp", true)
+        ) {
 
-            try {
-                val response =
-                    redditApi.getPosts().data.children.toString()
+            CoroutineScope(IO).launch {
 
-                withContext(Main) {
-                    binding.postTextView.text = response
+                try {
+                    val response =
+                        redditApi.getPosts().data.children.toString()
+
+                    withContext(Main) {
+                        binding.postTextView.text = response
+                    }
+                } catch (io: IOException) {
+                    Timber.e(io)
                 }
-            } catch (io: IOException) {
-                Timber.e(io)
             }
+
         }
 
     }
