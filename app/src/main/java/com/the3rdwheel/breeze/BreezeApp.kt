@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okio.IOException
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
@@ -60,37 +61,37 @@ class BreezeApp : Application() {
         val auth: Auth = get()
 
 
-        CoroutineScope(Main).launch {
+        CoroutineScope(IO).launch {
 
             try {
 
-                val response = async(IO) { auth.getAuthResponse(RedditUtils.CREDENTIALS) }
-
-                val tokenResponse = response.await()
+                val tokenResponse = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
 
                 val accessToken = tokenResponse.access_token
 
 
-                val securePrefs = Armadillo.create(
-                    getSharedPreferences(
-                        RedditUtils.SECURE_PREFS,
-                        MODE_PRIVATE
-                    )
-                ).encryptionFingerprint(this@BreezeApp).build()
+                withContext(Main) {
+                    val securePrefs = Armadillo.create(
+                        getSharedPreferences(
+                            RedditUtils.SECURE_PREFS,
+                            MODE_PRIVATE
+                        )
+                    ).encryptionFingerprint(this@BreezeApp).build()
 
 
 
-                securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
+                    securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
 
 
-                val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
-                val editor = prefs.edit()
-                editor.putBoolean("firstSetUp", false)
-                editor.apply()
+                    val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
+                    val editor = prefs.edit()
+                    editor.putBoolean("firstSetUp", false)
+                    editor.apply()
 
 
-                Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
+                }
 
 
             } catch (io: IOException) {
