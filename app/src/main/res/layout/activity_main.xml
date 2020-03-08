@@ -31,17 +31,15 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navBar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/toolbarColor"
-
+        android:background="?android:attr/windowBackground"
+        android:elevation="4dp"
         app:labelVisibilityMode="labeled"
         app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
         app:menu="@menu/bottom_navbar_menu"
 
-
         />
-    <!--        android:background="?android:attr/windowBackground"-->
     <!--                app:itemIconTint="@drawable/bottom_navigation_selector"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
