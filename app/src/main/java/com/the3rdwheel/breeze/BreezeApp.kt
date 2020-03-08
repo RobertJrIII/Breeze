@@ -14,7 +14,6 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okio.IOException
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -70,6 +69,8 @@ class BreezeApp : Application() {
                 val accessToken = tokenResponse.access_token
 
                 withContext(Main) {
+
+
                     val securePrefs = Armadillo.create(
                         getSharedPreferences(
                             RedditUtils.SECURE_PREFS,
@@ -92,8 +93,8 @@ class BreezeApp : Application() {
                 }
 
 
-            } catch (io: IOException) {
-                Timber.e(io)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
 
 

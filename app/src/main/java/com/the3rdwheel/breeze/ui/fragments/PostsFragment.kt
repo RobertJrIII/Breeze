@@ -38,25 +38,22 @@ class PostsFragment : Fragment() {
 
 
         val redditApi = get<RedditApi>()
-        if (!requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                .getBoolean("firstSetUp", true)
-        ) {
 
-            CoroutineScope(IO).launch {
 
-                try {
-                    val response =
-                        redditApi.getPosts().data.children.toString()
+        CoroutineScope(IO).launch {
 
-                    withContext(Main) {
-                        binding.postTextView.text = response
-                    }
-                } catch (io: IOException) {
-                    Timber.e(io)
+            try {
+                val response =
+                    redditApi.getPosts().data.children.toString()
+
+                withContext(Main) {
+                    binding.postTextView.text = response
                 }
+            } catch (e: Exception) {
+                Timber.e(e)
             }
-
         }
+
 
     }
 

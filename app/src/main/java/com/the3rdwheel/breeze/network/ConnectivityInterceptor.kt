@@ -11,7 +11,7 @@ class ConnectivityInterceptor(context: Context) : Interceptor {
 
     override fun intercept(chain: Interceptor.Chain): Response {
         if (!isOnline())
-            throw IOException()
+            throw NoNetworkException()
 
         return chain.proceed(chain.request())
     }
@@ -19,4 +19,7 @@ class ConnectivityInterceptor(context: Context) : Interceptor {
     private fun isOnline(): Boolean {
         return WiseFy.Brains(appContext).getSmarts().isDeviceConnectedToMobileOrWifiNetwork()
     }
+
+    class NoNetworkException : IOException()
+
 }
