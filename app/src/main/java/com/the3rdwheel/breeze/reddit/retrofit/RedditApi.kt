@@ -1,6 +1,5 @@
 package com.the3rdwheel.breeze.reddit.retrofit
 
-import com.the3rdwheel.breeze.network.ConnectivityInterceptor
 import com.the3rdwheel.breeze.network.SupportInterceptor
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.models.Submission
@@ -8,9 +7,8 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.HeaderMap
 import retrofit2.http.Query
+import java.util.concurrent.TimeUnit
 
 interface RedditApi {
 
@@ -25,14 +23,15 @@ interface RedditApi {
 
     companion object {
         operator fun invoke(
-            connectivityInterceptor: ConnectivityInterceptor,
             supportInterceptor: SupportInterceptor
         ): RedditApi {
 
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(connectivityInterceptor)
                 .authenticator(supportInterceptor)
                 .addInterceptor(supportInterceptor)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
                 .build()
 
             val retrofitBuilder = Retrofit.Builder()

@@ -83,6 +83,13 @@ class BreezeApp : Application() {
 
 
             } catch (e: Exception) {
+                withContext(Main) {
+                    Toast.makeText(
+                        this@BreezeApp,
+                        "No network detected. Try again later.",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
                 Timber.e(e)
             }
 
