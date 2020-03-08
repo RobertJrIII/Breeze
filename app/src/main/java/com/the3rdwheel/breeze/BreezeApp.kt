@@ -1,6 +1,7 @@
 package com.the3rdwheel.breeze
 
 import android.app.Application
+import android.content.Context
 import android.widget.Toast
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
@@ -13,6 +14,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import org.koin.android.ext.android.get
 import org.koin.android.ext.koin.androidContext
@@ -64,23 +66,10 @@ class BreezeApp : Application() {
 
             try {
 
-                val tokenResponse = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
-                val accessToken = tokenResponse.access_token
+                val accessToken = retrieveToken(auth)
 
                 withContext(Main) {
-
-
-                    val securePrefs = Armadillo.create(
-                        getSharedPreferences(
-                            RedditUtils.SECURE_PREFS,
-                            MODE_PRIVATE
-                        )
-                    ).encryptionFingerprint(this@BreezeApp).build()
-
-
-
-                    securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
 
 
                     val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
@@ -99,6 +88,26 @@ class BreezeApp : Application() {
 
 
         }
+    }
+
+    private fun retrieveToken(auth: Auth) = runBlocking {
+        val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+
+        val accessToken = response.access_token
+
+        withContext(Main) {
+            val securePrefs = Armadillo.create(
+                getSharedPreferences(
+                    RedditUtils.SECURE_PREFS,
+                    Context.MODE_PRIVATE
+                )
+            ).encryptionFingerprint(this@BreezeApp).build()
+
+
+            securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
+
+        }
+        return@runBlocking accessToken
     }
 
 }

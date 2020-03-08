@@ -17,8 +17,15 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
+        val securePrefs = Armadillo.create(
+            context.getSharedPreferences(
+                RedditUtils.SECURE_PREFS,
+                MODE_PRIVATE
+            )
+        ).encryptionFingerprint(context.applicationContext).build()
 
-        val token = getStoredToken()
+
+        val token = securePrefs.getString(RedditUtils.SECRET_KEY, "")
 
         if (token != "") {
             request = request.newBuilder()
@@ -39,9 +46,14 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
             synchronized(this) {
+                val securePrefs = Armadillo.create(
+                    context.getSharedPreferences(
+                        RedditUtils.SECURE_PREFS,
+                        MODE_PRIVATE
+                    )
+                ).encryptionFingerprint(context.applicationContext).build()
 
-
-                val storedAccessToken = getStoredToken()
+                val storedAccessToken = securePrefs.getString(RedditUtils.SECRET_KEY, "")
 
                 if (storedAccessToken == "") return null
 
@@ -71,19 +83,6 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
         return null
     }
 
-    private fun getStoredToken() = runBlocking {
-
-        Armadillo.create(
-                context.getSharedPreferences(
-                    RedditUtils.SECURE_PREFS,
-                    MODE_PRIVATE
-                )
-            ).encryptionFingerprint(context.applicationContext).build()
-
-            .getString(RedditUtils.SECRET_KEY, "")
-
-
-    }
 
     private fun refreshToken() = runBlocking {
         val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
