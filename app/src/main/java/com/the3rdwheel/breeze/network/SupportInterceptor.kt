@@ -17,15 +17,20 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        val securePrefs = Armadillo.create(
-            context.getSharedPreferences(
-                RedditUtils.SECURE_PREFS,
-                MODE_PRIVATE
-            )
-        ).encryptionFingerprint(context.applicationContext).build()
+        val token = runBlocking {
+            val securePrefs = withContext(Main) {
+                Armadillo.create(
+                    context.getSharedPreferences(
+                        RedditUtils.SECURE_PREFS,
+                        MODE_PRIVATE
+                    )
+                ).encryptionFingerprint(context.applicationContext).build()
+            }
+
+            return@runBlocking securePrefs.getString(RedditUtils.SECRET_KEY, "")
+        }
 
 
-        val token = securePrefs.getString(RedditUtils.SECRET_KEY, "")
 
         if (token != "") {
             request = request.newBuilder()
@@ -46,18 +51,25 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
             synchronized(this) {
-                val securePrefs = Armadillo.create(
-                    context.getSharedPreferences(
-                        RedditUtils.SECURE_PREFS,
-                        MODE_PRIVATE
-                    )
-                ).encryptionFingerprint(context.applicationContext).build()
+                val storedAccessToken = runBlocking {
 
-                val storedAccessToken = securePrefs.getString(RedditUtils.SECRET_KEY, "")
+                    val securePrefs = withContext(Main) {
+                        Armadillo.create(
+                            context.getSharedPreferences(
+                                RedditUtils.SECURE_PREFS,
+                                MODE_PRIVATE
+                            )
+                        ).encryptionFingerprint(context.applicationContext).build()
+
+
+                    }
+                    return@runBlocking securePrefs.getString(RedditUtils.SECRET_KEY, "")
+
+                }
 
                 if (storedAccessToken == "") return null
 
-                if (accessToken.equals(storedAccessToken)) {
+                if (accessToken == storedAccessToken) {
                     val newAccessToken = refreshToken()
                     return if (newAccessToken != "") {
 
