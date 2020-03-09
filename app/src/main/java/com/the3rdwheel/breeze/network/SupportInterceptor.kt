@@ -17,24 +17,26 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        val token = runBlocking {
-            val securePrefs = withContext(Main) {
-                Armadillo.create(
+        val storedToken = runBlocking(Main) {
+
+            return@runBlocking Armadillo.create(
                     context.getSharedPreferences(
                         RedditUtils.SECURE_PREFS,
                         MODE_PRIVATE
                     )
                 ).encryptionFingerprint(context.applicationContext).build()
-            }
+                .getString(RedditUtils.SECRET_KEY, "")
 
-            return@runBlocking securePrefs.getString(RedditUtils.SECRET_KEY, "")
         }
 
 
 
-        if (token != "") {
+        if (storedToken != "") {
             request = request.newBuilder()
-                .addHeader(RedditUtils.AUTHORIZATION_KEY, RedditUtils.AUTHORIZATION_BASE + token)
+                .addHeader(
+                    RedditUtils.AUTHORIZATION_KEY,
+                    RedditUtils.AUTHORIZATION_BASE + storedToken
+                )
                 .build()
         }
 
@@ -51,19 +53,17 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
             synchronized(this) {
-                val storedAccessToken = runBlocking {
+                val storedAccessToken = runBlocking(Main) {
 
-                    val securePrefs = withContext(Main) {
-                        Armadillo.create(
+                    return@runBlocking Armadillo.create(
                             context.getSharedPreferences(
                                 RedditUtils.SECURE_PREFS,
                                 MODE_PRIVATE
                             )
-                        ).encryptionFingerprint(context.applicationContext).build()
+                        )
+                        .encryptionFingerprint(context.applicationContext).build()
+                        .getString(RedditUtils.SECRET_KEY, "")
 
-
-                    }
-                    return@runBlocking securePrefs.getString(RedditUtils.SECRET_KEY, "")
 
                 }
 
