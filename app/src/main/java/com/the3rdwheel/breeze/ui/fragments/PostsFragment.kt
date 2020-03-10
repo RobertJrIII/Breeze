@@ -6,8 +6,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import coil.api.load
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
+import kotlinx.android.synthetic.main.posts_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -40,22 +42,27 @@ class PostsFragment : Fragment() {
 
 
         CoroutineScope(IO).launch {
-//            if (!requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-//                    .getBoolean("firstSetUp", true)
-//            ) {
 
             try {
                 val response =
-                    redditApi.getPosts().data.children.toString()
+                    redditApi.getPosts().data.children
 
-                withContext(Main) {
-                    binding.postTextView.text = response
+                for (post in response) {
+
+                    if (post.data.thumbnail != "self") {
+                        withContext(Main) {
+                            postImageView.load(post.data.thumbnail, get())
+
+                        }
+                        break
+                    }
                 }
+
+
             } catch (e: Exception) {
                 Timber.e(e)
             }
 
-            // }
 
         }
 

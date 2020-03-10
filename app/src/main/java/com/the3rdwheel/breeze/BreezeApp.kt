@@ -7,7 +7,9 @@ import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import at.favre.lib.armadillo.Armadillo
+import coil.ImageLoader
 import com.the3rdwheel.breeze.koin.authModules
+import com.the3rdwheel.breeze.koin.viewModule
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import kotlinx.coroutines.CoroutineScope
@@ -43,10 +45,9 @@ class BreezeApp : Application() {
         val config = FontRequestEmojiCompatConfig(this, fontRequest)
         EmojiCompat.init(config)
 
-
         startKoin {
             androidContext(this@BreezeApp)
-            modules(authModules)
+            modules(listOf(authModules, viewModule))
         }
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
