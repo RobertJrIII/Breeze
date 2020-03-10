@@ -1,15 +1,17 @@
 package com.the3rdwheel.breeze.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import coil.api.load
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.mikepenz.fastadapter.FastAdapter
+import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
+import com.the3rdwheel.breeze.reddit.adapter.PostItem
+import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
-import kotlinx.android.synthetic.main.posts_fragment.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
@@ -20,7 +22,7 @@ import timber.log.Timber
 
 
 class PostsFragment : Fragment() {
-
+    private lateinit var itemAdapter: ItemAdapter<PostItem>
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -29,8 +31,8 @@ class PostsFragment : Fragment() {
     ): View? {
 
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
-
-
+        itemAdapter = ItemAdapter()
+        binding.postRecyclerview.layoutManager = LinearLayoutManager(context)
         return binding.root
     }
 
@@ -38,6 +40,8 @@ class PostsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
+        val fastAdapter = FastAdapter.with(itemAdapter)
+        binding.postRecyclerview.adapter = fastAdapter
         val redditApi = get<RedditApi>()
 
 
@@ -48,13 +52,8 @@ class PostsFragment : Fragment() {
                     redditApi.getPosts().data.children
 
                 for (post in response) {
-
-                    if (post.data.thumbnail != "self") {
-                        withContext(Main) {
-                            postImageView.load(post.data.thumbnail, get())
-
-                        }
-                        break
+                    withContext(Main) {
+                        itemAdapter.add(PostItem(post.data))
                     }
                 }
 

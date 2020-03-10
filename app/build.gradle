@@ -134,4 +134,8 @@ dependencies {
     //armadillo
     implementation "at.favre.lib:armadillo:0.9.0"
 
+    //fastadapter
+    implementation "com.mikepenz:fastadapter:5.0.0"
+    implementation "com.mikepenz:fastadapter-extensions-binding:5.0.0"
+
 }
