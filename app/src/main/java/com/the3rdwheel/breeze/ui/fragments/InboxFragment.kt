@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.the3rdwheel.breeze.databinding.InboxFragmentBinding
+import kotlinx.android.synthetic.main.inbox_fragment.view.*
+import kotlinx.android.synthetic.main.posts_fragment.view.*
 
 
 class InboxFragment : Fragment() {
@@ -19,6 +21,7 @@ class InboxFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = InboxFragmentBinding.inflate(inflater, container, false)
+        binding.inboxTextView.text = "Inbox Fragment"
         return binding.root
     }
 

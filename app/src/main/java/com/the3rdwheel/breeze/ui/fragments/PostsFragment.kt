@@ -40,22 +40,22 @@ class PostsFragment : Fragment() {
 
 
         CoroutineScope(IO).launch {
-            if (!requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
-                    .getBoolean("firstSetUp", true)
-            ) {
+//            if (!requireContext().getSharedPreferences("prefs", Context.MODE_PRIVATE)
+//                    .getBoolean("firstSetUp", true)
+//            ) {
 
-                try {
-                    val response =
-                        redditApi.getPosts().data.children.toString()
+            try {
+                val response =
+                    redditApi.getPosts().data.children.toString()
 
-                    withContext(Main) {
-                        binding.postTextView.text = response
-                    }
-                } catch (e: Exception) {
-                    Timber.e(e)
+                withContext(Main) {
+                    binding.postTextView.text = response
                 }
-
+            } catch (e: Exception) {
+                Timber.e(e)
             }
+
+            // }
 
         }
 

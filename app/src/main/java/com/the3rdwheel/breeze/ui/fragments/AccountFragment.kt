@@ -18,6 +18,7 @@ class AccountFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = AccountFragmentBinding.inflate(inflater, container, false)
+        binding.accountTextView.text = "Account Fragment"
         return binding.root
     }
 
