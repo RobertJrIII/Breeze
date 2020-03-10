@@ -1,7 +1,12 @@
 package com.the3rdwheel.breeze.reddit.models.data.children.postdata
 
 
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import com.squareup.moshi.Json
+import com.the3rdwheel.breeze.R
+import com.the3rdwheel.breeze.databinding.PostItemBinding
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.preview.Preview
 
 data class PostData(
@@ -22,7 +27,7 @@ data class PostData(
     @Json(name = "pinned") val isPinned: Boolean,
     @Json(name = "over_18") val isAdultContent: Boolean,
     val preview: Preview?, //TODO add Image Class
-    // @Json(name = "all_awardings") val awards: List<Award>,
+    // @Json(name = "all_awardings") val awards: List<Award>?,
     @Json(name = "spoiler") val isSpoiler: Boolean,
     @Json(name = "locked") val isLocked: Boolean,
     val id: String,
@@ -33,3 +38,20 @@ data class PostData(
     @Json(name = "stickied") val isStickied: Boolean,
     @Json(name = "is_video") val isVideo: Boolean
 )
+//    : AbstractBindingItem<PostItemBinding>() {
+//
+//
+//    override fun bindView(binding: PostItemBinding, payloads: List<Any>) {
+//        binding.postAuthor.text = author
+//        binding.postTitle.text = title
+//        binding.postSubbreddit.text = subreddit_name_prefixed
+//    }
+//
+//    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): PostItemBinding {
+//        return PostItemBinding.inflate(inflater, parent, false)
+//    }
+//
+//    override val type: Int
+//        get() = R.id.postItem
+//
+//}

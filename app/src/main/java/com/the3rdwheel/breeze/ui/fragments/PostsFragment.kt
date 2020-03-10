@@ -22,6 +22,7 @@ import timber.log.Timber
 
 
 class PostsFragment : Fragment() {
+    private lateinit var fastAdapter: FastAdapter<PostItem>
     private lateinit var itemAdapter: ItemAdapter<PostItem>
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
@@ -32,6 +33,7 @@ class PostsFragment : Fragment() {
 
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
         itemAdapter = ItemAdapter()
+        fastAdapter = FastAdapter.with(itemAdapter)
         binding.postRecyclerview.layoutManager = LinearLayoutManager(context)
         return binding.root
     }
@@ -40,7 +42,6 @@ class PostsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
-        val fastAdapter = FastAdapter.with(itemAdapter)
         binding.postRecyclerview.adapter = fastAdapter
         val redditApi = get<RedditApi>()
 
