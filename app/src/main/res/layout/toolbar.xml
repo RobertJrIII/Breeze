@@ -12,9 +12,10 @@
 
         app:layout_behavior="com.google.android.material.appbar.AppBarLayoutScrollingViewBehavior"
 
-        app:layout_scrollFlags="scroll|enterAlways|snap"
 
         />
 
 
 </com.google.android.material.appbar.AppBarLayout>
+
+    <!--  app:layout_scrollFlags="scroll|enterAlways|snap"-->

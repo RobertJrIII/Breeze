@@ -68,7 +68,32 @@ class BreezeApp : Application() {
             try {
 
 
-                retrieveToken(auth)
+                val accessToken = retrieveToken(auth)
+
+                withContext(Main) {
+
+                    val securePrefs = Armadillo.create(
+                        getSharedPreferences(
+                            RedditUtils.SECURE_PREFS,
+                            Context.MODE_PRIVATE
+                        )
+                    ).encryptionFingerprint(this@BreezeApp).build()
+
+
+                    securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
+
+
+                    val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
+                    val editor = prefs.edit()
+                    editor.putBoolean("firstSetUp", false)
+                    editor.apply()
+
+
+
+
+                    Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
+
+                }
 
 
             } catch (e: Exception) {
@@ -89,31 +114,7 @@ class BreezeApp : Application() {
     private fun retrieveToken(auth: Auth) = runBlocking {
         val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
-
-        if (response.isSuccessful && response.body() != null) {
-            val accessToken = response.body()!!.access_token
-            withContext(Main) {
-                val securePrefs = Armadillo.create(
-                    getSharedPreferences(
-                        RedditUtils.SECURE_PREFS,
-                        Context.MODE_PRIVATE
-                    )
-                ).encryptionFingerprint(this@BreezeApp).build()
-
-
-                securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
-
-
-                val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
-                val editor = prefs.edit()
-                editor.putBoolean("firstSetUp", false)
-                editor.apply()
-
-                Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
-            }
-        }
-
-
+        return@runBlocking response.access_token
     }
 
 }
