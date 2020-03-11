@@ -1,4 +1,4 @@
-package com.the3rdwheel.breeze.reddit.adapter
+package com.the3rdwheel.breeze.items
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
