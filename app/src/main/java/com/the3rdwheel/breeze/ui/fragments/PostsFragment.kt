@@ -9,8 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.adapters.ItemAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
-import com.the3rdwheel.breeze.reddit.adapter.PostItem
-import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
+import com.the3rdwheel.breeze.items.PostItem
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.IO
@@ -55,7 +54,11 @@ class PostsFragment : Fragment() {
 
                 for (post in response) {
                     withContext(Main) {
-                        itemAdapter.add(PostItem(post.data))
+                        itemAdapter.add(
+                            PostItem(
+                                post.data
+                            )
+                        )
                     }
                 }
 
