@@ -2,6 +2,8 @@ package com.the3rdwheel.breeze.reddit.authentication.api
 
 import com.the3rdwheel.breeze.reddit.authentication.response.AuthResponse
 import com.the3rdwheel.breeze.reddit.RedditUtils
+import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.*
@@ -18,11 +20,10 @@ interface Auth {
         @Field("grant_type") grant_Type: String = "https://oauth.reddit.com/grants/installed_client",
         @Field("device_id") device_Id: String = "DO_NOT_TRACK_THIS_DEVICE"
 
-    ): AuthResponse
+    ): Response<AuthResponse>
 
 
     companion object {
-
 
         operator fun invoke(): Auth {
 
