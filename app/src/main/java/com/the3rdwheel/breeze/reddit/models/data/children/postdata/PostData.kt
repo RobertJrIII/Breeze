@@ -1,12 +1,6 @@
 package com.the3rdwheel.breeze.reddit.models.data.children.postdata
 
-
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import com.mikepenz.fastadapter.binding.AbstractBindingItem
 import com.squareup.moshi.Json
-import com.the3rdwheel.breeze.R
-import com.the3rdwheel.breeze.databinding.PostItemBinding
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.preview.Preview
 
 data class PostData(
@@ -19,6 +13,7 @@ data class PostData(
     val subreddit_name_prefixed: String,
     val hidden: Boolean,
     @Json(name = "hide_score") val isScoreHidden: Boolean,
+    val name: String,
     @Json(name = "total_awards_received") val rewardsReceived: Int,
     val score: Long,
     val thumbnail: String,
@@ -38,20 +33,3 @@ data class PostData(
     @Json(name = "stickied") val isStickied: Boolean,
     @Json(name = "is_video") val isVideo: Boolean
 )
-//    : AbstractBindingItem<PostItemBinding>() {
-//
-//
-//    override fun bindView(binding: PostItemBinding, payloads: List<Any>) {
-//        binding.postAuthor.text = author
-//        binding.postTitle.text = title
-//        binding.postSubbreddit.text = subreddit_name_prefixed
-//    }
-//
-//    override fun createBinding(inflater: LayoutInflater, parent: ViewGroup?): PostItemBinding {
-//        return PostItemBinding.inflate(inflater, parent, false)
-//    }
-//
-//    override val type: Int
-//        get() = R.id.postItem
-//
-//}
