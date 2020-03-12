@@ -137,5 +137,9 @@ dependencies {
     //fastadapter
     implementation "com.mikepenz:fastadapter:5.0.0"
     implementation "com.mikepenz:fastadapter-extensions-binding:5.0.0"
+    implementation "com.mikepenz:fastadapter-extensions-paged:5.0.0"
+
+    //paging
+    implementation "androidx.paging:paging-runtime-ktx:2.1.1"
 
 }
