@@ -40,6 +40,5 @@
         app:menu="@menu/bottom_navbar_menu"
 
         />
-    <!--                app:itemIconTint="@drawable/bottom_navigation_selector"-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

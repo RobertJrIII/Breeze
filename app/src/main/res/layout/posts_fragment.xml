@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:scrollbars="none"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/post_item" />
 

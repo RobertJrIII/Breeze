@@ -32,8 +32,6 @@ class PostsFragment : Fragment() {
 
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
         itemAdapter = ItemAdapter()
-        binding.postRecyclerview.setHasFixedSize(true)
-        binding.postRecyclerview.layoutManager = LinearLayoutManager(context)
         fastAdapter = FastAdapter.with(itemAdapter)
         return binding.root
     }
