@@ -23,8 +23,8 @@ interface RedditApi {
     //@Headers("Content-Type: application/json")
     @GET("{subName}/")
     suspend fun getPosts(
-        @Path("subName") subName: String?,
-        @Query("after") after: String?
+        @Path("subName") subName: String? = "",
+        @Query("after") after: String? = ""
     ): retrofit2.Response<Submission>
 
 
