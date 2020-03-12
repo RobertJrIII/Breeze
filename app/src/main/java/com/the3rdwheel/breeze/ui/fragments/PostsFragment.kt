@@ -20,8 +20,8 @@ import timber.log.Timber
 
 
 class PostsFragment : Fragment() {
-//    private lateinit var fastAdapter: FastAdapter<PostItem>
-//    private lateinit var itemAdapter: ItemAdapter<PostItem>
+    private lateinit var fastAdapter: FastAdapter<PostItem>
+    private lateinit var itemAdapter: ItemAdapter<PostItem>
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -30,8 +30,8 @@ class PostsFragment : Fragment() {
     ): View? {
 
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
-//        itemAdapter = ItemAdapter()
-//        fastAdapter = FastAdapter.with(itemAdapter)
+        itemAdapter = ItemAdapter()
+        fastAdapter = FastAdapter.with(itemAdapter)
         return binding.root
     }
 
@@ -39,33 +39,35 @@ class PostsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
-//        binding.postRecyclerview.adapter = fastAdapter
-//        val redditApi = get<RedditApi>()
-//
-//
-//        CoroutineScope(IO).launch {
-//
-//            try {
-//                val response =
-//                    redditApi.getPosts().data.children
-//
-//                for (post in response) {
-//                    withContext(Main) {
-//                        itemAdapter.add(
-//                            PostItem(
-//                                post.data
-//                            )
-//                        )
-//                    }
-//                }
-//
-//
-//            } catch (e: Exception) {
-//                Timber.e(e)
-//            }
-//
-//
-//        }
+        binding.postRecyclerview.adapter = fastAdapter
+        val redditApi = get<RedditApi>()
+
+
+        CoroutineScope(IO).launch {
+
+            try {
+                val response =
+                    redditApi.getPosts("r/funny", "").body()?.data?.children
+
+                if (response != null) {
+                    for (post in response) {
+                        withContext(Main) {
+                            itemAdapter.add(
+                                PostItem(
+                                    post.data
+                                )
+                            )
+                        }
+                    }
+                }
+
+
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+
+
+        }
 
 
     }

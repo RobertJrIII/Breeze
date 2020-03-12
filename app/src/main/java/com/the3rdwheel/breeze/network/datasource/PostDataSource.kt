@@ -1,7 +1,6 @@
-package com.the3rdwheel.breeze.network
+package com.the3rdwheel.breeze.network.datasource
 
 import androidx.paging.PageKeyedDataSource
-import com.the3rdwheel.breeze.reddit.models.data.children.Children
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
@@ -30,7 +29,19 @@ class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, Pos
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
-        TODO("Not yet implemented")
+        CoroutineScope(IO).launch {
+            val response = redditApi.getPosts("", params.key)
+
+            if (response.isSuccessful && response.body() != null) {
+                val childrenList = response.body()?.data?.children
+                val posts = ArrayList<PostData>()
+                for (child in childrenList!!) {
+                    posts.add(child.data)
+                }
+                callback.onResult(posts, posts[posts.size - 1].name)
+            }
+        }
+
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {

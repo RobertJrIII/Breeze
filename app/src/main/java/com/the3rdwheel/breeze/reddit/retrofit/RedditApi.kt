@@ -36,7 +36,7 @@ interface RedditApi {
             val okHttpClient = OkHttpClient.Builder()
                 .addInterceptor(object : Interceptor {
                     override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-                        var request = chain.request()
+                        val request = chain.request()
                         request.newBuilder().addHeader(
                             "Content-Type",
                             "application/json"
