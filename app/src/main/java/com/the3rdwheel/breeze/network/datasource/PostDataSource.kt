@@ -32,7 +32,6 @@ class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, Pos
             }
         }
 
-        
 
     }
 
