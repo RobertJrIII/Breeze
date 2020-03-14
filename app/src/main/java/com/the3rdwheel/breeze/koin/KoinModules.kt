@@ -5,8 +5,10 @@ import coil.util.CoilUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.network.SupportInterceptor
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
+import com.the3rdwheel.breeze.viewmodel.PostViewModel
 import okhttp3.OkHttpClient
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
 
 import org.koin.dsl.module
 
@@ -18,6 +20,10 @@ val authModules = module {
 
     single { SupportInterceptor(get(), androidContext()) }
     single { RedditApi(get()) }
+}
+
+val viewModelsModule = module {
+    viewModel { PostViewModel(get()) }
 }
 
 
