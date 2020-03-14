@@ -17,9 +17,9 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        val storedToken = runBlocking(Main) {
+        val storedToken =
 
-            return@runBlocking Armadillo.create(
+            Armadillo.create(
                     context.getSharedPreferences(
                         RedditUtils.SECURE_PREFS,
                         MODE_PRIVATE
@@ -27,7 +27,7 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 ).encryptionFingerprint(context.applicationContext).build()
                 .getString(RedditUtils.SECRET_KEY, "")
 
-        }
+
 
 
 
@@ -53,9 +53,9 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
             synchronized(this) {
-                val storedAccessToken = runBlocking(Main) {
+                val storedAccessToken =
 
-                    return@runBlocking Armadillo.create(
+                    Armadillo.create(
                             context.getSharedPreferences(
                                 RedditUtils.SECURE_PREFS,
                                 MODE_PRIVATE
@@ -65,7 +65,7 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                         .getString(RedditUtils.SECRET_KEY, "")
 
 
-                }
+
 
                 if (storedAccessToken == "") return null
 

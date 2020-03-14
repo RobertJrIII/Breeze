@@ -40,14 +40,14 @@ class PostsFragment : Fragment() {
 
 
         binding.postRecyclerview.adapter = fastAdapter
-        val redditApi = get<RedditApi>()
 
+        val redditApi = get<RedditApi>()
 
         CoroutineScope(IO).launch {
 
             try {
                 val response =
-                    redditApi.getPosts("r/funny", "").body()?.data?.children
+                    redditApi.getPosts("", "").body()?.data?.children
 
                 if (response != null) {
                     for (post in response) {

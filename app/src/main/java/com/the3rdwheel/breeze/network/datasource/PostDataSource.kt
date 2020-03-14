@@ -8,13 +8,17 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
 class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, PostData>() {
+
+    private var subName: String? = ""
+
+
     override fun loadInitial(
         params: LoadInitialParams<String>,
         callback: LoadInitialCallback<String, PostData>
     ) {
 
         CoroutineScope(IO).launch {
-            val response = redditApi.getPosts()
+            val response = redditApi.getPosts(subName)
 
             if (response.isSuccessful && response.body() != null) {
                 val data = response.body()?.data
@@ -28,11 +32,13 @@ class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, Pos
             }
         }
 
+        
+
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
         CoroutineScope(IO).launch {
-            val response = redditApi.getPosts(after = params.key)
+            val response = redditApi.getPosts(subName, params.key)
 
             if (response.isSuccessful && response.body() != null) {
                 val data = response.body()?.data
@@ -49,7 +55,7 @@ class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, Pos
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
-
+//TODO try and implement this
     }
 
 }
