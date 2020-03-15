@@ -18,7 +18,7 @@ class PostViewModel(redditApi: RedditApi) : ViewModel() {
         val config = PagedList.Config.Builder()
             .setPageSize(25)
             .setInitialLoadSizeHint(25)
-            .setEnablePlaceholders(true)
+            .setEnablePlaceholders(false)
             .build()
 
         postList = LivePagedListBuilder(postDataSourceFactory, config).build()
