@@ -10,7 +10,8 @@ import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 
 
 class PostViewModel(redditApi: RedditApi) : ViewModel() {
-    private val postList: LiveData<PagedList<PostData>>
+     val postList: LiveData<PagedList<PostData>>
+
     private val postDataSourceFactory: PostDataSourceFactory = PostDataSourceFactory(redditApi)
 
     init {
