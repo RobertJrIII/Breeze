@@ -141,8 +141,6 @@ dependencies {
     //paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
 
-    //Groupie
-    implementation "com.xwray:groupie:2.7.0"
-    implementation "com.xwray:groupie-kotlin-android-extensions:2.7.0"
+
 
 }
