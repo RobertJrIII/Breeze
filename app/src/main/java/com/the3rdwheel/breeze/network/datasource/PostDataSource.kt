@@ -4,10 +4,12 @@ import androidx.paging.PageKeyedDataSource
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
-class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, PostData>() {
+class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi) :
+    PageKeyedDataSource<String, PostData>() {
 
     private var subName: String? = ""
 
@@ -17,18 +19,18 @@ class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, Pos
         callback: LoadInitialCallback<String, PostData>
     ) {
 
-        CoroutineScope(IO).launch {
-            val response = redditApi.getPosts(subName)
+        scope.launch {
+            val response = redditApi.getPosts(subName, params.requestedLoadSize)
 
-            if (response.isSuccessful && response.body() != null) {
-                val data = response.body()?.data
-                val childrenList = data?.children
+            try {
+                if (response.isSuccessful && response.body() != null) {
+                    val data = response.body()?.data
+                    val redditPosts = data?.children?.map { it.data }
 
-                val posts = ArrayList<PostData>()
-                for (child in childrenList!!) {
-                    posts.add(child.data)
+                    callback.onResult(redditPosts ?: listOf(), data?.before, data?.after)
                 }
-                callback.onResult(posts, data.before, data.after)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
 
@@ -36,25 +38,50 @@ class PostDataSource(val redditApi: RedditApi) : PageKeyedDataSource<String, Pos
     }
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
-        CoroutineScope(IO).launch {
-            val response = redditApi.getPosts(subName, params.key)
+        scope.launch {
+            val response = redditApi.getPosts(subName, params.requestedLoadSize, params.key)
+            try {
 
-            if (response.isSuccessful && response.body() != null) {
-                val data = response.body()?.data
-                val childrenList = data?.children
+                if (response.isSuccessful && response.body() != null) {
+                    val data = response.body()?.data
 
-                val posts = ArrayList<PostData>()
-                for (child in childrenList!!) {
-                    posts.add(child.data)
+                    val redditPosts = data?.children?.map { it.data }
+
+                    callback.onResult(redditPosts ?: listOf(), data?.after)
                 }
-                callback.onResult(posts, data.after)
+            } catch (e: Exception) {
+                Timber.e(e)
             }
         }
 
     }
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
-//TODO try and implement this
+
+        scope.launch {
+
+            try {
+                val response =
+                    redditApi.getPosts(subName, params.requestedLoadSize, before = params.key)
+
+                if (response.isSuccessful && response.body() != null) {
+                    val data = response.body()?.data
+                    val redditPosts = data?.children?.map { it.data }
+                    callback.onResult(redditPosts ?: listOf(), data?.after)
+
+                }
+
+            } catch (e: Exception) {
+                Timber.e(e)
+            }
+
+        }
+
+
     }
 
+    override fun invalidate() {
+        super.invalidate()
+        scope.cancel()
+    }
 }

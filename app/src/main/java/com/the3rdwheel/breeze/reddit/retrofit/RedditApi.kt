@@ -24,7 +24,9 @@ interface RedditApi {
     @GET("{subName}/")
     suspend fun getPosts(
         @Path("subName") subName: String? = "",
-        @Query("after") after: String? = ""
+        @Query("limit") loadSize: Int = 30,
+        @Query("after") after: String? = "",
+        @Query("before") before: String? = ""
     ): retrofit2.Response<Submission>
 
 

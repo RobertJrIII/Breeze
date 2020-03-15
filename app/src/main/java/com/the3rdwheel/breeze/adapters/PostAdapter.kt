@@ -34,7 +34,7 @@ class PostAdapter : PagedListAdapter<PostData, PostAdapter.PostViewHolder>(getAs
 
 
     companion object {
-        fun getAsyncDifferConfig(): AsyncDifferConfig<PostData> {
+        private fun getAsyncDifferConfig(): AsyncDifferConfig<PostData> {
 
             val diffCallback = object : DiffUtil.ItemCallback<PostData>() {
                 override fun areItemsTheSame(oldItem: PostData, newItem: PostData): Boolean =
