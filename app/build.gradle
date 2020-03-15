@@ -12,6 +12,10 @@ def secretPropertiesFile = rootProject.file("secrets.properties")
 def secretProperties = new Properties()
 secretProperties.load(new FileInputStream(secretPropertiesFile))
 
+androidExtensions{
+    experimental = true
+}
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -134,12 +138,11 @@ dependencies {
     //armadillo
     implementation "at.favre.lib:armadillo:0.9.0"
 
-    //fastadapter
-    implementation "com.mikepenz:fastadapter:5.0.0"
-    implementation "com.mikepenz:fastadapter-extensions-binding:5.0.0"
-    implementation "com.mikepenz:fastadapter-extensions-paged:5.0.0"
-
     //paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
+
+    //Groupie
+    implementation "com.xwray:groupie:2.7.0"
+    implementation "com.xwray:groupie-kotlin-android-extensions:2.7.0"
 
 }

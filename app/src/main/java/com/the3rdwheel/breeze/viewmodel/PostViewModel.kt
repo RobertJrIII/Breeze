@@ -9,16 +9,16 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 
 
-class PostViewModel(private val redditApi: RedditApi) : ViewModel() {
-    val postList: LiveData<PagedList<PostData>>
+class PostViewModel(redditApi: RedditApi) : ViewModel() {
+    private val postList: LiveData<PagedList<PostData>>
+    private val postDataSourceFactory: PostDataSourceFactory = PostDataSourceFactory(redditApi)
 
     init {
 
-        val postDataSourceFactory = PostDataSourceFactory(redditApi)
         val config = PagedList.Config.Builder()
-            .setPageSize(26)
-            .setInitialLoadSizeHint(26)
-            .setEnablePlaceholders(false)
+            .setPageSize(25)
+            .setInitialLoadSizeHint(25)
+            .setEnablePlaceholders(true)
             .build()
 
         postList = LivePagedListBuilder(postDataSourceFactory, config).build()
