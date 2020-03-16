@@ -32,12 +32,10 @@ class PostsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
-        val postviewModel: PostViewModel by viewModel()
+        val postViewModel: PostViewModel by viewModel()
 
-        postviewModel.getPosts().observe(viewLifecycleOwner, Observer {
-
+        postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
-
 
         })
         binding.postRecyclerview.adapter = mAdapter

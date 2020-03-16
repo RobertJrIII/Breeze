@@ -7,10 +7,12 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
-class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi) :
+class PostDataSource(
+    private val scope: CoroutineScope,
+    private val redditApi: RedditApi,
+    private val subName: String?
+) :
     PageKeyedDataSource<String, PostData>() {
-
-    private var subName: String? = ""
 
 
     override fun loadInitial(
@@ -28,8 +30,6 @@ class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi
                     val redditPosts = data?.children?.map { it.data }
 
                     callback.onResult(redditPosts!!, data.before, data.after)
-                } else {
-                    invalidate()
                 }
 
             } catch (e: Exception) {

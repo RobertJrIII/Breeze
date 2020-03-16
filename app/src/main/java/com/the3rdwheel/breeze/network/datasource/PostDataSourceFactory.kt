@@ -6,15 +6,17 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
 
-class PostDataSourceFactory(private val scope: CoroutineScope, private val redditApi: RedditApi) :
+class PostDataSourceFactory(
+    private val scope: CoroutineScope,
+    private val redditApi: RedditApi,
+    private val subName: String? = ""
+) :
     DataSource.Factory<String, PostData>() {
     private val sourceLiveData = MutableLiveData<PostDataSource>()
-    private lateinit var postDataSource: PostDataSource
     override fun create(): DataSource<String, PostData> {
-        postDataSource = PostDataSource(scope, redditApi)
+        val postDataSource = PostDataSource(scope, redditApi, subName)
         sourceLiveData.postValue(postDataSource)
         return postDataSource
     }
 
-    fun getDataSource() = postDataSource
 }

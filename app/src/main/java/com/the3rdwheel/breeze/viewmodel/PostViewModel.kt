@@ -12,12 +12,12 @@ import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 
 class PostViewModel(redditApi: RedditApi) : ViewModel() {
     private val postList: LiveData<PagedList<PostData>>
+    var subName: String? = ""
 
     private val postDataSourceFactory: PostDataSourceFactory =
-        PostDataSourceFactory(viewModelScope, redditApi)
+        PostDataSourceFactory(viewModelScope, redditApi, subName)
 
     init {
-
         val config = PagedList.Config.Builder()
             .setPageSize(35)
             .setInitialLoadSizeHint(35)
@@ -27,6 +27,6 @@ class PostViewModel(redditApi: RedditApi) : ViewModel() {
         postList = LivePagedListBuilder(postDataSourceFactory, config).build()
     }
 
-    fun getFactory() = postDataSourceFactory
+
     fun getPosts() = postList
 }
