@@ -2,6 +2,7 @@ package com.the3rdwheel.breeze.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -10,9 +11,9 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 
 
-class PostViewModel(redditApi: RedditApi) : ViewModel() {
+class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
     private val postList: LiveData<PagedList<PostData>>
-    var subName: String? = ""
+
 
     private val postDataSourceFactory: PostDataSourceFactory =
         PostDataSourceFactory(viewModelScope, redditApi, subName)
@@ -29,4 +30,20 @@ class PostViewModel(redditApi: RedditApi) : ViewModel() {
 
 
     fun getPosts() = postList
+
+
+    class Factory(
+        private val redditApi: RedditApi,
+        private var subName: String? = ""
+    ) :
+        ViewModelProvider.Factory {
+
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return modelClass.getConstructor(RedditApi::class.java, String::class.java)
+                .newInstance(redditApi, subName)
+        }
+
+    }
+
 }
+

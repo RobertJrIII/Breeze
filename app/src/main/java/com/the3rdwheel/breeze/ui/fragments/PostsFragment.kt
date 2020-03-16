@@ -6,10 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
-import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.android.ext.android.get
 
 
 class PostsFragment : Fragment() {
@@ -31,8 +32,10 @@ class PostsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        val factory = PostViewModel.Factory(get(), "r/news")
+        val postViewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
 
-        val postViewModel: PostViewModel by viewModel()
+
 
         postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)

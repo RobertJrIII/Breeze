@@ -7,9 +7,7 @@ import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
 import at.favre.lib.armadillo.Armadillo
-import coil.ImageLoader
 import com.the3rdwheel.breeze.koin.authModules
-import com.the3rdwheel.breeze.koin.viewModelsModule
 import com.the3rdwheel.breeze.koin.viewModule
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.RedditUtils
@@ -48,7 +46,7 @@ class BreezeApp : Application() {
 
         startKoin {
             androidContext(this@BreezeApp)
-            modules(listOf(authModules, viewModule, viewModelsModule))
+            modules(listOf(authModules, viewModule))
         }
         val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
 
@@ -67,13 +65,10 @@ class BreezeApp : Application() {
         CoroutineScope(IO).launch {
 
             try {
-
-
                 retrieveToken(auth)
-
-
             } catch (e: Exception) {
                 withContext(Main) {
+
                     Toast.makeText(
                         this@BreezeApp,
                         "No network detected. Try again later.",

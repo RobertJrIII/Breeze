@@ -9,7 +9,7 @@ import kotlinx.coroutines.CoroutineScope
 class PostDataSourceFactory(
     private val scope: CoroutineScope,
     private val redditApi: RedditApi,
-    private val subName: String? = ""
+    private val subName: String?
 ) :
     DataSource.Factory<String, PostData>() {
     private val sourceLiveData = MutableLiveData<PostDataSource>()
