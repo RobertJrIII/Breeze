@@ -12,7 +12,7 @@ def secretPropertiesFile = rootProject.file("secrets.properties")
 def secretProperties = new Properties()
 secretProperties.load(new FileInputStream(secretPropertiesFile))
 
-androidExtensions{
+androidExtensions {
     experimental = true
 }
 
@@ -141,6 +141,7 @@ dependencies {
     //paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
 
-
+    //covert
+    implementation 'nz.co.trademe.covert:covert:2.0.0'
 
 }

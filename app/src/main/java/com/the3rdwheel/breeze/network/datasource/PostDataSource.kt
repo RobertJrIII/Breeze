@@ -4,7 +4,6 @@ import androidx.paging.PageKeyedDataSource
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -28,8 +27,11 @@ class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi
                     val data = response.body()?.data
                     val redditPosts = data?.children?.map { it.data }
 
-                    callback.onResult(redditPosts ?: listOf(), data?.before, data?.after)
+                    callback.onResult(redditPosts!!, data.before, data.after)
+                } else {
+                    invalidate()
                 }
+
             } catch (e: Exception) {
                 Timber.e(e)
             }
@@ -48,7 +50,7 @@ class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi
 
                     val redditPosts = data?.children?.map { it.data }
 
-                    callback.onResult(redditPosts ?: listOf(), data?.after)
+                    callback.onResult(redditPosts!!, data.after)
                 }
             } catch (e: Exception) {
                 Timber.e(e)
@@ -68,7 +70,7 @@ class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi
                 if (response.isSuccessful && response.body() != null) {
                     val data = response.body()?.data
                     val redditPosts = data?.children?.map { it.data }
-                    callback.onResult(redditPosts ?: listOf(), data?.after)
+                    callback.onResult(redditPosts!!, data.after)
 
                 }
 
@@ -81,8 +83,4 @@ class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi
 
     }
 
-    override fun invalidate() {
-        super.invalidate()
-        scope.cancel()
-    }
 }
