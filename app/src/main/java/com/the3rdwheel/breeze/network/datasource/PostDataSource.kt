@@ -20,9 +20,10 @@ class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi
     ) {
 
         scope.launch {
-            val response = redditApi.getPosts(subName, params.requestedLoadSize)
+
 
             try {
+                val response = redditApi.getPosts(subName, params.requestedLoadSize)
                 if (response.isSuccessful && response.body() != null) {
                     val data = response.body()?.data
                     val redditPosts = data?.children?.map { it.data }
@@ -39,9 +40,9 @@ class PostDataSource(private val scope: CoroutineScope, val redditApi: RedditApi
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
         scope.launch {
-            val response = redditApi.getPosts(subName, params.requestedLoadSize, params.key)
-            try {
 
+            try {
+                val response = redditApi.getPosts(subName, params.requestedLoadSize, params.key)
                 if (response.isSuccessful && response.body() != null) {
                     val data = response.body()?.data
 
