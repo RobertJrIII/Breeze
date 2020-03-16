@@ -6,11 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
-import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
-import nz.co.trademe.covert.Covert
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -19,13 +17,6 @@ class PostsFragment : Fragment() {
     private lateinit var mAdapter: PostAdapter
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
-
-
-    private val covertConfig = Covert.Config(
-        iconRes = R.drawable.ic_post_24dp,
-        iconDefaultColorRes = android.R.color.black,
-        actionColorRes = R.color.colorPrimary
-    )
 
 
     override fun onCreateView(

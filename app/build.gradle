@@ -101,10 +101,10 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui-ktx:2.2.1'
 
     //Viewmodel & LiveData
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
 
     //Coil
-    implementation "io.coil-kt:coil:0.9.5"
     implementation "io.coil-kt:coil-gif:0.9.5"
     implementation "io.coil-kt:coil-base:0.9.5"
 
@@ -141,7 +141,7 @@ dependencies {
     //paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.1"
 
-    //covert
-    implementation 'nz.co.trademe.covert:covert:2.0.0'
+    //ktx extentions
+    implementation "androidx.core:core-ktx:1.2.0"
 
 }
