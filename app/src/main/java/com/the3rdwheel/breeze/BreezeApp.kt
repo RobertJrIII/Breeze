@@ -45,45 +45,9 @@ class BreezeApp : Application() {
             androidContext(applicationContext)
             modules(listOf(authModules, viewModule))
         }
-//        if (!SecurePreferences.contains(applicationContext, RedditUtils.SECRET_KEY)) {
-//            setUp()
-//        }
 
 
     }
 
-//    private fun setUp() {
-//
-//        CoroutineScope(IO).launch {
-//
-//            try {
-//                retrieveToken(get())
-//            } catch (e: Exception) {
-//                withContext(Main) {
-//                    Toast.makeText(
-//                        applicationContext,
-//                        "No network detected. Try again later.",
-//                        Toast.LENGTH_LONG
-//                    ).show()
-//                }
-//                Timber.e(e)
-//            }
-//
-//
-//        }
-//    }
-//
-//    private fun retrieveToken(auth: Auth) = runBlocking {
-//        val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
-//
-//        if (response.isSuccessful && response.body() != null) {
-//            val accessToken = response.body()!!.access_token
-//            withContext(Default) {
-//                SecurePreferences.setValue(applicationContext, RedditUtils.SECRET_KEY, accessToken)
-//            }
-//        }
-//
-//
-//    }
 
 }

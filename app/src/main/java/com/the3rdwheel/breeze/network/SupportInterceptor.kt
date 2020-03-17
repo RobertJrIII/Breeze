@@ -16,10 +16,10 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
 
         var request = chain.request()
-        if (!SecurePreferences.contains(context.applicationContext, RedditUtils.SECRET_KEY)) {
+        request = if (!SecurePreferences.contains(context.applicationContext, RedditUtils.SECRET_KEY)) {
             val token = retrieveToken()
 
-            request = buildRequest(token, request)
+            buildRequest(token, request)
 
         } else {
             val storedToken =
@@ -28,7 +28,7 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                     RedditUtils.SECRET_KEY,
                     ""
                 )
-            request = buildRequest(storedToken, request)
+            buildRequest(storedToken, request)
         }
 
 
