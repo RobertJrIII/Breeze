@@ -7,7 +7,6 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import okhttp3.*
 
 class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator,
@@ -17,25 +16,40 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
 
         var request = chain.request()
+        if (!SecurePreferences.contains(context.applicationContext, RedditUtils.SECRET_KEY)) {
+            val token = retrieveToken()
 
-        val storedToken =
-            SecurePreferences.getStringValue(context.applicationContext, RedditUtils.SECRET_KEY, "")
+            request = buildRequest(token, request)
 
-
-
-
-        if (storedToken != "") {
-            request = request.newBuilder()
-                .addHeader(
-                    RedditUtils.AUTHORIZATION_KEY,
-                    RedditUtils.AUTHORIZATION_BASE + storedToken
+        } else {
+            val storedToken =
+                SecurePreferences.getStringValue(
+                    context.applicationContext,
+                    RedditUtils.SECRET_KEY,
+                    ""
                 )
-                .build()
+            request = buildRequest(storedToken, request)
         }
+
+
+
 
 
         return chain.proceed(request)
 
+    }
+
+    private fun buildRequest(token: String?, request: Request): Request {
+
+        if (token != "") {
+            return request.newBuilder()
+                .addHeader(
+                    RedditUtils.AUTHORIZATION_KEY,
+                    RedditUtils.AUTHORIZATION_BASE + token
+                )
+                .build()
+        }
+        return request
     }
 
 
@@ -59,7 +73,7 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 if (storedAccessToken == "") return null
 
                 if (accessToken == storedAccessToken) {
-                    val newAccessToken = refreshToken()
+                    val newAccessToken = retrieveToken()
                     return if (newAccessToken != "") {
 
                         response.request.newBuilder().header(
@@ -85,10 +99,9 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     }
 
 
-    private fun refreshToken() = runBlocking(IO) {
-
-        val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+    private fun retrieveToken() = runBlocking(IO) {
         var accessToken: String? = ""
+        val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
         if (response.isSuccessful && response.body() != null) {
             accessToken = response.body()!!.access_token
