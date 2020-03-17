@@ -32,7 +32,7 @@ class PostsFragment : Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val factory = PostViewModel.Factory(get(), "r/news")
+        val factory = PostViewModel.Factory(get())
         val postViewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
 
 

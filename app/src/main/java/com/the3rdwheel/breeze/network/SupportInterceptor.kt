@@ -2,9 +2,10 @@ package com.the3rdwheel.breeze.network
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
-import at.favre.lib.armadillo.Armadillo
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
+import de.adorsys.android.securestoragelibrary.SecurePreferences
+import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -17,17 +18,9 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
         var request = chain.request()
 
-        val storedToken =
-
-            Armadillo.create(
-                    context.getSharedPreferences(
-                        RedditUtils.SECURE_PREFS,
-                        MODE_PRIVATE
-                    )
-                ).encryptionFingerprint(context.applicationContext).build()
-                .getString(RedditUtils.SECRET_KEY, "")
-
-
+        val storedToken = runBlocking(IO) {
+            SecurePreferences.getStringValue(context.applicationContext, RedditUtils.SECRET_KEY, "")
+        }
 
 
 
@@ -55,14 +48,13 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
             synchronized(this) {
                 val storedAccessToken =
 
-                    Armadillo.create(
-                            context.getSharedPreferences(
-                                RedditUtils.SECURE_PREFS,
-                                MODE_PRIVATE
-                            )
+                    runBlocking(IO) {
+                        SecurePreferences.getStringValue(
+                            context.applicationContext,
+                            RedditUtils.SECRET_KEY,
+                            ""
                         )
-                        .encryptionFingerprint(context.applicationContext).build()
-                        .getString(RedditUtils.SECRET_KEY, "")
+                    }
 
 
 
@@ -96,25 +88,31 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     }
 
 
-    private fun refreshToken() = runBlocking {
+    private fun refreshToken() = runBlocking(IO) {
 
         val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
         var accessToken: String? = ""
 
         if (response.isSuccessful && response.body() != null) {
-            accessToken = response.body()?.access_token
+            accessToken = response.body()!!.access_token
 
-            withContext(Main) {
-                val securePrefs = Armadillo.create(
-                    context.getSharedPreferences(
-                        RedditUtils.SECURE_PREFS,
-                        MODE_PRIVATE
-                    )
-                ).encryptionFingerprint(context.applicationContext).build()
+//            withContext(Main) {
+//                val securePrefs = Armadillo.create(
+//                    context.getSharedPreferences(
+//                        RedditUtils.SECURE_PREFS,
+//                        MODE_PRIVATE
+//                    )
+//                ).encryptionFingerprint(context.applicationContext).build()
+//
+//                securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
+//
+//            }
+            SecurePreferences.setValue(
+                context.applicationContext,
+                RedditUtils.SECRET_KEY,
+                accessToken
+            )
 
-                securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
-
-            }
         }
 
 
