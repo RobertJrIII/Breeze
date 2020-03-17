@@ -1,12 +1,11 @@
 package com.the3rdwheel.breeze.network
 
 import android.content.Context
-import android.content.Context.MODE_PRIVATE
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.*
@@ -16,11 +15,12 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
 
 
     override fun intercept(chain: Interceptor.Chain): Response {
+
         var request = chain.request()
 
-        val storedToken = runBlocking(IO) {
+        val storedToken =
             SecurePreferences.getStringValue(context.applicationContext, RedditUtils.SECRET_KEY, "")
-        }
+
 
 
 
@@ -35,6 +35,7 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
 
 
         return chain.proceed(request)
+
     }
 
 
@@ -46,17 +47,13 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
             synchronized(this) {
-                val storedAccessToken =
-
-                    runBlocking(IO) {
-                        SecurePreferences.getStringValue(
-                            context.applicationContext,
-                            RedditUtils.SECRET_KEY,
-                            ""
-                        )
-                    }
-
-
+                val storedAccessToken = runBlocking(Default) {
+                    SecurePreferences.getStringValue(
+                        context.applicationContext,
+                        RedditUtils.SECRET_KEY,
+                        ""
+                    )
+                }
 
 
                 if (storedAccessToken == "") return null
@@ -96,27 +93,14 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
         if (response.isSuccessful && response.body() != null) {
             accessToken = response.body()!!.access_token
 
-//            withContext(Main) {
-//                val securePrefs = Armadillo.create(
-//                    context.getSharedPreferences(
-//                        RedditUtils.SECURE_PREFS,
-//                        MODE_PRIVATE
-//                    )
-//                ).encryptionFingerprint(context.applicationContext).build()
-//
-//                securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
-//
-//            }
             SecurePreferences.setValue(
                 context.applicationContext,
                 RedditUtils.SECRET_KEY,
                 accessToken
             )
 
+
         }
-
-
-
 
         return@runBlocking accessToken
     }

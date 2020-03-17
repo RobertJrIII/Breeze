@@ -11,7 +11,7 @@
         android:layout_height="?attr/actionBarSize"
 
         app:layout_behavior="com.google.android.material.appbar.AppBarLayoutScrollingViewBehavior"
-        app:layout_scrollFlags="scroll|enterAlways|snap"
+        app:layout_scrollFlags="scroll|enterAlways"
 
         />
 

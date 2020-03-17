@@ -11,6 +11,7 @@ import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import de.adorsys.android.securestoragelibrary.SecurePreferences
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.launch
@@ -28,7 +29,6 @@ class BreezeApp : Application() {
         super.onCreate()
 
         if (BuildConfig.DEBUG) {
-
             Timber.plant(Timber.DebugTree())
         }
 
@@ -38,38 +38,30 @@ class BreezeApp : Application() {
             "Noto Color Emoji Compat",
             R.array.com_google_android_gms_fonts_certs
         )
-
-
-        val config = FontRequestEmojiCompatConfig(this, fontRequest)
+        val config = FontRequestEmojiCompatConfig(applicationContext, fontRequest)
         EmojiCompat.init(config)
 
         startKoin {
-            androidContext(this@BreezeApp)
+            androidContext(applicationContext)
             modules(listOf(authModules, viewModule))
         }
-        val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
-
-        val isFirstSetUp = prefs.getBoolean("firstSetUp", true)
-
-        if (isFirstSetUp) {
+        if (!SecurePreferences.contains(applicationContext, RedditUtils.SECRET_KEY)) {
             setUp()
         }
+
 
     }
 
     private fun setUp() {
-        val auth: Auth = get()
-
 
         CoroutineScope(IO).launch {
 
             try {
-                retrieveToken(auth)
+                retrieveToken(get())
             } catch (e: Exception) {
                 withContext(Main) {
-
                     Toast.makeText(
-                        this@BreezeApp,
+                        applicationContext,
                         "No network detected. Try again later.",
                         Toast.LENGTH_LONG
                     ).show()
@@ -84,28 +76,10 @@ class BreezeApp : Application() {
     private fun retrieveToken(auth: Auth) = runBlocking {
         val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
 
-
         if (response.isSuccessful && response.body() != null) {
             val accessToken = response.body()!!.access_token
-            SecurePreferences.setValue(this@BreezeApp, RedditUtils.SECRET_KEY, accessToken)
-            withContext(Main) {
-//                val securePrefs = Armadillo.create(
-//                    getSharedPreferences(
-//                        RedditUtils.SECURE_PREFS,
-//                        Context.MODE_PRIVATE
-//                    )
-//                ).encryptionFingerprint(this@BreezeApp).build()
-//
-//
-//                securePrefs.edit().putString(RedditUtils.SECRET_KEY, accessToken).apply()
-
-
-                val prefs = getSharedPreferences("prefs", MODE_PRIVATE)
-                val editor = prefs.edit()
-                editor.putBoolean("firstSetUp", false)
-                editor.apply()
-
-                Toast.makeText(this@BreezeApp, accessToken, Toast.LENGTH_LONG).show()
+            withContext(Default) {
+                SecurePreferences.setValue(applicationContext, RedditUtils.SECRET_KEY, accessToken)
             }
         }
 

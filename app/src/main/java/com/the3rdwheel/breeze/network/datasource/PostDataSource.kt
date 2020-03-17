@@ -61,24 +61,24 @@ class PostDataSource(
 
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
 
-        scope.launch {
-
-            try {
-                val response =
-                    redditApi.getPosts(subName, params.requestedLoadSize, before = params.key)
-
-                if (response.isSuccessful && response.body() != null) {
-                    val data = response.body()?.data
-                    val redditPosts = data?.children?.map { it.data }
-                    callback.onResult(redditPosts!!, data.after)
-
-                }
-
-            } catch (e: Exception) {
-                Timber.e(e)
-            }
-
-        }
+//        scope.launch {
+//
+//            try {
+//                val response =
+//                    redditApi.getPosts(subName, params.requestedLoadSize, before = params.key)
+//
+//                if (response.isSuccessful && response.body() != null) {
+//                    val data = response.body()?.data
+//                    val redditPosts = data?.children?.map { it.data }
+//                    callback.onResult(redditPosts!!, data.after)
+//
+//                }
+//
+//            } catch (e: Exception) {
+//                Timber.e(e)
+//            }
+//
+//        }
 
 
     }
