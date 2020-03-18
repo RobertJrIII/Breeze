@@ -7,6 +7,7 @@ import de.adorsys.android.securestoragelibrary.SecurePreferences
 import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.*
 
 class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator,
@@ -16,23 +17,23 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun intercept(chain: Interceptor.Chain): Response {
 
         var request = chain.request()
-        if (!SecurePreferences.contains(context.applicationContext, RedditUtils.SECRET_KEY)) {
-            val token = retrieveToken()
+        request =
+            if (!SecurePreferences.contains(context, RedditUtils.SECRET_KEY)) {
+                val token = retrieveToken()
 
-            request = buildRequest(token, request)
+                buildRequest(token, request)
 
-        } else {
-            val storedToken =
-                SecurePreferences.getStringValue(
-                    context.applicationContext,
-                    RedditUtils.SECRET_KEY,
-                    ""
-                )
-            request = buildRequest(storedToken, request)
-        }
-
-
-
+            } else {
+                val storedToken =
+                    runBlocking(Default) {
+                        SecurePreferences.getStringValue(
+                            context,
+                            RedditUtils.SECRET_KEY,
+                            ""
+                        )
+                    }
+                buildRequest(storedToken, request)
+            }
 
 
         return chain.proceed(request)
@@ -106,11 +107,13 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
         if (response.isSuccessful && response.body() != null) {
             accessToken = response.body()!!.access_token
 
-            SecurePreferences.setValue(
-                context.applicationContext,
-                RedditUtils.SECRET_KEY,
-                accessToken
-            )
+            withContext(Default) {
+                SecurePreferences.setValue(
+                    context,
+                    RedditUtils.SECRET_KEY,
+                    accessToken
+                )
+            }
 
 
         }
