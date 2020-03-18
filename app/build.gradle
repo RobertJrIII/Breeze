@@ -109,7 +109,7 @@ dependencies {
     implementation "io.coil-kt:coil-base:0.9.5"
 
     //fragment
-    implementation "androidx.fragment:fragment-ktx:1.2.2"
+  //  implementation "androidx.fragment:fragment-ktx:1.2.2"
 
     //emoji
     implementation 'androidx.emoji:emoji:1.0.0'
