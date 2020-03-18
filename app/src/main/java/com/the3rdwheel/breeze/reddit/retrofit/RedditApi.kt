@@ -8,25 +8,22 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.util.concurrent.TimeUnit
 
 interface RedditApi {
 
-    // @Headers("Content-Type: application/json")
     @GET("search")
     suspend fun getSearchResults(@Query("q") query: String): Submission
 
 
-    //@Headers("Content-Type: application/json")
     @GET("{subName}/")
     suspend fun getPosts(
         @Path("subName") subName: String? = "",
         @Query("limit") loadSize: Int = 30,
-        @Query("after") after: String? = "",
-        @Query("before") before: String? = ""
+        @Query("after") after: String? = ""
+        //@Query("before") before: String? = ""
     ): retrofit2.Response<Submission>
 
 
@@ -42,6 +39,9 @@ interface RedditApi {
                         request.newBuilder().addHeader(
                             "Content-Type",
                             "application/json"
+                        ).build().newBuilder().addHeader(
+                            "User-Agent",
+                            "android:com.the3rdwheel.breeze:0.1 (by /u/RobertJrIII)"
                         ).build()
                         return chain.proceed(request)
                     }

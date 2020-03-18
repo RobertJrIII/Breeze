@@ -24,4 +24,14 @@
         android:name="com.the3rdwheel.breeze.ui.fragments.InboxFragment"
         android:label="Inbox"
         tools:layout="@layout/inbox_fragment" />
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.the3rdwheel.breeze.ui.fragments.SearchFragment"
+        android:label="Search"
+        tools:layout="@layout/search_fragment" />
+    <fragment
+        android:id="@+id/subsFragment"
+        android:name="com.the3rdwheel.breeze.ui.fragments.SubsFragment"
+        android:label="SubReddits"
+        tools:layout="@layout/subs_fragment" />
 </navigation>

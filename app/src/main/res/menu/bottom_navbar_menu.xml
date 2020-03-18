@@ -2,15 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/postsFragment"
-        android:icon="@drawable/ic_post_24dp"
+        android:icon="@drawable/post_24dp"
         android:title="@string/posts" />
 
     <item
+        android:id="@+id/subsFragment"
+        android:icon="@drawable/list_24dp"
+        android:title="@string/subs" />
+
+    <item
         android:id="@+id/accountFragment"
-        android:icon="@drawable/ic_account_circle_24dp"
+        android:icon="@drawable/account_circle_24dp"
         android:title="@string/account"
 
         />
+
+    <item
+        android:id="@+id/searchFragment"
+        android:icon="@drawable/search_24dp"
+        android:title="@string/search" />
+
     <item
         android:id="@+id/inboxFragment"
         android:icon="@drawable/inbox_24dp"
@@ -18,11 +29,11 @@
 
         />
 
-    <item
-        android:id="@+id/settingsFragment"
-        android:icon="@drawable/ic_settings_24dp"
-        android:title="@string/settings"
+    <!--    <item-->
+    <!--        android:id="@+id/settingsFragment"-->
+    <!--        android:icon="@drawable/settings_24dp"-->
+    <!--        android:title="@string/settings"-->
 
-        />
+    <!--        />-->
 
 </menu>
