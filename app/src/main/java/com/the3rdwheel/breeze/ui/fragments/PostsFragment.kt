@@ -40,6 +40,11 @@ class PostsFragment : Fragment() {
             mAdapter.submitList(it)
 
         })
+
+        postViewModel.networkState?.observe(viewLifecycleOwner, Observer {
+            mAdapter.updateNetworkState(it)
+        })
+
         binding.postRecyclerview.adapter = mAdapter
     }
 

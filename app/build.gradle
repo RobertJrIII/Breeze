@@ -109,9 +109,9 @@ dependencies {
     implementation 'androidx.emoji:emoji:1.0.0'
 
     //Room
-    implementation "androidx.room:room-runtime:2.2.4"
-    kapt "androidx.room:room-compiler:2.2.4"
-    implementation "androidx.room:room-ktx:2.2.4"
+//    implementation "androidx.room:room-runtime:2.2.4"
+//    kapt "androidx.room:room-compiler:2.2.4"
+//    implementation "androidx.room:room-ktx:2.2.4"
 
     //Koin
     implementation "org.koin:koin-android:2.0.1"
@@ -124,10 +124,11 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     //paging
-    implementation "androidx.paging:paging-runtime-ktx:2.1.1"
+    implementation "androidx.paging:paging-runtime-ktx:2.1.2"
 
     //SecureStorage
     implementation "de.adorsys.android:securestoragelibrary:1.2.4"
 
+    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
 
 }

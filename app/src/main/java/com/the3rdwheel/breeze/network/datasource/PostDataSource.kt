@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.network.datasource
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PageKeyedDataSource
 import com.the3rdwheel.breeze.network.NetworkState
@@ -88,6 +89,7 @@ class PostDataSource(
 //
 //        }
     }
-
+    fun getNetworkState(): LiveData<NetworkState> =
+        networkState
 
 }

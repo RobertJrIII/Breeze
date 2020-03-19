@@ -9,21 +9,72 @@ import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.the3rdwheel.breeze.R
+import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
+import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 
-class PostAdapter : PagedListAdapter<PostData, PostAdapter.PostViewHolder>(getAsyncDifferConfig()) {
-    //TODO Added NetworkState functionality here
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
-        return PostViewHolder(v)
+
+class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        return when (viewType) {
+            R.layout.post_item -> PostViewHolder(view)
+            R.layout.loading -> LoadingViewHolder(view)
+            else -> throw IllegalArgumentException("Unknown view type $viewType")
+        }
     }
 
-    override fun onBindViewHolder(holder: PostViewHolder, position: Int) {
-        val currentPostData = getItem(position)
-        holder.mAuthor.text = currentPostData?.author
-        holder.mTitle.text = currentPostData?.title
-        holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        if (holder is PostViewHolder) {
+            val currentPostData = getItem(position)
+            holder.mAuthor.text = currentPostData?.author
+            holder.mTitle.text = currentPostData?.title
+            holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
+        } else {
+            (holder as LoadingViewHolder).postLoading
+        }
+
     }
+
+
+    private var networkState: NetworkState? = null
+
+    override fun getItemViewType(position: Int): Int {
+        return if (hasExtraRow() && position == itemCount - 1) {
+            R.layout.loading
+        } else {
+            R.layout.post_item
+        }
+    }
+
+    override fun getItemCount(): Int {
+        return if (hasExtraRow()) {
+            super.getItemCount() + 1
+        } else {
+            super.getItemCount()
+        }
+    }
+
+    private fun hasExtraRow() = networkState != null && networkState != NetworkState.SUCCESS
+
+
+    fun updateNetworkState(newNetworkState: NetworkState?) {
+        val previousState = this.networkState
+        val hadExtraRow = hasExtraRow()
+        this.networkState = newNetworkState
+        val hasExtraRow = hasExtraRow()
+        if (hadExtraRow != hasExtraRow) {
+            if (hadExtraRow) {
+                notifyItemRemoved(super.getItemCount())
+            } else {
+                notifyItemInserted(super.getItemCount())
+            }
+        } else if (hasExtraRow && previousState != newNetworkState) {
+            notifyItemChanged(itemCount - 1)
+        }
+    }
+
 
     class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val mTitle: EmojiTextView = itemView.findViewById(R.id.postTitle)
@@ -32,6 +83,9 @@ class PostAdapter : PagedListAdapter<PostData, PostAdapter.PostViewHolder>(getAs
 
     }
 
+    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val postLoading: MaterialProgressBar = itemView.findViewById(R.id.postLoading)
+    }
 
     companion object {
         private fun getAsyncDifferConfig(): AsyncDifferConfig<PostData> {
