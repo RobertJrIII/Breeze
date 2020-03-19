@@ -1,9 +1,7 @@
 package com.the3rdwheel.breeze.adapters
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.emoji.widget.EmojiTextView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
@@ -11,7 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
-import me.zhanghai.android.materialprogressbar.MaterialProgressBar
+import com.the3rdwheel.breeze.ui.viewholders.LoadingViewHolder
+import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
 
 
 class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
@@ -75,17 +74,6 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
         }
     }
 
-
-    class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val mTitle: EmojiTextView = itemView.findViewById(R.id.postTitle)
-        val mAuthor: EmojiTextView = itemView.findViewById(R.id.postAuthor)
-        val mSubReddit: EmojiTextView = itemView.findViewById(R.id.postSubbreddit)
-
-    }
-
-    class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val postLoading: MaterialProgressBar = itemView.findViewById(R.id.postLoading)
-    }
 
     companion object {
         private fun getAsyncDifferConfig(): AsyncDifferConfig<PostData> {

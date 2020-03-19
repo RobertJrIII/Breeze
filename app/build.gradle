@@ -129,6 +129,4 @@ dependencies {
     //SecureStorage
     implementation "de.adorsys.android:securestoragelibrary:1.2.4"
 
-    implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
-
 }
