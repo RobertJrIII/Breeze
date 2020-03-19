@@ -15,7 +15,6 @@ import org.koin.android.ext.android.get
 
 class PostsFragment : Fragment() {
 
-    private lateinit var mAdapter: PostAdapter
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -25,7 +24,7 @@ class PostsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
-        mAdapter = PostAdapter()
+
         return binding.root
     }
 
@@ -35,7 +34,7 @@ class PostsFragment : Fragment() {
         val factory = PostViewModel.Factory(get())
         val postViewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
 
-
+        val mAdapter = PostAdapter()
 
         postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)

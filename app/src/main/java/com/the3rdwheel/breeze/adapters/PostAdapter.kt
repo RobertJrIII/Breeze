@@ -12,7 +12,7 @@ import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 
 class PostAdapter : PagedListAdapter<PostData, PostAdapter.PostViewHolder>(getAsyncDifferConfig()) {
-
+    //TODO Added NetworkState functionality here
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PostViewHolder {
         val v = LayoutInflater.from(parent.context).inflate(R.layout.post_item, parent, false)
         return PostViewHolder(v)
