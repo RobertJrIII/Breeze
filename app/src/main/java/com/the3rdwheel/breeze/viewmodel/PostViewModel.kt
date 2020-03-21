@@ -19,18 +19,19 @@ class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
 
     private val postDataSourceFactory: PostDataSourceFactory =
         PostDataSourceFactory(viewModelScope, redditApi, subName)
-     val networkState: LiveData<NetworkState>? =
-        switchMap(postDataSourceFactory.getPostDataSourceData()) { it.getNetworkState() }
+    val networkState: LiveData<NetworkState>? =
+        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getNetworkState() }
+
+//    val hasPostLiveData: LiveData<Boolean> =
+//        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getHasPostData() }
 
     init {
         val config = PagedList.Config.Builder()
-            .setPageSize(35)
-            .setInitialLoadSizeHint(35)
+            .setPageSize(25)
             .setEnablePlaceholders(false)
             .build()
 
         postList = LivePagedListBuilder(postDataSourceFactory, config).build()
-
 
     }
 
@@ -51,5 +52,8 @@ class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
 
     }
 
+    fun refresh() {
+        postDataSourceFactory.getPostDataSource().invalidate()
+    }
 }
 

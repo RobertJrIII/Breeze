@@ -12,13 +12,19 @@ class PostDataSourceFactory(
     private val subName: String?
 ) :
     DataSource.Factory<String, PostData>() {
-    private val sourceLiveData = MutableLiveData<PostDataSource>()
+    private val postSourceLiveData = MutableLiveData<PostDataSource>()
+    private lateinit var postDataSource: PostDataSource
 
-    fun getPostDataSourceData() = sourceLiveData
+
     override fun create(): DataSource<String, PostData> {
-        val postDataSource = PostDataSource(scope, redditApi, subName)
-        sourceLiveData.postValue(postDataSource)
+        postDataSource = PostDataSource(scope, redditApi, subName)
+        postSourceLiveData.postValue(postDataSource)
         return postDataSource
     }
 
+    fun getPostDataSourceLiveData() = postSourceLiveData
+
+    fun getPostDataSource(): PostDataSource {
+        return postDataSource
+    }
 }

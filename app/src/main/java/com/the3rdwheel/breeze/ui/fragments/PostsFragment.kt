@@ -14,7 +14,7 @@ import org.koin.android.ext.android.get
 
 
 class PostsFragment : Fragment() {
-
+    private var hasPost = false
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
 
@@ -35,17 +35,33 @@ class PostsFragment : Fragment() {
         val postViewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
 
         val mAdapter = PostAdapter()
+        binding.postRecyclerview.adapter = mAdapter
+
 
         postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
 
         })
 
+//        postViewModel.hasPostLiveData.observe(viewLifecycleOwner, Observer {
+//            this.hasPost = it
+//            binding.postSwipeRefresh.isRefreshing = false
+//        })
+
+
+
+
         postViewModel.networkState?.observe(viewLifecycleOwner, Observer {
             mAdapter.updateNetworkState(it)
         })
 
-        binding.postRecyclerview.adapter = mAdapter
+
+        binding.postSwipeRefresh.setOnRefreshListener {
+            hasPost = false
+            postViewModel.refresh()
+            binding.postSwipeRefresh.isRefreshing = false
+
+        }
     }
 
     override fun onDestroyView() {

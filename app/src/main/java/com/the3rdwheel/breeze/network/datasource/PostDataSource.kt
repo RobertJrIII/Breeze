@@ -16,7 +16,7 @@ class PostDataSource(
 ) :
     PageKeyedDataSource<String, PostData>() {
     private val networkState = MutableLiveData<NetworkState>()
-
+    //private val hasPostsLiveDara = MutableLiveData<Boolean>()
 
     override fun loadInitial(
         params: LoadInitialParams<String>,
@@ -93,6 +93,7 @@ class PostDataSource(
 //        }
     }
 
+   // fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
     fun getNetworkState(): LiveData<NetworkState> =
         networkState
 
