@@ -15,6 +15,8 @@ import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
 
 class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
 
+    private var networkState: NetworkState? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
         return when (viewType) {
@@ -31,13 +33,10 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
             holder.mTitle.text = currentPostData?.title
             holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
         } else {
-            (holder as LoadingViewHolder).postLoading
+            (holder as LoadingViewHolder).postLoading.isIndeterminate = true
         }
 
     }
-
-
-    private var networkState: NetworkState? = null
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
@@ -84,8 +83,6 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
 
                 override fun areContentsTheSame(oldItem: PostData, newItem: PostData): Boolean =
                     oldItem == newItem
-
-
             }
             return AsyncDifferConfig.Builder(diffCallback).build()
         }
