@@ -48,7 +48,7 @@ class PostsFragment : Fragment() {
 //            binding.postSwipeRefresh.isRefreshing = false
 //        })
 
-
+//TODO create error background
 
 
         postViewModel.networkState?.observe(viewLifecycleOwner, Observer {

@@ -23,7 +23,7 @@ class PostDataSource(
         callback: LoadInitialCallback<String, PostData>
     ) {
 
-
+//TODO add initial loading
         scope.launch {
             networkState.postValue(NetworkState.LOADING)
 

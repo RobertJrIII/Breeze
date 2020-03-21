@@ -54,8 +54,14 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
         }
     }
 
-    private fun hasExtraRow() = networkState != null && networkState != NetworkState.SUCCESS
+    private fun hasExtraRow() = networkState != null && networkState != NetworkState.SUCCESS   // add extra row when loading or error
 
+    fun removeFooter() {
+        if (hasExtraRow()) {
+            notifyItemRemoved(itemCount - 1)
+        }
+        networkState = null
+    }
 
     fun updateNetworkState(newNetworkState: NetworkState?) {
         val previousState = this.networkState
