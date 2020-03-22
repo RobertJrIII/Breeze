@@ -5,8 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.network.NetworkState
@@ -19,10 +19,9 @@ class PostsFragment : Fragment() {
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
 
-
-    private lateinit var factory: PostViewModel.Factory
-    private lateinit var postViewModel: PostViewModel
     private lateinit var mAdapter: PostAdapter
+
+    private val postViewModel: PostViewModel by viewModels { PostViewModel.Factory(get()) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,8 +29,6 @@ class PostsFragment : Fragment() {
     ): View? {
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
 
-        factory = PostViewModel.Factory(get())
-        postViewModel = ViewModelProvider(this, factory).get(PostViewModel::class.java)
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
         return binding.root
     }
@@ -51,11 +48,8 @@ class PostsFragment : Fragment() {
                 }
                 NetworkState.FAILED -> {
                     binding.postSwipeRefresh.isRefreshing = false
-                    binding.redditNotAvailable.setOnClickListener {
-                        binding.postSwipeRefresh.isRefreshing = false
-                        binding.redditNotAvailable.setOnClickListener { refresh() }
-                        showError()
-                    }
+                    binding.redditNotAvailable.setOnClickListener { refresh() }
+                    showError()
                 }
                 else -> {
                     binding.postSwipeRefresh.isRefreshing = true
@@ -63,6 +57,12 @@ class PostsFragment : Fragment() {
             }
         })
 
+
+        observeViewModel()
+
+    }
+
+    private fun observeViewModel() {
         postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
 
@@ -85,12 +85,9 @@ class PostsFragment : Fragment() {
         postViewModel.networkState?.observe(viewLifecycleOwner, Observer {
             mAdapter.updateNetworkState(it)
         })
-
-
     }
 
     private fun showError() {
-
         binding.postSwipeRefresh.isRefreshing = false
         binding.redditNotAvailable.visibility = View.VISIBLE
     }

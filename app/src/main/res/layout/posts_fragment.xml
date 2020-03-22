@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/postSwipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.PostsFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/postRecyclerview"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/postSwipeRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:scrollbars="none"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:listitem="@layout/post_item" />
+        android:layout_height="match_parent">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/postRecyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:scrollbars="none"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            tools:listitem="@layout/post_item" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
     <RelativeLayout
@@ -28,6 +34,7 @@
             android:id="@+id/NotAvailableText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:gravity="center"
             android:text="@string/reddit_cannot_be_reached_at_the_moment" />
 
@@ -36,10 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/NotAvailableText"
+            android:layout_centerInParent="true"
             android:gravity="center"
+            android:paddingTop="4dp"
             android:text="@string/table_flip" />
 
     </RelativeLayout>
-
-
-</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
