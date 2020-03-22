@@ -10,7 +10,9 @@ import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.ui.viewholders.LoadingViewHolder
+import com.the3rdwheel.breeze.ui.viewholders.PostErrorViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
+import timber.log.Timber
 
 
 class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
@@ -22,6 +24,7 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
         return when (viewType) {
             R.layout.post_item -> PostViewHolder(view)
             R.layout.loading -> LoadingViewHolder(view)
+            R.layout.error_post_retry -> PostErrorViewHolder(view)
             else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
     }
@@ -32,15 +35,23 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
             holder.mAuthor.text = currentPostData?.author
             holder.mTitle.text = currentPostData?.title
             holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
+        } else if (holder is LoadingViewHolder) {
+            holder.postLoading.isIndeterminate = true
         } else {
-            (holder as LoadingViewHolder).postLoading.isIndeterminate = true
+            (holder as PostErrorViewHolder).retryButton.setOnClickListener {
+                Timber.d("clicked")
+            }
         }
 
     }
 
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
-            R.layout.loading
+            if (networkState == NetworkState.LOADING) {
+                R.layout.loading
+            } else {
+                R.layout.error_post_retry
+            }
         } else {
             R.layout.post_item
         }
@@ -54,7 +65,8 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
         }
     }
 
-    private fun hasExtraRow() = networkState != null && networkState != NetworkState.SUCCESS   // add extra row when loading or error
+    private fun hasExtraRow() =
+        networkState != null && networkState != NetworkState.SUCCESS   // add extra row when loading or error
 
     fun removeFooter() {
         if (hasExtraRow()) {

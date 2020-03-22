@@ -1,6 +1,7 @@
 package com.the3rdwheel.breeze.ui.viewholders
 
 import android.view.View
+import android.widget.Button
 import android.widget.ProgressBar
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
@@ -15,4 +16,9 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
 class LoadingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val postLoading: ProgressBar = itemView.findViewById(R.id.postLoading)
+}
+
+
+class PostErrorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val retryButton: Button = itemView.findViewById(R.id.footer_error_button)
 }
