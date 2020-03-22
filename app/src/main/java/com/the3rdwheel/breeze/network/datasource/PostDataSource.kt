@@ -25,10 +25,8 @@ class PostDataSource(
         callback: LoadInitialCallback<String, PostData>
     ) {
         retryQuery = { loadInitial(params, callback) }
+        initialLoadStateLiveData.postValue(NetworkState.LOADING)
         scope.launch(IO) {
-
-            initialLoadStateLiveData.postValue(NetworkState.LOADING)
-
             try {
                 val response = redditApi.getPosts(subName, params.requestedLoadSize)
                 if (response.isSuccessful && response.body() != null) {
@@ -51,8 +49,8 @@ class PostDataSource(
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
 
         retryQuery = { loadAfter(params, callback) }
+        networkState.postValue(NetworkState.LOADING)
         scope.launch(IO) {
-            networkState.postValue(NetworkState.LOADING)
             try {
                 val response = redditApi.getPosts(subName, params.requestedLoadSize, params.key)
                 if (response.isSuccessful && response.body() != null) {
@@ -70,30 +68,7 @@ class PostDataSource(
 
     }
 
-    override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
-
-//        scope.launch {
-//            networkState.postValue(NetworkState.LOADING)
-//            try {
-//                val response =
-//                    redditApi.getPosts(subName, params.requestedLoadSize, before = params.key)
-//
-//                if (response.isSuccessful && response.body() != null) {
-//                    val data = response.body()?.data
-//                    val redditPosts = data?.children?.map { it.data }
-//                    networkState.postValue(NetworkState.SUCCESS)
-//                    callback.onResult(redditPosts!!, data.after)
-//
-//                }
-//
-//            } catch (e: Exception) {
-//                Timber.e(e)
-//                networkState.postValue(NetworkState.FAILED)
-//
-//            }
-//
-//        }
-    }
+    override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {}
 
     fun getInitialLoadStateData(): LiveData<NetworkState> = initialLoadStateLiveData
     fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
