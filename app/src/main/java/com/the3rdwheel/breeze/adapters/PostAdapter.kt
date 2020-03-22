@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.the3rdwheel.breeze.R
+import com.the3rdwheel.breeze.network.Callback
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.ui.viewholders.LoadingViewHolder
@@ -15,7 +16,8 @@ import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
 import timber.log.Timber
 
 
-class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
+class PostAdapter(private val callback: Callback) :
+    PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
 
     private var networkState: NetworkState? = null
 
@@ -42,7 +44,7 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
             }
             else -> {
                 (holder as PostErrorViewHolder).retryButton.setOnClickListener {
-                    Timber.d("clicked")
+                  callback.retryLoadingMore()
                 }
             }
         }

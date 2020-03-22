@@ -17,15 +17,16 @@ class PostDataSource(
 ) :
     PageKeyedDataSource<String, PostData>() {
     private val networkState = MutableLiveData<NetworkState>()
-
+    private var retryQuery: (() -> Any)? = null
     private val hasPostsLiveDara = MutableLiveData<Boolean>()
     private val initialLoadStateLiveData = MutableLiveData<NetworkState>()
     override fun loadInitial(
         params: LoadInitialParams<String>,
         callback: LoadInitialCallback<String, PostData>
     ) {
+        retryQuery = { loadInitial(params, callback) }
+        scope.launch(IO) {
 
-        scope.launch {
             initialLoadStateLiveData.postValue(NetworkState.LOADING)
 
             try {
@@ -49,8 +50,8 @@ class PostDataSource(
 
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
 
-
-        scope.launch {
+        retryQuery = { loadAfter(params, callback) }
+        scope.launch(IO) {
             networkState.postValue(NetworkState.LOADING)
             try {
                 val response = redditApi.getPosts(subName, params.requestedLoadSize, params.key)
@@ -99,5 +100,9 @@ class PostDataSource(
     fun getNetworkState(): LiveData<NetworkState> =
         networkState
 
-
+    fun retryFailedQuery() {
+        val prevQuery = retryQuery
+        retryQuery = null
+        prevQuery?.invoke()
+    }
 }

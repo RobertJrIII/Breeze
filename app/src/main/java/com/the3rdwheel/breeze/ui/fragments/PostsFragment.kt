@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
+import com.the3rdwheel.breeze.network.Callback
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
 import org.koin.android.ext.android.get
@@ -37,9 +38,20 @@ class PostsFragment : Fragment() {
         super.onActivityCreated(savedInstanceState)
 
 
-        mAdapter = PostAdapter()
+        mAdapter = PostAdapter(object : Callback {
+            override fun retryLoadingMore() {
+                postViewModel.retryLoadingPosts()
+            }
+        })
         binding.postRecyclerview.adapter = mAdapter
 
+
+
+        observeViewModel()
+
+    }
+
+    private fun observeViewModel() {
 
         postViewModel.initialLoadData.observe(viewLifecycleOwner, Observer {
             when (it) {
@@ -57,12 +69,6 @@ class PostsFragment : Fragment() {
             }
         })
 
-
-        observeViewModel()
-
-    }
-
-    private fun observeViewModel() {
         postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
             mAdapter.submitList(it)
 
