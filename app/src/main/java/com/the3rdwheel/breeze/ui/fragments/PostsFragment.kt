@@ -75,7 +75,7 @@ class PostsFragment : Fragment() {
                 binding.redditNotAvailable.visibility = View.GONE
             } else {
                 binding.redditNotAvailable.setOnClickListener { }
-                showError()
+                // showError() idk maybe no needed
             }
         })
 

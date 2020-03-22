@@ -7,6 +7,7 @@ import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.IO
 import timber.log.Timber
 
 class PostDataSource(
@@ -24,7 +25,6 @@ class PostDataSource(
         callback: LoadInitialCallback<String, PostData>
     ) {
 
-//TODO add initial loading
         scope.launch {
             initialLoadStateLiveData.postValue(NetworkState.LOADING)
 
@@ -98,5 +98,6 @@ class PostDataSource(
     fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
     fun getNetworkState(): LiveData<NetworkState> =
         networkState
+
 
 }
