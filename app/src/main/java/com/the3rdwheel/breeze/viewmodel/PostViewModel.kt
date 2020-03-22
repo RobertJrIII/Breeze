@@ -22,8 +22,11 @@ class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
     val networkState: LiveData<NetworkState>? =
         switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getNetworkState() }
 
-//    val hasPostLiveData: LiveData<Boolean> =
-//        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getHasPostData() }
+    val hasPostLiveData: LiveData<Boolean> =
+        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getHasPostData() }
+
+    val initialLoadData: LiveData<NetworkState> =
+        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getInitialLoadStateData() }
 
     init {
         val config = PagedList.Config.Builder()

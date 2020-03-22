@@ -16,8 +16,9 @@ class PostDataSource(
 ) :
     PageKeyedDataSource<String, PostData>() {
     private val networkState = MutableLiveData<NetworkState>()
-    //private val hasPostsLiveDara = MutableLiveData<Boolean>()
 
+    private val hasPostsLiveDara = MutableLiveData<Boolean>()
+    private val initialLoadStateLiveData = MutableLiveData<NetworkState>()
     override fun loadInitial(
         params: LoadInitialParams<String>,
         callback: LoadInitialCallback<String, PostData>
@@ -25,21 +26,21 @@ class PostDataSource(
 
 //TODO add initial loading
         scope.launch {
-            networkState.postValue(NetworkState.LOADING)
+            initialLoadStateLiveData.postValue(NetworkState.LOADING)
 
             try {
                 val response = redditApi.getPosts(subName, params.requestedLoadSize)
                 if (response.isSuccessful && response.body() != null) {
                     val data = response.body()?.data
                     val redditPosts = data?.children?.map { it.data }
-                    networkState.postValue(NetworkState.SUCCESS)
+                    initialLoadStateLiveData.postValue(NetworkState.SUCCESS)
 
                     callback.onResult(redditPosts!!, data.before, data.after)
                 }
 
             } catch (e: Exception) {
                 Timber.e(e)
-                networkState.postValue(NetworkState.FAILED)
+                initialLoadStateLiveData.postValue(NetworkState.FAILED)
             }
         }
 
@@ -93,7 +94,8 @@ class PostDataSource(
 //        }
     }
 
-   // fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
+    fun getInitialLoadStateData(): LiveData<NetworkState> = initialLoadStateLiveData
+    fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
     fun getNetworkState(): LiveData<NetworkState> =
         networkState
 

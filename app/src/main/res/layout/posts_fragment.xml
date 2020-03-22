@@ -18,4 +18,28 @@
         tools:listitem="@layout/post_item" />
 
 
+    <RelativeLayout
+        android:id="@+id/redditNotAvailable"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <androidx.emoji.widget.EmojiTextView
+            android:id="@+id/NotAvailableText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/reddit_cannot_be_reached_at_the_moment" />
+
+
+        <androidx.emoji.widget.EmojiTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/NotAvailableText"
+            android:gravity="center"
+            android:text="@string/table_flip" />
+
+    </RelativeLayout>
+
+
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

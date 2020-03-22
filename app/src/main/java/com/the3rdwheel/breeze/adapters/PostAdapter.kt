@@ -30,16 +30,20 @@ class PostAdapter : PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsync
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (holder is PostViewHolder) {
-            val currentPostData = getItem(position)
-            holder.mAuthor.text = currentPostData?.author
-            holder.mTitle.text = currentPostData?.title
-            holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
-        } else if (holder is LoadingViewHolder) {
-            holder.postLoading.isIndeterminate = true
-        } else {
-            (holder as PostErrorViewHolder).retryButton.setOnClickListener {
-                Timber.d("clicked")
+        when (holder) {
+            is PostViewHolder -> {
+                val currentPostData = getItem(position)
+                holder.mAuthor.text = currentPostData?.author
+                holder.mTitle.text = currentPostData?.title
+                holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
+            }
+            is LoadingViewHolder -> {
+                holder.postLoading.isIndeterminate = true
+            }
+            else -> {
+                (holder as PostErrorViewHolder).retryButton.setOnClickListener {
+                    Timber.d("clicked")
+                }
             }
         }
 
