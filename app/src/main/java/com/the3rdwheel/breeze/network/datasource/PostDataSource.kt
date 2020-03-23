@@ -16,10 +16,12 @@ class PostDataSource(
     private val subName: String?
 ) :
     PageKeyedDataSource<String, PostData>() {
+
     private val networkState = MutableLiveData<NetworkState>()
     private var retryQuery: (() -> Any)? = null
     private val hasPostsLiveDara = MutableLiveData<Boolean>()
     private val initialLoadStateLiveData = MutableLiveData<NetworkState>()
+
     override fun loadInitial(
         params: LoadInitialParams<String>,
         callback: LoadInitialCallback<String, PostData>
@@ -33,7 +35,7 @@ class PostDataSource(
                     val data = response.body()?.data
                     val redditPosts = data?.children?.map { it.data }
                     initialLoadStateLiveData.postValue(NetworkState.SUCCESS)
-
+                    retryQuery = null  //added not tested
                     callback.onResult(redditPosts!!, data.before, data.after)
                 }
 
@@ -57,7 +59,7 @@ class PostDataSource(
                     val data = response.body()?.data
                     networkState.postValue(NetworkState.SUCCESS)
                     val redditPosts = data?.children?.map { it.data }
-
+                    retryQuery = null //added not tested
                     callback.onResult(redditPosts!!, data.after)
                 }
             } catch (e: Exception) {
@@ -75,7 +77,7 @@ class PostDataSource(
     fun getNetworkState(): LiveData<NetworkState> =
         networkState
 
-    fun retryFailedQuery() {
+    fun retryFailedLoading() {
         val prevQuery = retryQuery
         retryQuery = null
         prevQuery?.invoke()

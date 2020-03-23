@@ -13,7 +13,6 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.ui.viewholders.LoadingViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostErrorViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
-import timber.log.Timber
 
 
 class PostAdapter(private val callback: Callback) :

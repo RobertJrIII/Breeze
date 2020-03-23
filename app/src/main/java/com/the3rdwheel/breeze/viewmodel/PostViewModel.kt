@@ -55,7 +55,7 @@ class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
 
     }
 
-    fun retryLoadingPosts() = postDataSourceFactory.getPostDataSource().retryFailedQuery()
+    fun retryLoadingPosts() = postDataSourceFactory.getPostDataSource().retryFailedLoading()
 
     fun refresh() {
         postDataSourceFactory.getPostDataSource().invalidate()
