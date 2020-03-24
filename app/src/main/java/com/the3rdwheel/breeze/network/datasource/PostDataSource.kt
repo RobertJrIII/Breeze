@@ -11,6 +11,8 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import timber.log.Timber
 
+private const val isInitial: Boolean = true
+
 class PostDataSource(
     private val scope: CoroutineScope,
     private val redditApi: RedditApi,
@@ -28,14 +30,13 @@ class PostDataSource(
     fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
     fun getNetworkState(): LiveData<NetworkState> = networkState
 
-    private var supervisorJob = SupervisorJob()
 
     override fun loadInitial(
         params: LoadInitialParams<String>,
         callback: LoadInitialCallback<String, PostData>
     ) {
         retryQuery = { loadInitial(params, callback) }
-        execute(true, subName, params.requestedLoadSize) { data ->
+        execute(isInitial, subName, params.requestedLoadSize) { data ->
             val posts = data.children.map { it.data }
 
             callback.onResult(posts, data.before, data.after)
@@ -64,7 +65,7 @@ class PostDataSource(
     override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {
 
         retryQuery = { loadAfter(params, callback) }
-        execute(false, subName, params.requestedLoadSize, params.key) { data ->
+        execute(!isInitial, subName, params.requestedLoadSize, params.key) { data ->
             val posts = data.children.map { it.data }
 
             callback.onResult(posts, data.after)
@@ -99,11 +100,20 @@ class PostDataSource(
     ) {
 
         setNetworkState(isInitial, NetworkState.LOADING)
-        scope.launch(IO + supervisorJob + getJobErrorHandler(isInitial)) {
-            val data = redditApi.getPosts(subName, perPage, nextKey).body()?.data
-            retryQuery = null
-            setNetworkState(isInitial, NetworkState.SUCCESS)
-            callback(data!!)
+        scope.launch(IO) {
+            try {
+                val response = redditApi.getPosts(subName, perPage, nextKey)
+                if (response.isSuccessful && response.body() != null) {
+                    val data = response.body()?.data
+                    setNetworkState(isInitial, NetworkState.SUCCESS)
+                    retryQuery = null
+                    callback(data!!)
+                }
+            } catch (e: Exception) {
+                Timber.e(e)
+                setNetworkState(isInitial, NetworkState.FAILED)
+            }
+
         }
     }
 
@@ -115,10 +125,6 @@ class PostDataSource(
         }
     }
 
-    private fun getJobErrorHandler(isInitial: Boolean) = CoroutineExceptionHandler { _, e ->
-        Timber.e(e)
-        setNetworkState(isInitial, NetworkState.FAILED)
-    }
 
     fun retryFailedLoading() {
         val prevQuery = retryQuery
@@ -126,9 +132,5 @@ class PostDataSource(
         prevQuery?.invoke()
     }
 
-    override fun invalidate() {
-        super.invalidate()
-        supervisorJob.cancelChildren()   // Cancel possible running job to only keep last result searched by user
-    }
 
 }
