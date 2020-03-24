@@ -20,9 +20,13 @@ class PostsFragment : Fragment() {
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var mAdapter: PostAdapter
-
     private val postViewModel: PostViewModel by viewModels { PostViewModel.Factory(get()) }
+    private val mAdapter = PostAdapter(object : Callback {
+        override fun retryLoadingMore() {
+            postViewModel.retryLoadingPosts()
+        }
+    })
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,26 +34,25 @@ class PostsFragment : Fragment() {
     ): View? {
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
 
+
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
-        return binding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
 
 
-        mAdapter = PostAdapter(object : Callback {
-            override fun retryLoadingMore() {
-                postViewModel.retryLoadingPosts()
-            }
-        })
+
         binding.postRecyclerview.adapter = mAdapter
 
 
+        //    observeViewModel()
 
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         observeViewModel()
 
     }
+
 
     private fun observeViewModel() {
 
@@ -84,9 +87,6 @@ class PostsFragment : Fragment() {
                 // showError() idk maybe no needed
             }
         })
-
-
-
 
         postViewModel.networkState?.observe(viewLifecycleOwner, Observer {
             mAdapter.updateNetworkState(it)
