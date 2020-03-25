@@ -41,24 +41,6 @@ class PostDataSource(
 
             callback.onResult(posts, data.before, data.after)
         }
-//        initialLoadStateLiveData.postValue(NetworkState.LOADING)
-//        scope.launch(IO) {
-//            try {
-//                val response = redditApi.getPosts(subName, params.requestedLoadSize)
-//                if (response.isSuccessful && response.body() != null) {
-//                    val data = response.body()?.data
-//                    val redditPosts = data?.children?.map { it.data }
-//                    initialLoadStateLiveData.postValue(NetworkState.SUCCESS)
-//                    retryQuery = null  //added not tested
-//                    callback.onResult(redditPosts!!, data.before, data.after)
-//                }
-//
-//            } catch (e: Exception) {
-//                Timber.e(e)
-//                initialLoadStateLiveData.postValue(NetworkState.FAILED)
-//            }
-//        }
-
 
     }
 
@@ -70,22 +52,6 @@ class PostDataSource(
 
             callback.onResult(posts, data.after)
         }
-//        networkState.postValue(NetworkState.LOADING)
-//        scope.launch(IO) {
-//            try {
-//                val response = redditApi.getPosts(subName, params.requestedLoadSize, params.key)
-//                if (response.isSuccessful && response.body() != null) {
-//                    val data = response.body()?.data
-//                    networkState.postValue(NetworkState.SUCCESS)
-//                    val redditPosts = data?.children?.map { it.data }
-//                    retryQuery = null //added not tested
-//                    callback.onResult(redditPosts!!, data.after)
-//                }
-//            } catch (e: Exception) {
-//                Timber.e(e)
-//                networkState.postValue(NetworkState.FAILED)
-//            }
-//        }
 
     }
 

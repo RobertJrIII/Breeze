@@ -5,15 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.network.Callback
 import com.the3rdwheel.breeze.network.NetworkState
+import com.the3rdwheel.breeze.viewmodel.CommunicationViewModel
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
 import org.koin.android.ext.android.get
 
+const val topPosition = 0
 
 class PostsFragment : Fragment() {
     private var hasPost = false
@@ -26,7 +29,7 @@ class PostsFragment : Fragment() {
             postViewModel.retryLoadingPosts()
         }
     })
-
+    private val sharedViewModel: CommunicationViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -50,7 +53,11 @@ class PostsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observeViewModel()
-
+        sharedViewModel.getPostFragmentReselected().observe(viewLifecycleOwner, Observer {
+            if (it) {
+                binding.postRecyclerview.scrollToPosition(topPosition)
+            }
+        })
     }
 
 
