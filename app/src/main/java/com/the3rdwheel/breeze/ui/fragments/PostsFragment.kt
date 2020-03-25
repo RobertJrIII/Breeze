@@ -84,16 +84,16 @@ class PostsFragment : Fragment() {
 
         })
 
-        postViewModel.hasPostLiveData.observe(viewLifecycleOwner, Observer {
-            this.hasPost = it
-            binding.postSwipeRefresh.isRefreshing = false
-            if (it) {
-                binding.redditNotAvailable.visibility = View.GONE
-            } else {
-                binding.redditNotAvailable.setOnClickListener { }
-                // showError() idk maybe no needed
-            }
-        })
+//        postViewModel.hasPostLiveData.observe(viewLifecycleOwner, Observer {
+//            this.hasPost = it
+//            binding.postSwipeRefresh.isRefreshing = false
+//            if (it) {
+//                binding.redditNotAvailable.visibility = View.GONE
+//            } else {
+//                binding.redditNotAvailable.setOnClickListener { }
+//                // showError() idk maybe no needed
+//            }
+//        })
 
         postViewModel.networkState?.observe(viewLifecycleOwner, Observer {
             mAdapter.updateNetworkState(it)
