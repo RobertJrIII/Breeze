@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         navBar.setupWithNavController(controller)
 
         navBar.setOnNavigationItemReselectedListener {
-            if (it.toString() == "Posts") {
+            if (it.title == getString(R.string.posts)) {
                 sharedViewModel.setPostFragmentReselected(reselected)
             }
         }
