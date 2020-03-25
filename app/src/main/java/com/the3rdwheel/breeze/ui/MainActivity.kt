@@ -2,7 +2,6 @@ package com.the3rdwheel.breeze.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
@@ -17,25 +16,26 @@ const val reselected = true
 
 class MainActivity : AppCompatActivity() {
 
-    private val sharedViewModel by viewModels<CommunicationViewModel>()
+    private val sharedViewModel: CommunicationViewModel by viewModels()
+    private lateinit var controller: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
 
 
         setContentView(binding.root)
-        val controller: NavController = findNavController(R.id.nav_host_fragment)
-        val navBar = binding.navBar
+        controller = findNavController(R.id.nav_host_fragment)
 
-        navBar.setupWithNavController(controller)
 
-        navBar.setOnNavigationItemReselectedListener {
-            if (it.title == getString(R.string.posts)) {
+        binding.navBar.setupWithNavController(controller)
+
+        binding.navBar.setOnNavigationItemReselectedListener {
+            if (it.itemId == R.id.postsFragment) {
                 sharedViewModel.setPostFragmentReselected(reselected)
             }
         }
-        setSupportActionBar(binding.mainToolbar.toolbar)
 
+        setSupportActionBar(binding.mainToolbar.toolbar)
 
         val appBarConfiguration = AppBarConfiguration(
 

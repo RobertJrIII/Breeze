@@ -19,7 +19,7 @@ class PostDataSource(
     PageKeyedDataSource<String, PostData>() {
 
     private val networkState = MutableLiveData<NetworkState>()
-    private var retryQuery: (() -> Any)? = null
+    private var retryQuery: (() -> Unit)? = null
     private val hasPostsLiveDara = MutableLiveData<Boolean>()
     private val initialLoadStateLiveData = MutableLiveData<NetworkState>()
 
