@@ -67,6 +67,8 @@ class PostsFragment : Fragment() {
             when (it) {
                 NetworkState.SUCCESS -> {
                     binding.postSwipeRefresh.isRefreshing = false
+                    binding.redditNotAvailable.visibility =
+                        View.GONE //added don't know if adding this will remove has posts
                 }
                 NetworkState.FAILED -> {
                     binding.postSwipeRefresh.isRefreshing = false
@@ -75,6 +77,8 @@ class PostsFragment : Fragment() {
                 }
                 else -> {
                     binding.postSwipeRefresh.isRefreshing = true
+                    binding.redditNotAvailable.visibility =
+                        View.GONE //added don't know if adding this will remove has posts
                 }
             }
         })

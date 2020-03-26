@@ -4,8 +4,10 @@ import android.content.Context
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import okhttp3.*
 
 class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator,
@@ -49,7 +51,7 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
     override fun authenticate(route: Route?, response: Response): Request? {
 
         if (response.code == 401) {
-
+            val request = response.request
             val accessToken = response.request.header(RedditUtils.AUTHORIZATION_KEY)
                 ?.substring(RedditUtils.AUTHORIZATION_BASE.length)
 
@@ -61,12 +63,12 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
                 return if (accessToken == storedAccessToken) {
                     val newAccessToken = retrieveToken()
                     if (newAccessToken != "") {
-                        buildRequest(newAccessToken, response.request)
+                        buildRequest(newAccessToken, request)
 
                     } else {
                         null
                     }
-                } else buildRequest(storedAccessToken, response.request)
+                } else buildRequest(storedAccessToken, request)
             }
 
         }
@@ -84,12 +86,13 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
             accessToken = response.body()!!.access_token
 
 
+            withContext(Default) {
                 SecurePreferences.setValue(
                     context,
                     RedditUtils.SECRET_KEY,
                     accessToken
                 )
-
+            }
 
 
         }
@@ -97,7 +100,13 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
         return@runBlocking accessToken
     }
 
-    private fun getStoredToken() =
-        SecurePreferences.getStringValue(context, RedditUtils.SECRET_KEY, "")
+    private fun getStoredToken() = runBlocking(Default) {
+        SecurePreferences.getStringValue(
+            context,
+            RedditUtils.SECRET_KEY,
+            ""
+        )
+    }
+
 
 }
