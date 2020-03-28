@@ -11,7 +11,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import timber.log.Timber
 
-private const val isInitial: Boolean = true
+private const val isInitialLoad: Boolean = true
 
 class PostDataSource(
     private val scope: CoroutineScope,
@@ -36,7 +36,7 @@ class PostDataSource(
         callback: LoadInitialCallback<String, PostData>
     ) {
         retryQuery = { loadInitial(params, callback) }
-        execute(isInitial, subName, params.requestedLoadSize) { data ->
+        execute(isInitialLoad, subName, params.requestedLoadSize) { data ->
             val posts = data.children.map { it.data }
 
             callback.onResult(posts, data.before, data.after)
@@ -68,7 +68,7 @@ class PostDataSource(
 
         retryQuery = { loadAfter(params, callback) }
 
-        execute(!isInitial, subName, params.requestedLoadSize, params.key) { data ->
+        execute(!isInitialLoad, subName, params.requestedLoadSize, params.key) { data ->
             val posts = data.children.map { it.data }
             callback.onResult(posts, data.after)
 
