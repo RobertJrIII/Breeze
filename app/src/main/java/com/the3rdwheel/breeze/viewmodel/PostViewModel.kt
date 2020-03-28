@@ -19,7 +19,7 @@ class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
 
     private val postDataSourceFactory: PostDataSourceFactory =
         PostDataSourceFactory(viewModelScope, redditApi, subName)
-    val networkState: LiveData<NetworkState>? =
+    val networkState: LiveData<NetworkState> =
         switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getNetworkState() }
 
     val hasPostLiveData: LiveData<Boolean> =

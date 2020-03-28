@@ -8,27 +8,25 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
-import com.the3rdwheel.breeze.network.Callback
+import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
+import com.the3rdwheel.breeze.ui.Gestures
 import com.the3rdwheel.breeze.viewmodel.CommunicationViewModel
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
 import org.koin.android.ext.android.get
 
 const val topPosition = 0
 
-class PostsFragment : Fragment() {
+class PostsFragment : Fragment(), NetworkAssistance {
     private var hasPost = false
     private var _binding: PostsFragmentBinding? = null
     private val binding get() = _binding!!
 
     private val postViewModel: PostViewModel by viewModels { PostViewModel.Factory(get()) }
-    private val mAdapter = PostAdapter(object : Callback {
-        override fun retryLoadingMore() {
-            postViewModel.retryLoadingPosts()
-        }
-    })
+    private val mAdapter = PostAdapter(this)
     private val sharedViewModel: CommunicationViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -40,7 +38,9 @@ class PostsFragment : Fragment() {
 
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
 
-
+        ItemTouchHelper(Gestures(ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)).attachToRecyclerView(
+            binding.postRecyclerview
+        )
 
         binding.postRecyclerview.adapter = mAdapter
 
@@ -63,6 +63,11 @@ class PostsFragment : Fragment() {
 
     private fun observeViewModel() {
 
+        postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
+            mAdapter.submitList(it)
+
+        })
+
         postViewModel.initialLoadData.observe(viewLifecycleOwner, Observer {
             when (it) {
                 NetworkState.SUCCESS -> {
@@ -83,10 +88,6 @@ class PostsFragment : Fragment() {
             }
         })
 
-        postViewModel.getPosts().observe(viewLifecycleOwner, Observer {
-            mAdapter.submitList(it)
-
-        })
 
 //        postViewModel.hasPostLiveData.observe(viewLifecycleOwner, Observer {
 //            this.hasPost = it
@@ -99,7 +100,7 @@ class PostsFragment : Fragment() {
 //            }
 //        })
 
-        postViewModel.networkState?.observe(viewLifecycleOwner, Observer {
+        postViewModel.networkState.observe(viewLifecycleOwner, Observer {
             mAdapter.updateNetworkState(it)
         })
     }
@@ -120,6 +121,10 @@ class PostsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun retryLoadingMore() {
+        postViewModel.retryLoadingPosts()
     }
 
 }

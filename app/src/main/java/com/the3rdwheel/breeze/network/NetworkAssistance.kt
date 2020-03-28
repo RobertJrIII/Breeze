@@ -1,5 +1,5 @@
 package com.the3rdwheel.breeze.network
 
-interface Callback {
+interface NetworkAssistance {
     fun retryLoadingMore()
 }
