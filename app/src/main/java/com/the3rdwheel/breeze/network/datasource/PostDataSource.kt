@@ -24,7 +24,7 @@ class PostDataSource(
     private var retryQuery: (() -> Unit)? = null
     private val hasPostsLiveDara = MutableLiveData<Boolean>()
     private val initialLoadStateLiveData = MutableLiveData<NetworkState>()
-
+    private var supervisorJob: CompletableJob = SupervisorJob()
 
     fun getInitialLoadStateData(): LiveData<NetworkState> = initialLoadStateLiveData
     fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
@@ -96,6 +96,11 @@ class PostDataSource(
 
     }
 
+    private fun getJobErrorHandler(isInitial: Boolean) = CoroutineExceptionHandler { _, e ->
+        Timber.e(e)
+        setNetworkState(isInitial, NetworkState.FAILED)
+    }
+
     override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, PostData>) {}
 
 
@@ -123,22 +128,23 @@ class PostDataSource(
 
 
         setNetworkState(isInitial, NetworkState.LOADING)
-        scope.launch(IO) {
-            try {
-                val response = redditApi.getPosts(subName, perPage, nextKey)
+        scope.launch(IO + getJobErrorHandler(isInitial) + supervisorJob) {
 
-                if (response.isSuccessful && response.body() != null) {
-                    val data = response.body()?.data
-                    setNetworkState(isInitial, NetworkState.SUCCESS)
-                    retryQuery = null
-                    callback(data!!)
-                }  //maybe add Failed here as well just in case
-            } catch (e: Exception) {
-                Timber.e(e)
-                setNetworkState(isInitial, NetworkState.FAILED)
-            }
+            val response = redditApi.getPosts(subName, perPage, nextKey)
+
+            if (response.isSuccessful && response.body() != null) {
+                val data = response.body()?.data
+                setNetworkState(isInitial, NetworkState.SUCCESS)
+                retryQuery = null
+                callback(data!!)
+            }  //maybe add Failed here as well just in case
+
 
         }
     }
 
+    override fun invalidate() {
+        super.invalidate()
+        supervisorJob.cancelChildren()   // Cancel possible running job to only keep last result searched by user
+    }
 }

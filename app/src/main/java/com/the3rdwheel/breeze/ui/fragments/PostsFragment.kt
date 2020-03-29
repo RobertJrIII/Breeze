@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
@@ -42,7 +43,10 @@ class PostsFragment : Fragment(), NetworkAssistance {
             binding.postRecyclerview
         )
 
-        binding.postRecyclerview.adapter = mAdapter
+        binding.postRecyclerview.apply {
+            adapter = mAdapter
+            //addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
+        }
 
 
         //    observeViewModel()
