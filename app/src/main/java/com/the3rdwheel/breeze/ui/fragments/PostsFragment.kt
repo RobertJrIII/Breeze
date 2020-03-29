@@ -26,7 +26,7 @@ class PostsFragment : Fragment(), NetworkAssistance {
     private val binding get() = _binding!!
 
     private val postViewModel: PostViewModel by viewModels { PostViewModel.Factory(get()) }
-    private val mAdapter = PostAdapter(this)
+    private val mAdapter = PostAdapter(this) //try to save instance
     private val sharedViewModel: CommunicationViewModel by activityViewModels()
 
     override fun onCreateView(

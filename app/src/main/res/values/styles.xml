@@ -10,5 +10,5 @@
         <!--        <item name="android:navigationBarColor">@android:color/transparent</item>-->
     </style>
 
-    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.ActionBar" />
+
 </resources>

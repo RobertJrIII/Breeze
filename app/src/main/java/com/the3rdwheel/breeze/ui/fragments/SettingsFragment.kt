@@ -14,7 +14,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
     }
 
     override fun onPrepareOptionsMenu(menu: Menu) {
-        menu.findItem(R.id.settings).isVisible = false
+        menu.findItem(R.id.settingsFragment).isVisible = false
         super.onPrepareOptionsMenu(menu)
     }
 
