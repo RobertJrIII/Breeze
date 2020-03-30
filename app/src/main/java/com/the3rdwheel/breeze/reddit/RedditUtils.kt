@@ -18,4 +18,9 @@ object RedditUtils {
     const val SECRET_KEY = "Secret_ANONYMOUS"
     const val SECURE_PREFS = "secret_shared_prefs"
 
+
+    const val DOWN_VOTE_COLOR = "#9494FF"
+    const val UP_VOTE_COLOR = "#FF8b60"
+    const val SAVE = "#FFFF33"
+    const val MORE_OPTIONS = "#C0C0C0"
 }

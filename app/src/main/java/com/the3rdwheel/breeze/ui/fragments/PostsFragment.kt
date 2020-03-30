@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.ui.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,13 +9,16 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.ItemTouchHelper
+import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
+import com.the3rdwheel.breeze.gestures.*
 import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
-import com.the3rdwheel.breeze.ui.Gestures
+import com.the3rdwheel.breeze.reddit.RedditUtils.DOWN_VOTE_COLOR
+import com.the3rdwheel.breeze.reddit.RedditUtils.MORE_OPTIONS
+import com.the3rdwheel.breeze.reddit.RedditUtils.SAVE
+import com.the3rdwheel.breeze.reddit.RedditUtils.UP_VOTE_COLOR
 import com.the3rdwheel.breeze.viewmodel.CommunicationViewModel
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
 import org.koin.android.ext.android.get
@@ -39,9 +43,18 @@ class PostsFragment : Fragment(), NetworkAssistance {
 
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
 
-        ItemTouchHelper(Gestures(ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT)).attachToRecyclerView(
+        SimpleSwipe(
+            LEFT_AND_RIGHT,
+            listOf(
+                SwipeItems(Color.parseColor(SAVE), R.drawable.save_24dp),
+                SwipeItems(Color.parseColor(MORE_OPTIONS), R.drawable.more_24dp),
+                SwipeItems(Color.parseColor(DOWN_VOTE_COLOR), R.drawable.down_vote_24dp),
+                SwipeItems(Color.parseColor(UP_VOTE_COLOR), R.drawable.up_vote_24dp)
+            ),
             binding.postRecyclerview
         )
+
+
 
         binding.postRecyclerview.apply {
             adapter = mAdapter

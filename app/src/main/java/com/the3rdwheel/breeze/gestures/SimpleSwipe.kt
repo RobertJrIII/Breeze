@@ -1,7 +1,6 @@
-package com.the3rdwheel.breeze.ui
+package com.the3rdwheel.breeze.gestures
 
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE
@@ -9,14 +8,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
 
 
-const val DOWN_VOTE_COLOR = "#9494FF"
-const val UP_VOTE_COLOR = "#FF8b60"
-const val SAVE = "#FFFF33"
-const val MORE_OPTIONS = "#C0C0C0"
+const val LEFT_AND_RIGHT = ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT
+const val RIGHT = ItemTouchHelper.RIGHT
+const val LEFT = ItemTouchHelper.LEFT
 
-class Gestures(swipeDirs: Int) : ItemTouchHelper.SimpleCallback(ACTION_STATE_IDLE, swipeDirs) {
+class SimpleSwipe(
+    swipeDirs: Int,
+    private val items: List<SwipeItems>,
+    recyclerView: RecyclerView
+) :
+    ItemTouchHelper.SimpleCallback(ACTION_STATE_IDLE, swipeDirs) {
+    private val colorDrawable: ColorDrawable = ColorDrawable()
 
-//    private var swipeBack = false
+    init {
+
+        ItemTouchHelper(this).attachToRecyclerView(recyclerView)
+    }
+
+
 
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         //TODO add voting, saving, etc. here
@@ -50,11 +59,7 @@ class Gestures(swipeDirs: Int) : ItemTouchHelper.SimpleCallback(ACTION_STATE_IDL
         actionState: Int,
         isCurrentlyActive: Boolean
     ) {
-//        recyclerView.setOnTouchListener { v, event ->
-//            swipeBack =
-//                event.action == MotionEvent.ACTION_CANCEL || event.action == MotionEvent.ACTION_UP
-//            false
-//        }
+
 
         val itemView = viewHolder.itemView
         val widthOfSingleLabel = itemView.width / 4
@@ -63,7 +68,7 @@ class Gestures(swipeDirs: Int) : ItemTouchHelper.SimpleCallback(ACTION_STATE_IDL
         if (dX < widthOfSingleLabel && dX > 0) {
 
             setBackground(
-                Color.parseColor(SAVE),
+                items[0].color,
                 itemView.left,
                 itemView.top,
                 dX.toInt(),
@@ -72,7 +77,7 @@ class Gestures(swipeDirs: Int) : ItemTouchHelper.SimpleCallback(ACTION_STATE_IDL
         } else if (dX > widthOfSingleLabel && ((dX < width / 2) || (dX > width / 2))) {
 
             setBackground(
-                Color.parseColor(MORE_OPTIONS),
+                items[1].color,
                 itemView.left,
                 itemView.top,
                 dX.toInt(),
@@ -82,7 +87,7 @@ class Gestures(swipeDirs: Int) : ItemTouchHelper.SimpleCallback(ACTION_STATE_IDL
         } else if (dX < 0 && (width + dX > widthOfSingleLabel * 3)) {
 
             setBackground(
-                Color.parseColor(UP_VOTE_COLOR),
+                items[3].color,
                 itemView.right + dX.toInt(),
                 itemView.top,
                 itemView.right,
@@ -90,7 +95,7 @@ class Gestures(swipeDirs: Int) : ItemTouchHelper.SimpleCallback(ACTION_STATE_IDL
             )
         } else {
             setBackground(
-                Color.parseColor(DOWN_VOTE_COLOR),
+                items[2].color,
                 itemView.right + dX.toInt(),
                 itemView.top,
                 itemView.right,
@@ -110,9 +115,9 @@ class Gestures(swipeDirs: Int) : ItemTouchHelper.SimpleCallback(ACTION_STATE_IDL
         bottom: Int,
         canvas: Canvas
     ) {
-        val background = ColorDrawable(color)
-        background.setBounds(left, top, right, bottom)
+        colorDrawable.color = color
+        colorDrawable.setBounds(left, top, right, bottom)
 
-        background.draw(canvas)
+        colorDrawable.draw(canvas)
     }
 }
