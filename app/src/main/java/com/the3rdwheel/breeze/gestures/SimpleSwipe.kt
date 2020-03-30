@@ -2,6 +2,7 @@ package com.the3rdwheel.breeze.gestures
 
 import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
+import android.widget.Toast
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ItemTouchHelper.ACTION_STATE_IDLE
 import androidx.recyclerview.widget.RecyclerView
@@ -19,6 +20,7 @@ class SimpleSwipe(
 ) :
     ItemTouchHelper.SimpleCallback(ACTION_STATE_IDLE, swipeDirs) {
     private val colorDrawable: ColorDrawable = ColorDrawable()
+    private var rectangle: Int? = null
 
     init {
 
@@ -26,9 +28,10 @@ class SimpleSwipe(
     }
 
 
-
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-        //TODO add voting, saving, etc. here
+       if (rectangle == 3){
+           Toast.makeText(viewHolder.itemView.context,"DownVoted",Toast.LENGTH_SHORT).show()
+       }
     }
 
     override fun onMove(
@@ -66,7 +69,7 @@ class SimpleSwipe(
         val width = itemView.width
 
         if (dX < widthOfSingleLabel && dX > 0) {
-
+            rectangle = 1
             setBackground(
                 items[0].color,
                 itemView.left,
@@ -75,7 +78,7 @@ class SimpleSwipe(
                 itemView.bottom, c
             )
         } else if (dX > widthOfSingleLabel && ((dX < width / 2) || (dX > width / 2))) {
-
+            rectangle = 2
             setBackground(
                 items[1].color,
                 itemView.left,
@@ -85,7 +88,7 @@ class SimpleSwipe(
             )
 
         } else if (dX < 0 && (width + dX > widthOfSingleLabel * 3)) {
-
+            rectangle = 4
             setBackground(
                 items[3].color,
                 itemView.right + dX.toInt(),
@@ -94,6 +97,7 @@ class SimpleSwipe(
                 itemView.bottom, c
             )
         } else {
+            rectangle = 3
             setBackground(
                 items[2].color,
                 itemView.right + dX.toInt(),

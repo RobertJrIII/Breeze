@@ -40,29 +40,6 @@ class PostsFragment : Fragment(), NetworkAssistance {
 
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
 
-        SimpleSwipe(
-            LEFT_AND_RIGHT,
-            listOf(
-                SwipeItems(
-                    getColor(resources, R.color.save),
-                    R.drawable.save_24dp
-                ),
-                SwipeItems(
-                    getColor(resources, R.color.moreOptions),
-                    R.drawable.more_24dp
-                ),
-                SwipeItems(
-                    getColor(resources, R.color.downVoteColor),
-                    R.drawable.down_vote_24dp
-                ),
-                SwipeItems(
-                    getColor(resources, R.color.upVoteColor),
-                    R.drawable.up_vote_24dp
-                )
-            ),
-            binding.postRecyclerview
-        )
-
 
 
         binding.postRecyclerview.apply {
@@ -153,8 +130,32 @@ class PostsFragment : Fragment(), NetworkAssistance {
         postViewModel.retryLoadingPosts()
     }
 
-    private fun getColor(resources: Resources, colorID: Int, theme: Resources.Theme? = null) =
-        ResourcesCompat.getColor(resources, colorID, theme)
+//    private fun getColor(resources: Resources, colorID: Int, theme: Resources.Theme? = null) =
+//        ResourcesCompat.getColor(resources, colorID, theme)
+//
+//
+//    SimpleSwipe(
+//    LEFT_AND_RIGHT,
+//    listOf(
+//    SwipeItems(
+//    getColor(resources, R.color.save),
+//    R.drawable.save_24dp
+//    ),
+//    SwipeItems(
+//    getColor(resources, R.color.moreOptions),
+//    R.drawable.more_24dp
+//    ),
+//    SwipeItems(
+//    getColor(resources, R.color.downVoteColor),
+//    R.drawable.down_vote_24dp
+//    ),
+//    SwipeItems(
+//    getColor(resources, R.color.upVoteColor),
+//    R.drawable.up_vote_24dp
+//    )
+//    ),
+//    binding.postRecyclerview
+//    )
 }
 
 
