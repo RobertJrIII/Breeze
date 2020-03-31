@@ -39,7 +39,7 @@ class PostAdapter(private val networkAssistance: NetworkAssistance) :
                 holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
             }
             is LoadingViewHolder -> {
-                holder.postLoading.isIndeterminate = true
+               //holder.postLoading.isIndeterminate = true
             }
             else -> {
                 (holder as PostErrorViewHolder).retryButton.setOnClickListener {
