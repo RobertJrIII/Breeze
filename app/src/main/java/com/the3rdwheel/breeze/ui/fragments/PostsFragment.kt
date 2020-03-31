@@ -1,19 +1,15 @@
 package com.the3rdwheel.breeze.ui.fragments
 
-import android.content.res.Resources
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
-import com.the3rdwheel.breeze.gestures.*
 import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.viewmodel.CommunicationViewModel
@@ -130,32 +126,7 @@ class PostsFragment : Fragment(), NetworkAssistance {
         postViewModel.retryLoadingPosts()
     }
 
-//    private fun getColor(resources: Resources, colorID: Int, theme: Resources.Theme? = null) =
-//        ResourcesCompat.getColor(resources, colorID, theme)
-//
-//
-//    SimpleSwipe(
-//    LEFT_AND_RIGHT,
-//    listOf(
-//    SwipeItems(
-//    getColor(resources, R.color.save),
-//    R.drawable.save_24dp
-//    ),
-//    SwipeItems(
-//    getColor(resources, R.color.moreOptions),
-//    R.drawable.more_24dp
-//    ),
-//    SwipeItems(
-//    getColor(resources, R.color.downVoteColor),
-//    R.drawable.down_vote_24dp
-//    ),
-//    SwipeItems(
-//    getColor(resources, R.color.upVoteColor),
-//    R.drawable.up_vote_24dp
-//    )
-//    ),
-//    binding.postRecyclerview
-//    )
+
 }
 
 

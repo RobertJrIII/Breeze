@@ -4,6 +4,7 @@ import android.content.Context
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import de.adorsys.android.securestoragelibrary.SecurePreferences
+import kotlinx.coroutines.Dispatchers.Default
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
@@ -112,12 +113,13 @@ class SupportInterceptor(private val auth: Auth, private val context: Context) :
         return@runBlocking accessToken
     }
 
-    private fun getStoredToken() =
+    private fun getStoredToken() = runBlocking(Default) {
         SecurePreferences.getStringValue(
             context,
             RedditUtils.SECRET_KEY,
             ""
         )
+    }
 
 
 }
