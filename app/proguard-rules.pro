@@ -114,6 +114,11 @@
     public <methods>;
 }
 
--keep class com.the3rdwheel.breeze.reddit.authentication.network.response.** {*;}
+#Reddit Responses
+-keep class com.the3rdwheel.breeze.reddit.authentication.response.** {*;}
 -keep class com.the3rdwheel.breeze.reddit.models.** {*;}
+#Fragments
+-keep class com.the3rdwheel.breeze.ui.fragment.** {*;}
+
+
 

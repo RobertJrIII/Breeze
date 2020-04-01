@@ -21,7 +21,7 @@ const val topPosition = 0
 class PostsFragment : Fragment(), NetworkAssistance {
     private var hasPost = false
     private var _binding: PostsFragmentBinding? = null
-    private val binding get() = _binding!!
+    private val binding: PostsFragmentBinding get() = _binding!!
 
     private val postViewModel: PostViewModel by viewModels { PostViewModel.Factory(get()) }
     private val mAdapter = PostAdapter(this) //try to save instance

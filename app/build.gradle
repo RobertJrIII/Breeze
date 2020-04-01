@@ -44,12 +44,14 @@ android {
 
     buildTypes {
         release {
+            useProguard = false
             shrinkResources true
             minifyEnabled true
             buildConfigField("String", "CLIENT_ID", secretProperties['clientID'])
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
+            useProguard = false
             shrinkResources false
             minifyEnabled false
             buildConfigField("String", "CLIENT_ID", secretProperties['clientID'])
@@ -121,7 +123,7 @@ dependencies {
     implementation "androidx.preference:preference-ktx:1.1.0"
 
     //leak canary
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
+    //  debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.2'
 
     //paging
     implementation "androidx.paging:paging-runtime-ktx:2.1.2"
@@ -131,5 +133,6 @@ dependencies {
 
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
 
+    implementation 'androidx.fragment:fragment-ktx:1.2.3'
 
 }

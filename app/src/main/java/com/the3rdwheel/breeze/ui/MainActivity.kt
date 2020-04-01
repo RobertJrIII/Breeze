@@ -14,7 +14,6 @@ import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.databinding.ActivityMainBinding
 import com.the3rdwheel.breeze.viewmodel.CommunicationViewModel
 
-const val reselected = true
 
 class MainActivity : AppCompatActivity() {
 
@@ -34,7 +33,7 @@ class MainActivity : AppCompatActivity() {
 
         binding.navBar.setOnNavigationItemReselectedListener {
             if (it.itemId == R.id.postsFragment) {
-                sharedViewModel.setPostFragmentReselected(reselected)
+                sharedViewModel.setPostFragmentReselected(true)
             }
         }
 
