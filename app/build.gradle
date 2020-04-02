@@ -44,14 +44,12 @@ android {
 
     buildTypes {
         release {
-            useProguard = false
             shrinkResources true
             minifyEnabled true
             buildConfigField("String", "CLIENT_ID", secretProperties['clientID'])
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         debug {
-            useProguard = false
             shrinkResources false
             minifyEnabled false
             buildConfigField("String", "CLIENT_ID", secretProperties['clientID'])
@@ -133,6 +131,6 @@ dependencies {
 
     implementation 'me.zhanghai.android.materialprogressbar:library:1.6.1'
 
-    implementation 'androidx.fragment:fragment-ktx:1.2.3'
+    implementation 'androidx.fragment:fragment-ktx:1.2.4'
 
 }

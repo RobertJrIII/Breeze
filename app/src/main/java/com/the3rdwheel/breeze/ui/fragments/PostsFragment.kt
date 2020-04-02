@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.network.NetworkAssistance
@@ -23,7 +23,7 @@ class PostsFragment : Fragment(), NetworkAssistance {
     private var _binding: PostsFragmentBinding? = null
     private val binding: PostsFragmentBinding get() = _binding!!
 
-    private val postViewModel: PostViewModel by viewModels { PostViewModel.Factory(get()) }
+    private lateinit var postViewModel: PostViewModel
     private val mAdapter = PostAdapter(this) //try to save instance
     private val sharedViewModel: CommunicationViewModel by activityViewModels()
 
@@ -36,8 +36,8 @@ class PostsFragment : Fragment(), NetworkAssistance {
 
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
 
-
-
+        postViewModel =
+            ViewModelProvider(this, PostViewModel.Factory(get())).get(PostViewModel::class.java)
         binding.postRecyclerview.apply {
             adapter = mAdapter
             //addItemDecoration(DividerItemDecoration(context, DividerItemDecoration.VERTICAL))
