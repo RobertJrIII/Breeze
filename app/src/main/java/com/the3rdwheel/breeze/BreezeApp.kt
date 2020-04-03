@@ -4,12 +4,13 @@ import android.app.Application
 import androidx.core.provider.FontRequest
 import androidx.emoji.text.EmojiCompat
 import androidx.emoji.text.FontRequestEmojiCompatConfig
-import com.the3rdwheel.breeze.koin.authModules
-import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
+import com.the3rdwheel.breeze.dagger.AppComponent
+import com.the3rdwheel.breeze.dagger.DaggerAppComponent
 import timber.log.Timber
 
 class BreezeApp : Application() {
+
+    private lateinit var appComponent: AppComponent
 
 
     override fun onCreate() {
@@ -28,12 +29,10 @@ class BreezeApp : Application() {
         val config = FontRequestEmojiCompatConfig(applicationContext, fontRequest)
         EmojiCompat.init(config)
 
-        startKoin {
-            androidContext(applicationContext)
-            modules(listOf(authModules))
-        }
 
+        appComponent = DaggerAppComponent.builder().application(this).build()
 
     }
 
+    fun getAppComponent() = appComponent
 }

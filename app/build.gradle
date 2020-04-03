@@ -114,9 +114,6 @@ dependencies {
 //    kapt "androidx.room:room-compiler:2.2.4"
 //    implementation "androidx.room:room-ktx:2.2.4"
 
-    //Koin
-    implementation "org.koin:koin-android:2.0.1"
-    implementation "org.koin:koin-androidx-scope:2.0.1"
 
     //Preferences
     implementation "androidx.preference:preference-ktx:1.1.0"
@@ -134,4 +131,7 @@ dependencies {
 
     implementation 'androidx.fragment:fragment-ktx:1.2.4'
 
+    //Dagger
+    implementation 'com.google.dagger:dagger:2.27'
+    kapt 'com.google.dagger:dagger-compiler:2.27'
 }
