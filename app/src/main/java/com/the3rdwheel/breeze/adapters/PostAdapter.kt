@@ -6,7 +6,10 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.Coil
+import coil.ImageLoader
 import coil.api.load
+import coil.size.Scale
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
@@ -21,7 +24,6 @@ class PostAdapter(private val networkAssistance: NetworkAssistance) :
     PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
 
     private var networkState: NetworkState? = null
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
         return when (viewType) {
@@ -42,7 +44,10 @@ class PostAdapter(private val networkAssistance: NetworkAssistance) :
 
                 Timber.d(currentPostData.toString())
                 if (!currentPostData.all_awardings.isNullOrEmpty()) {
-                    holder.mAward.load(currentPostData.all_awardings[0].icon_url)
+
+                    holder.mAward.load(currentPostData.all_awardings[0].icon_url){
+                        scale(Scale.FIT)
+                    }
                 }
             }
             is LoadingViewHolder -> {

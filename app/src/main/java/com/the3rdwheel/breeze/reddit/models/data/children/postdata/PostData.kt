@@ -26,7 +26,7 @@ data class PostData(
     @Json(name = "all_awardings") val all_awardings: List<Award>?,
     @Json(name = "spoiler") val isSpoiler: Boolean,
     @Json(name = "locked") val isLocked: Boolean,
-    val id: String,
+    @Json(name = "id") val id: String,
     val author: String,
     val num_comments: Long,
     @Json(name = "contest_mode") val isContestMode: Boolean,
