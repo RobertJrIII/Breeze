@@ -1,12 +1,10 @@
 package com.the3rdwheel.breeze.viewmodel
 
-import androidx.lifecycle.LiveData
+import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.switchMap
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.network.datasource.PostDataSourceFactory
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData

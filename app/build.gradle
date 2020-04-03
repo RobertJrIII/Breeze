@@ -103,8 +103,8 @@ dependencies {
 
     //Coil
     implementation "io.coil-kt:coil-gif:0.9.5"
-   // implementation "io.coil-kt:coil-base:0.9.5"
-    implementation("io.coil-kt:coil:0.9.5")
+    implementation "io.coil-kt:coil-base:0.9.5"
+    implementation "io.coil-kt:coil:0.9.5"
 
     //emoji
     implementation 'androidx.emoji:emoji:1.0.0'

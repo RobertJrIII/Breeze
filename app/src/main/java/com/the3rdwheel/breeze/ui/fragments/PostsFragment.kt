@@ -9,6 +9,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
+import coil.ImageLoader
 import com.the3rdwheel.breeze.BreezeApp
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
@@ -18,22 +19,23 @@ import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import com.the3rdwheel.breeze.viewmodel.CommunicationViewModel
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
 import javax.inject.Inject
-import javax.inject.Named
 
 const val topPosition = 0
 
 class PostsFragment : Fragment(), NetworkAssistance {
 
     @Inject
-    @Named("RedditApi")
     lateinit var redditApi: RedditApi
+
+    @Inject
+    lateinit var imageLoader: ImageLoader
 
     private var hasPost = false
     private var _binding: PostsFragmentBinding? = null
     private val binding: PostsFragmentBinding get() = _binding!!
 
     private lateinit var postViewModel: PostViewModel
-    private val mAdapter = PostAdapter(this) //try to save instance
+    private lateinit var mAdapter: PostAdapter
     private val sharedViewModel: CommunicationViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -43,7 +45,7 @@ class PostsFragment : Fragment(), NetworkAssistance {
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
 
         (requireActivity().application as BreezeApp).getAppComponent().inject(this)
-
+        mAdapter = PostAdapter(this, imageLoader)
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
 
         postViewModel =

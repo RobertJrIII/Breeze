@@ -1,34 +1,46 @@
 package com.the3rdwheel.breeze.dagger
 
 import android.content.Context
-import com.the3rdwheel.breeze.network.SupportInterceptor
+import coil.ImageLoader
+import coil.util.CoilUtils
+import com.the3rdwheel.breeze.network.RedditAuthenticator
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import dagger.Module
 import dagger.Provides
-import javax.inject.Named
+import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
 class AppModule {
 
     @Provides
-    @Named("Auth")
     @Singleton
     fun provideAuth() = Auth()
 
 
     @Provides
-    @Named("Interceptor")
     @Singleton
-    fun provideNetworkInterceptor(@Named("Auth") auth: Auth, context: Context) =
-        SupportInterceptor(auth, context)
+    fun provideNetworkInterceptor(auth: Auth, context: Context) =
+        RedditAuthenticator(auth, context)
 
 
     @Provides
     @Singleton
-    @Named("RedditApi")
-    fun provideRedditApi(@Named("Interceptor") interceptor: SupportInterceptor) =
+    fun provideRedditApi(interceptor: RedditAuthenticator) =
         RedditApi.invoke(interceptor)
+
+    @Provides
+    @Singleton
+    fun provideImageLoader(context: Context): ImageLoader {
+        return ImageLoader(context) {
+            okHttpClient {
+                OkHttpClient.Builder()
+                    .cache(CoilUtils.createDefaultCache(context))
+                    .build()
+            }
+        }
+    }
+
 
 }

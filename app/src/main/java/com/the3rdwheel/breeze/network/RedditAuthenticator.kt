@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.runBlocking
 import okhttp3.*
 
-class SupportInterceptor(private val auth: Auth, private val context: Context) : Authenticator,
+class RedditAuthenticator(private val auth: Auth, private val context: Context) : Authenticator,
     Interceptor {
 
 

@@ -6,7 +6,6 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.Coil
 import coil.ImageLoader
 import coil.api.load
 import coil.size.Scale
@@ -17,10 +16,12 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.ui.viewholders.LoadingViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostErrorViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
-import timber.log.Timber
 
 
-class PostAdapter(private val networkAssistance: NetworkAssistance) :
+class PostAdapter(
+    private val networkAssistance: NetworkAssistance,
+    private val imageLoader: ImageLoader
+) :
     PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
 
     private var networkState: NetworkState? = null
@@ -42,10 +43,9 @@ class PostAdapter(private val networkAssistance: NetworkAssistance) :
                 holder.mTitle.text = currentPostData.title
                 holder.mSubReddit.text = currentPostData.subreddit_name_prefixed
 
-                Timber.d(currentPostData.toString())
                 if (!currentPostData.all_awardings.isNullOrEmpty()) {
 
-                    holder.mAward.load(currentPostData.all_awardings[0].icon_url){
+                    holder.mAward.load(currentPostData.all_awardings[0].icon_url, imageLoader) {
                         scale(Scale.FIT)
                     }
                 }
