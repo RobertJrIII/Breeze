@@ -6,6 +6,7 @@ import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
@@ -13,6 +14,7 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.ui.viewholders.LoadingViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostErrorViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
+import timber.log.Timber
 
 
 class PostAdapter(private val networkAssistance: NetworkAssistance) :
@@ -34,16 +36,21 @@ class PostAdapter(private val networkAssistance: NetworkAssistance) :
         when (holder) {
             is PostViewHolder -> {
                 val currentPostData = getItem(position)
-                holder.mAuthor.text = currentPostData?.author
-                holder.mTitle.text = currentPostData?.title
-                holder.mSubReddit.text = currentPostData?.subreddit_name_prefixed
+                holder.mAuthor.text = currentPostData!!.author
+                holder.mTitle.text = currentPostData.title
+                holder.mSubReddit.text = currentPostData.subreddit_name_prefixed
+
+                Timber.d(currentPostData.toString())
+                if (!currentPostData.all_awardings.isNullOrEmpty()) {
+                    holder.mAward.load(currentPostData.all_awardings[0].icon_url)
+                }
             }
             is LoadingViewHolder -> {
                 holder.postLoading.isIndeterminate = true
             }
             else -> {
                 (holder as PostErrorViewHolder).retryButton.setOnClickListener {
-                  networkAssistance.retryLoadingMore()
+                    networkAssistance.retryLoadingMore()
                 }
             }
         }

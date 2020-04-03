@@ -1,11 +1,12 @@
 package com.the3rdwheel.breeze.reddit.models.data.children.postdata
 
 import com.squareup.moshi.Json
+import com.the3rdwheel.breeze.reddit.models.data.children.postdata.awards.Award
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.preview.Preview
 
 data class PostData(
     val subreddit: String,
-    @Json(name = "selftext") val selfText: String?,
+    @Json(name = "selftext") val selftext: String?,
     val saved: Boolean,
     val gilded: Int,
     val clicked: Boolean,
@@ -14,7 +15,7 @@ data class PostData(
     val hidden: Boolean,
     @Json(name = "hide_score") val isScoreHidden: Boolean,
     val name: String,
-    @Json(name = "total_awards_received") val rewardsReceived: Int,
+    @Json(name = "total_awards_received") val total_awards_received: Int,
     val score: Long,
     val thumbnail: String,
     val created: Long,
@@ -22,7 +23,7 @@ data class PostData(
     @Json(name = "pinned") val isPinned: Boolean,
     @Json(name = "over_18") val isAdultContent: Boolean,
     val preview: Preview?, //TODO add Image Class
-    // @Json(name = "all_awardings") val awards: List<Award>?,
+    @Json(name = "all_awardings") val all_awardings: List<Award>?,
     @Json(name = "spoiler") val isSpoiler: Boolean,
     @Json(name = "locked") val isLocked: Boolean,
     val id: String,
