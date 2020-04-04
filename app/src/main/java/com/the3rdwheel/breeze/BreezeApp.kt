@@ -30,7 +30,7 @@ class BreezeApp : Application() {
         EmojiCompat.init(config)
 
 
-        appComponent = DaggerAppComponent.builder().application(this).build()
+        appComponent = DaggerAppComponent.builder().context(this).build()
 
     }
 

@@ -21,20 +21,12 @@ class RedditAuthenticator(private val auth: Auth, private val context: Context) 
             val token = retrieveToken()
             if (token != "") {
                 request = buildRequest(token, request)
-//                request = request.newBuilder().addHeader(
-//                    RedditUtils.AUTHORIZATION_KEY,
-//                    RedditUtils.AUTHORIZATION_BASE + token
-//                ).build()
             }
 
 
         } else {
             val storedToken = getStoredToken()
             request = buildRequest(storedToken, request)
-//            request = request.newBuilder().addHeader(
-//                RedditUtils.AUTHORIZATION_KEY,
-//                RedditUtils.AUTHORIZATION_BASE + storedToken
-//            ).build()
         }
 
 
@@ -60,22 +52,12 @@ class RedditAuthenticator(private val auth: Auth, private val context: Context) 
                     val newAccessToken = retrieveToken()
                     return if (newAccessToken != "") {
                         buildRequest(newAccessToken, request)
-//                        request.newBuilder().header(
-//                            RedditUtils.AUTHORIZATION_KEY,
-//                            RedditUtils.AUTHORIZATION_BASE + newAccessToken
-//
-//                        ).build()
 
                     } else {
                         null
                     }
                 } else {
                     return buildRequest(storedAccessToken, request)
-//                    return request.newBuilder().header(
-//                        RedditUtils.AUTHORIZATION_KEY,
-//                        RedditUtils.AUTHORIZATION_BASE + storedAccessToken
-//                    )
-//                        .build()
                 }
             }
 
@@ -98,7 +80,7 @@ class RedditAuthenticator(private val auth: Auth, private val context: Context) 
 
     private fun retrieveToken() = runBlocking(IO) {
         var accessToken: String? = ""
-        val response = auth.getAuthResponse(RedditUtils.CREDENTIALS)
+        val response = auth.getAuthResponse(RedditUtils.getCredentials())
 
         if (response.isSuccessful && response.body() != null) {
             accessToken = response.body()!!.access_token

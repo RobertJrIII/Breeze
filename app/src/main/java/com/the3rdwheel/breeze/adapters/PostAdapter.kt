@@ -46,7 +46,8 @@ class PostAdapter(
                 if (!currentPostData.all_awardings.isNullOrEmpty()) {
 
                     holder.mAward.load(currentPostData.all_awardings[0].icon_url, imageLoader) {
-                        scale(Scale.FIT)
+                        size(24)
+                        scale(Scale.FILL)
                     }
                 }
             }

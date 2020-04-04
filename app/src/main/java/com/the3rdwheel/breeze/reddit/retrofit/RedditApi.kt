@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.reddit.retrofit
 
+import com.the3rdwheel.breeze.network.BaseHeader
 import com.the3rdwheel.breeze.network.RedditAuthenticator
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.models.Submission
@@ -28,23 +29,12 @@ interface RedditApi {
 
     companion object {
         operator fun invoke(
-            redditAuthenticator: RedditAuthenticator
+            redditAuthenticator: RedditAuthenticator,
+            baseHeader: BaseHeader
         ): RedditApi {
 
             val okHttpClient = OkHttpClient.Builder()
-                .addInterceptor(object : Interceptor {
-                    override fun intercept(chain: Interceptor.Chain): okhttp3.Response {
-                        val request = chain.request()
-                        request.newBuilder().addHeader(
-                            "Content-Type",
-                            "application/json"
-                        ).build().newBuilder().addHeader(
-                            "User-Agent",
-                            "android:com.the3rdwheel.breeze:0.1 (by /u/RobertJrIII)"
-                        ).build()
-                        return chain.proceed(request)
-                    }
-                })
+                .addInterceptor(baseHeader)
                 .authenticator(redditAuthenticator)
                 .addInterceptor(redditAuthenticator)
                 .connectTimeout(30, TimeUnit.SECONDS)

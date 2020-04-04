@@ -15,7 +15,7 @@ interface AppComponent {
         fun build(): AppComponent
 
         @BindsInstance
-        fun application(context: Context): Builder
+        fun context(context: Context): Builder
     }
 
     fun inject(postsFragment: PostsFragment)
