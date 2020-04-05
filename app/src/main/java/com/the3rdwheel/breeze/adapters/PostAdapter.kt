@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.the3rdwheel.breeze.R
+import com.the3rdwheel.breeze.databinding.ErrorPostRetryBinding
+import com.the3rdwheel.breeze.databinding.LoadingBinding
+import com.the3rdwheel.breeze.databinding.PostItemBinding
 import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
@@ -24,11 +27,27 @@ class PostAdapter(
 
     private var networkState: NetworkState? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
+        val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            R.layout.post_item -> PostViewHolder(view)
-            R.layout.loading -> LoadingViewHolder(view)
-            R.layout.error_post_retry -> PostErrorViewHolder(view)
+            R.layout.post_item -> PostViewHolder(
+                PostItemBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                )
+            )
+            R.layout.loading -> LoadingViewHolder(
+                LoadingBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                )
+            )
+            R.layout.error_post_retry -> PostErrorViewHolder(
+                ErrorPostRetryBinding.inflate(
+                    layoutInflater, parent, false
+                )
+            )
             else -> throw IllegalArgumentException("Unknown view type $viewType")
         }
     }
@@ -36,10 +55,9 @@ class PostAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is PostViewHolder -> {
-                val currentPostData = getItem(position)
-                holder.mAuthor.text = currentPostData!!.author
-                holder.mTitle.text = currentPostData.title
-                holder.mSubReddit.text = currentPostData.subreddit_name_prefixed
+                val currentPostData: PostData? = getItem(position)
+
+                holder.bind(currentPostData!!)
 //                val awards = currentPostData.all_awardings
 //
 //                if (!awards.isNullOrEmpty()) {
@@ -61,12 +79,13 @@ class PostAdapter(
 //                }
             }
             is LoadingViewHolder -> {
-                holder.postLoading.isIndeterminate = true
+                holder.bind(true)
+            }
+            is PostErrorViewHolder -> {
+                holder.bind(networkAssistance)
             }
             else -> {
-                (holder as PostErrorViewHolder).retryButton.setOnClickListener {
-                    networkAssistance.retryLoadingMore()
-                }
+                throw IllegalArgumentException("Unknown holder")
             }
         }
 
