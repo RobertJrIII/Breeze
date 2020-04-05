@@ -26,7 +26,9 @@ class BreezeApp : Application() {
             "Noto Color Emoji Compat",
             R.array.com_google_android_gms_fonts_certs
         )
-        val config = FontRequestEmojiCompatConfig(applicationContext, fontRequest)
+        val config: EmojiCompat.Config =
+            FontRequestEmojiCompatConfig(applicationContext, fontRequest)
+                .setReplaceAll(true)
         EmojiCompat.init(config)
 
 

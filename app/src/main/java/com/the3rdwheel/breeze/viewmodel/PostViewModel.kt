@@ -4,11 +4,10 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Transformations.switchMap
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.network.datasource.PostDataSourceFactory
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
-import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
+import com.the3rdwheel.breeze.reddit.api.RedditApi
 
 
 class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {

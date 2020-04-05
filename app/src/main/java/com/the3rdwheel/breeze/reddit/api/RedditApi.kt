@@ -1,10 +1,9 @@
-package com.the3rdwheel.breeze.reddit.retrofit
+package com.the3rdwheel.breeze.reddit.api
 
 import com.the3rdwheel.breeze.network.BaseHeader
 import com.the3rdwheel.breeze.network.RedditAuthenticator
 import com.the3rdwheel.breeze.reddit.RedditUtils
 import com.the3rdwheel.breeze.reddit.models.Submission
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory

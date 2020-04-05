@@ -6,7 +6,7 @@ import androidx.paging.PageKeyedDataSource
 import com.the3rdwheel.breeze.network.NetworkState
 import com.the3rdwheel.breeze.reddit.models.data.Data
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
-import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
+import com.the3rdwheel.breeze.reddit.api.RedditApi
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import timber.log.Timber

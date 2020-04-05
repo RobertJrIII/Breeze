@@ -15,39 +15,27 @@ class PostViewHolder(postItemBinding: PostItemBinding) :
     RecyclerView.ViewHolder(postItemBinding.root) {
 
 
-    private val mTitle: EmojiTextView = postItemBinding.postTitle
-    private val mAuthor: EmojiTextView = postItemBinding.postAuthor
-    private val mSubReddit: EmojiTextView = postItemBinding.postSubbreddit
-    private val mAwards: FlowLayout = postItemBinding.awards
+    val mTitle: EmojiTextView = postItemBinding.postTitle
+    val mAuthor: EmojiTextView = postItemBinding.postAuthor
+    val mSubReddit: EmojiTextView = postItemBinding.postSubbreddit
+    val mAwards: FlowLayout = postItemBinding.awards
 
 
-    fun bind(postData: PostData) {
-        mAuthor.text = postData.author
-        mTitle.text = postData.title
-        mSubReddit.text = postData.subreddit_name_prefixed
-    }
+
 
 }
 
 class LoadingViewHolder(loadingBinding: LoadingBinding) :
     RecyclerView.ViewHolder(loadingBinding.root) {
-    private val postLoading: MaterialProgressBar = loadingBinding.postLoading
+    val postLoading: MaterialProgressBar = loadingBinding.postLoading
 
-    fun bind(isIndeterminate: Boolean) {
-        postLoading.isIndeterminate = isIndeterminate
-    }
 }
 
 
 class PostErrorViewHolder(errorPostRetryBinding: ErrorPostRetryBinding) :
     RecyclerView.ViewHolder(errorPostRetryBinding.root) {
-    private val retryButton: Button = errorPostRetryBinding.footerErrorButton
+    val retryButton: Button = errorPostRetryBinding.footerErrorButton
 
-    fun bind(networkAssistance: NetworkAssistance) {
-        retryButton.setOnClickListener {
-            networkAssistance.retryLoadingMore()
-        }
-    }
-    //TODO maybe add an interface method for bind repeated code
+
 
 }

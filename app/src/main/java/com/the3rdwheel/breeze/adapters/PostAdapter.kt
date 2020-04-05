@@ -55,9 +55,11 @@ class PostAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is PostViewHolder -> {
-                val currentPostData: PostData? = getItem(position)
+                val postData: PostData? = getItem(position)
 
-                holder.bind(currentPostData!!)
+                holder.mAuthor.text = postData?.author
+                holder.mTitle.text = postData?.title
+                holder.mSubReddit.text = postData?.subreddit_name_prefixed
 //                val awards = currentPostData.all_awardings
 //
 //                if (!awards.isNullOrEmpty()) {
@@ -79,10 +81,12 @@ class PostAdapter(
 //                }
             }
             is LoadingViewHolder -> {
-                holder.bind(true)
+                holder.postLoading.isIndeterminate = true
             }
             is PostErrorViewHolder -> {
-                holder.bind(networkAssistance)
+                holder.retryButton.setOnClickListener {
+                    networkAssistance.retryLoadingMore()
+                }
             }
             else -> {
                 throw IllegalArgumentException("Unknown holder")

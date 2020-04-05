@@ -14,7 +14,7 @@ import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
 import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
-import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
+import com.the3rdwheel.breeze.reddit.api.RedditApi
 import com.the3rdwheel.breeze.viewmodel.CommunicationViewModel
 import com.the3rdwheel.breeze.viewmodel.PostViewModel
 import javax.inject.Inject

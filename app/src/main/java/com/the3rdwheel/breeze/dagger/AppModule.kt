@@ -4,7 +4,7 @@ import android.content.Context
 import com.the3rdwheel.breeze.network.BaseHeader
 import com.the3rdwheel.breeze.network.RedditAuthenticator
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
-import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
+import com.the3rdwheel.breeze.reddit.api.RedditApi
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
