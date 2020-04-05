@@ -2,9 +2,9 @@ package com.the3rdwheel.breeze.ui.viewholders
 
 import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import androidx.emoji.widget.EmojiTextView
 import androidx.recyclerview.widget.RecyclerView
+import com.nex3z.flowlayout.FlowLayout
 import com.the3rdwheel.breeze.R
 import me.zhanghai.android.materialprogressbar.MaterialProgressBar
 
@@ -12,7 +12,7 @@ class PostViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     val mTitle: EmojiTextView = itemView.findViewById(R.id.postTitle)
     val mAuthor: EmojiTextView = itemView.findViewById(R.id.postAuthor)
     val mSubReddit: EmojiTextView = itemView.findViewById(R.id.postSubbreddit)
-    val mAward: ImageView = itemView.findViewById(R.id.singleAward)
+    val mAwards: FlowLayout = itemView.findViewById(R.id.awards)
 
 }
 

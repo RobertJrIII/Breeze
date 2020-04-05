@@ -2,13 +2,12 @@ package com.the3rdwheel.breeze.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import coil.ImageLoader
-import coil.api.load
-import coil.size.Scale
+import com.bumptech.glide.Glide
 import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.network.NetworkAssistance
 import com.the3rdwheel.breeze.network.NetworkState
@@ -19,8 +18,7 @@ import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
 
 
 class PostAdapter(
-    private val networkAssistance: NetworkAssistance,
-    private val imageLoader: ImageLoader
+    private val networkAssistance: NetworkAssistance
 ) :
     PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
 
@@ -42,14 +40,25 @@ class PostAdapter(
                 holder.mAuthor.text = currentPostData!!.author
                 holder.mTitle.text = currentPostData.title
                 holder.mSubReddit.text = currentPostData.subreddit_name_prefixed
-
-                if (!currentPostData.all_awardings.isNullOrEmpty()) {
-
-                    holder.mAward.load(currentPostData.all_awardings[0].icon_url, imageLoader) {
-                        size(24)
-                        scale(Scale.FILL)
-                    }
-                }
+//                val awards = currentPostData.all_awardings
+//
+//                if (!awards.isNullOrEmpty()) {
+//
+//                    for (award in awards) {
+//
+//                        holder.mAwards.addView(ImageView(holder.itemView.context!!).apply {
+//                            maxWidth = 10
+//                            maxHeight = 10
+//                            Glide.with(holder.itemView.context).load(award.icon_url)
+//                                .override(24)
+//                                .into(this)
+//                        })
+//
+//
+//                    }
+//
+//
+//                }
             }
             is LoadingViewHolder -> {
                 holder.postLoading.isIndeterminate = true

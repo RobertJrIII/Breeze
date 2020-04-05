@@ -1,15 +1,12 @@
 package com.the3rdwheel.breeze.dagger
 
 import android.content.Context
-import coil.ImageLoader
-import coil.util.CoilUtils
 import com.the3rdwheel.breeze.network.BaseHeader
 import com.the3rdwheel.breeze.network.RedditAuthenticator
 import com.the3rdwheel.breeze.reddit.authentication.api.Auth
 import com.the3rdwheel.breeze.reddit.retrofit.RedditApi
 import dagger.Module
 import dagger.Provides
-import okhttp3.OkHttpClient
 import javax.inject.Singleton
 
 @Module
@@ -33,18 +30,6 @@ class AppModule {
     @Singleton
     fun provideRedditApi(interceptor: RedditAuthenticator, baseHeader: BaseHeader) =
         RedditApi.invoke(interceptor, baseHeader)
-
-    @Provides
-    @Singleton
-    fun provideImageLoader(context: Context): ImageLoader {
-        return ImageLoader(context) {
-            okHttpClient {
-                OkHttpClient.Builder()
-                    .cache(CoilUtils.createDefaultCache(context))
-                    .build()
-            }
-        }
-    }
 
 
 }

@@ -2,10 +2,11 @@
 <me.zhanghai.android.materialprogressbar.MaterialProgressBar xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/postLoading"
-    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal"
+    style="@style/Widget.MaterialProgressBar.ProgressBar.Horizontal.NoPadding"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:indeterminate="true"
+    android:scaleY="3"
     app:mpb_progressStyle="horizontal">
 
 </me.zhanghai.android.materialprogressbar.MaterialProgressBar>

@@ -9,7 +9,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
-import coil.ImageLoader
 import com.the3rdwheel.breeze.BreezeApp
 import com.the3rdwheel.breeze.adapters.PostAdapter
 import com.the3rdwheel.breeze.databinding.PostsFragmentBinding
@@ -27,9 +26,6 @@ class PostsFragment : Fragment(), NetworkAssistance {
     @Inject
     lateinit var redditApi: RedditApi
 
-    @Inject
-    lateinit var imageLoader: ImageLoader
-
     private var hasPost = false
     private var _binding: PostsFragmentBinding? = null
     private val binding: PostsFragmentBinding get() = _binding!!
@@ -45,7 +41,7 @@ class PostsFragment : Fragment(), NetworkAssistance {
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
 
         (requireActivity().application as BreezeApp).getAppComponent().inject(this)
-        mAdapter = PostAdapter(this, imageLoader)
+        mAdapter = PostAdapter(this)
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
 
         postViewModel =
