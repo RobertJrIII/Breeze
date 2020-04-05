@@ -61,7 +61,6 @@ class PostAdapter(
                 holder.mAuthor.text = postData?.author
                 holder.mTitle.text = postData?.title
                 holder.mSubReddit.text = postData?.subreddit_name_prefixed
-                Timber.d(postData.toString())
 
             }
             is LoadingViewHolder -> {

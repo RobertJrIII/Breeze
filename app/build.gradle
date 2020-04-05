@@ -28,6 +28,9 @@ android {
         enabled = true
     }
 
+    dataBinding {
+        enabled = true
+    }
 //    defaultConfig {
 //        javaCompileOptions {
 //            annotationProcessorOptions {
@@ -99,7 +102,7 @@ dependencies {
 
     //emoji
     implementation 'androidx.emoji:emoji-appcompat:1.0.0'
-   // implementation 'androidx.emoji:emoji:1.0.0'
+    // implementation 'androidx.emoji:emoji:1.0.0'
 
     //Room
 //    implementation "androidx.room:room-runtime:2.2.4"

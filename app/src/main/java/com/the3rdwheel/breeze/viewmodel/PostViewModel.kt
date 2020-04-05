@@ -10,7 +10,7 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.reddit.api.RedditApi
 
 
-class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
+class PostViewModel(redditApi: RedditApi, subName: String?) : ViewModel() {
     private val postList: LiveData<PagedList<PostData>>
 
 
