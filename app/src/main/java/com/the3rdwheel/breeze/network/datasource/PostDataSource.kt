@@ -20,15 +20,19 @@ class PostDataSource(
 ) :
     PageKeyedDataSource<String, PostData>() {
 
-    private val networkState = MutableLiveData<NetworkState>()
+    private val _networkState = MutableLiveData<NetworkState>()
+    val networkState: LiveData<NetworkState>
+        get() = _networkState
     private var retryQuery: (() -> Unit)? = null
-    private val hasPostsLiveDara = MutableLiveData<Boolean>()
-    private val initialLoadStateLiveData = MutableLiveData<NetworkState>()
-    private var supervisorJob: CompletableJob = SupervisorJob()
 
-    fun getInitialLoadStateData(): LiveData<NetworkState> = initialLoadStateLiveData
-    fun getHasPostData(): LiveData<Boolean> = hasPostsLiveDara
-    fun getNetworkState(): LiveData<NetworkState> = networkState
+    private val _hasPostsLiveData = MutableLiveData<Boolean>()
+    val hasPostLiveData: LiveData<Boolean>
+        get() = _hasPostsLiveData
+
+    private val _initialLoadStateLiveData = MutableLiveData<NetworkState>()
+    val initialLoadStateLiveData: LiveData<NetworkState>
+        get() = _initialLoadStateLiveData
+    private var supervisorJob: CompletableJob = SupervisorJob()
 
 
     override fun loadInitial(
@@ -112,9 +116,9 @@ class PostDataSource(
 
     private fun setNetworkState(isInitial: Boolean, networkStatus: NetworkState) {
         if (isInitial) {
-            initialLoadStateLiveData.postValue(networkStatus)
+            _initialLoadStateLiveData.postValue(networkStatus)
         } else {
-            networkState.postValue(networkStatus)
+            _networkState.postValue(networkStatus)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.the3rdwheel.breeze.network.datasource
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
@@ -12,17 +13,19 @@ class PostDataSourceFactory(
     private val subName: String?
 ) :
     DataSource.Factory<String, PostData>() {
-    private val postSourceLiveData = MutableLiveData<PostDataSource>()
+    private val _postSourceLiveData = MutableLiveData<PostDataSource>()
+    val postSourceLiveData: LiveData<PostDataSource>
+        get() = _postSourceLiveData
     private lateinit var postDataSource: PostDataSource
 
 
     override fun create(): DataSource<String, PostData> {
         postDataSource = PostDataSource(scope, redditApi, subName)
-        postSourceLiveData.postValue(postDataSource)
+        _postSourceLiveData.postValue(postDataSource)
         return postDataSource
     }
 
-    fun getPostDataSourceLiveData() = postSourceLiveData
+   // fun getPostDataSourceLiveData() = _postSourceLiveData
 
     fun getPostDataSource(): PostDataSource {
         return postDataSource

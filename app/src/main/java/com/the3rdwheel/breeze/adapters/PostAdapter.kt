@@ -18,6 +18,7 @@ import com.the3rdwheel.breeze.reddit.models.data.children.postdata.PostData
 import com.the3rdwheel.breeze.ui.viewholders.LoadingViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostErrorViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
+import timber.log.Timber
 
 
 class PostAdapter(
@@ -60,25 +61,8 @@ class PostAdapter(
                 holder.mAuthor.text = postData?.author
                 holder.mTitle.text = postData?.title
                 holder.mSubReddit.text = postData?.subreddit_name_prefixed
-//                val awards = currentPostData.all_awardings
-//
-//                if (!awards.isNullOrEmpty()) {
-//
-//                    for (award in awards) {
-//
-//                        holder.mAwards.addView(ImageView(holder.itemView.context!!).apply {
-//                            maxWidth = 10
-//                            maxHeight = 10
-//                            Glide.with(holder.itemView.context).load(award.icon_url)
-//                                .override(24)
-//                                .into(this)
-//                        })
-//
-//
-//                    }
-//
-//
-//                }
+                Timber.d(postData.toString())
+
             }
             is LoadingViewHolder -> {
                 holder.postLoading.isIndeterminate = true

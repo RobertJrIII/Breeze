@@ -17,13 +17,13 @@ class PostViewModel(redditApi: RedditApi, subName: String) : ViewModel() {
     private val postDataSourceFactory: PostDataSourceFactory =
         PostDataSourceFactory(viewModelScope, redditApi, subName)
     val networkState: LiveData<NetworkState> =
-        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getNetworkState() }
+        switchMap(postDataSourceFactory.postSourceLiveData) { it.networkState }
 
     val hasPostLiveData: LiveData<Boolean> =
-        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getHasPostData() }
+        switchMap(postDataSourceFactory.postSourceLiveData) { it.hasPostLiveData }
 
     val initialLoadData: LiveData<NetworkState> =
-        switchMap(postDataSourceFactory.getPostDataSourceLiveData()) { it.getInitialLoadStateData() }
+        switchMap(postDataSourceFactory.postSourceLiveData) { it.initialLoadStateLiveData }
 
     init {
         val config = PagedList.Config.Builder()
