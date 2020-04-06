@@ -38,7 +38,7 @@
                 android:textSize="12sp" />
 
 
-            <com.nex3z.flowlayout.FlowLayout
+            <com.google.android.flexbox.FlexboxLayout
                 android:id="@+id/awards"
                 android:layout_width="wrap_content"
                 android:layout_height="12dp" />

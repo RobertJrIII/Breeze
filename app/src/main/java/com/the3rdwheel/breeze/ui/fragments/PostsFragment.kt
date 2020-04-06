@@ -41,7 +41,7 @@ class PostsFragment : Fragment(), NetworkAssistance {
         _binding = PostsFragmentBinding.inflate(inflater, container, false)
 
         (requireActivity().application as BreezeApp).getAppComponent().inject(this)
-        mAdapter = PostAdapter(this)
+        mAdapter = PostAdapter(this, requireContext())
         binding.postSwipeRefresh.setOnRefreshListener(this::refresh)
 
         postViewModel =

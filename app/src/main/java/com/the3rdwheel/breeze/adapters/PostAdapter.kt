@@ -1,14 +1,15 @@
 package com.the3rdwheel.breeze.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.view.forEach
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.AsyncDifferConfig
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.the3rdwheel.breeze.R
 import com.the3rdwheel.breeze.databinding.ErrorPostRetryBinding
 import com.the3rdwheel.breeze.databinding.LoadingBinding
 import com.the3rdwheel.breeze.databinding.PostItemBinding
@@ -20,31 +21,36 @@ import com.the3rdwheel.breeze.ui.viewholders.PostErrorViewHolder
 import com.the3rdwheel.breeze.ui.viewholders.PostViewHolder
 import timber.log.Timber
 
+private const val LOADING_LAYOUT = 0
+private const val ERROR_LAYOUT = 1
+private const val POST_LAYOUT = 2
+
 
 class PostAdapter(
-    private val networkAssistance: NetworkAssistance
+    private val networkAssistance: NetworkAssistance,
+    context: Context
 ) :
     PagedListAdapter<PostData, RecyclerView.ViewHolder>(getAsyncDifferConfig()) {
-
+    private val glide = Glide.with(context)
     private var networkState: NetworkState? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return when (viewType) {
-            R.layout.post_item -> PostViewHolder(
+            POST_LAYOUT -> PostViewHolder(
                 PostItemBinding.inflate(
                     layoutInflater,
                     parent,
                     false
                 )
             )
-            R.layout.loading -> LoadingViewHolder(
+            LOADING_LAYOUT -> LoadingViewHolder(
                 LoadingBinding.inflate(
                     layoutInflater,
                     parent,
                     false
                 )
             )
-            R.layout.error_post_retry -> PostErrorViewHolder(
+            ERROR_LAYOUT -> PostErrorViewHolder(
                 ErrorPostRetryBinding.inflate(
                     layoutInflater, parent, false
                 )
@@ -56,11 +62,24 @@ class PostAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is PostViewHolder -> {
-                val postData: PostData? = getItem(position)
+                val postData = getItem(position)
+                Timber.v(postData.toString())
+                holder.mAuthor.text = postData!!.author
+                holder.mTitle.text = postData.title
+                holder.mSubReddit.text = postData.subreddit_name_prefixed
 
-                holder.mAuthor.text = postData?.author
-                holder.mTitle.text = postData?.title
-                holder.mSubReddit.text = postData?.subreddit_name_prefixed
+                postData.all_awardings!!.forEach {
+
+                    val awardImage = ImageView(holder.itemView.context).apply {
+                        maxHeight = 24
+                        maxWidth = 24
+                    }
+
+
+                    glide.load(it.icon_url).override(24).into(awardImage)
+                    holder.mAwards.addView(awardImage)
+                }
+
 
             }
             is LoadingViewHolder -> {
@@ -78,15 +97,26 @@ class PostAdapter(
 
     }
 
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is PostViewHolder) {
+            // if (holder.mAwards.childCount > 0) {
+            holder.mAwards.forEach {
+                glide.clear(it)
+            }
+
+        }
+    }
+
     override fun getItemViewType(position: Int): Int {
         return if (hasExtraRow() && position == itemCount - 1) {
             if (networkState == NetworkState.LOADING) {
-                R.layout.loading
+                LOADING_LAYOUT
             } else {
-                R.layout.error_post_retry
+                ERROR_LAYOUT
             }
         } else {
-            R.layout.post_item
+            POST_LAYOUT
         }
     }
 
